@@ -1,5 +1,0 @@
-version: V2
-
-Name:
-Tony Nguyen
-    Changed V1 -> V2
