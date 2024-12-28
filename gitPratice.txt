@@ -6,4 +6,6 @@ repository.
 Version: V1
 Tony Nguyen
     Changed V0 -> V1
-    
+Version: V2
+Tri Nguyen
+    Changed V1 -> V2
