@@ -1,14 +1,12 @@
-const mysql = require('mysql');
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'nguyen.mh.tony@gmail.com',
-    password: 'password',
-    database: 'unimapDatabase'
+// db.js
+const mysql = require("mysql2/promise"); // Use mysql2 with promises
+
+const pool = mysql.createPool({
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
 });
 
-connection.connect(err => {
-    if (err) throw err;
-    console.log('Connected to MySQL!');
-});
-
-module.exports = connection;
+module.exports = pool; // Export the pool
