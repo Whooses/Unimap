@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../../db");
 
+
 // Middleware to log requests for events
 router.use((req, res, next) => {
     console.log(`Event request: ${req.method} ${req.url}`);
