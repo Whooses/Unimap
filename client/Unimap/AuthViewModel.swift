@@ -3,7 +3,7 @@ import Auth0
 import JWTDecode
 
 class AuthViewModel: ObservableObject {
-    @Published var isAuthenticated = false
+    @Published var isAuthenticated = true
     @Published var userName: String?
 
     func login() {
