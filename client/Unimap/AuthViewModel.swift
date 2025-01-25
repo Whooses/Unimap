@@ -3,7 +3,7 @@ import Auth0
 import JWTDecode
 
 class AuthViewModel: ObservableObject {
-    @Published var isAuthenticated = true
+    @Published var isAuthenticated = false
     @Published var userName: String?
 
     func login() {
@@ -39,6 +39,7 @@ class AuthViewModel: ObservableObject {
     private func decodeUserInfo(from idToken: String) {
         do {
             let jwt = try decode(jwt: idToken)
+            print("\(jwt)")
             self.userName = jwt.claim(name: "name").string // Extract the "name" claim
         } catch {
             print("Failed to decode ID token: \(error)")
