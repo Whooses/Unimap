@@ -1,37 +1,25 @@
-from fastapi import FastAPI
-from databases import Database
-from dotenv import load_dotenv
-from contextlib import asynccontextmanager
-import os
+from fastapi import FastAPI, Depends
+from sqlalchemy.orm import Session
+from db.session import SessionLocal, engine, Base
+from db.models.events import Events
 
-load_dotenv()
+# Create tables in the database (if they don't exist)
+Base.metadata.create_all(bind=engine)
 
-DATABASE_PASSWORD = os.getenv('DATABASE_PASSWORD')
-DATABASE_URL = f"postgresql://postgres.olxchrqwobbpgwqyuvos:{DATABASE_PASSWORD}@aws-0-ca-central-1.pooler.supabase.com:6543/postgres"
+app = FastAPI()
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Initialize and connect to the database
-    database = Database(DATABASE_URL)
-    await database.connect()
 
-    # Store the database instance in app.state
-    app.state.database = database
-    yield
+# Dependency to get the database session
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
-    # Disconnect from the database
-    await database.disconnect()
 
-app = FastAPI(lifespan=lifespan)
-
-@app.get("/")
-def read_root():
-    return {"message": "Server is running"}
-
+# Example route to get all events
 @app.get("/events")
-async def get_events():
-    # Retrieve the database instance from app.state
-    database = app.state.database
-    query = "SELECT * FROM events"
-    results = await database.fetch_all(query)
-    return results
+def get_events(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    events = db.query(Events).offset(skip).limit(limit).all()
+    return events
