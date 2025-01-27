@@ -15,9 +15,11 @@ struct HomeView: View {
                 SearchBarComponent()
                     .padding(.top, 16)
                 
-                ForEach(1...1, id: \.self) { _ in
-                    HorizontalEventScroll()
-                }
+                Recommendations()
+                Upcoming()
+                    .padding(.top, 16)
+                LatestEvents()
+                    .padding(.top, 16)
             }
         }
         .background(Color.white)

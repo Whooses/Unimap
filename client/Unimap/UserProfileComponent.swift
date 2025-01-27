@@ -1,3 +1,11 @@
+//
+//  UserProfileComponent.swift
+//  Unimap
+//
+//  Created by Bhavya Patel on 2025-01-22.
+//
+import SwiftUI
+
 // Account pfp component
 struct UserProfileComponent: View {
     var imageName: String // Name of the profile image in assets

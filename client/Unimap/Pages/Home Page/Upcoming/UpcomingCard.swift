@@ -1,3 +1,10 @@
+//
+//  UpcomingCard.swift
+//  Unimap
+//
+//  Created by Bhavya Patel on 2025-01-22.
+//
+
 import SwiftUI
 
 struct UpcomingCard: View {
@@ -9,69 +16,67 @@ struct UpcomingCard: View {
     let eventDate: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            // Header
+        VStack(alignment: .leading, spacing: 10) { // Increased spacing slightly
+            // Header (Username and Profile Picture)
             HStack {
                 Image(userPFP)
                     .resizable()
-                    .frame(width: 40, height: 40)
+                    .frame(width: 30, height: 30) // Increased size
                     .clipShape(Circle())
-                
+
                 Text(username)
                     .font(.subheadline)
                     .bold()
-                
+
                 Spacer()
-                
+
                 Image(systemName: "ellipsis")
                     .rotationEffect(.degrees(90))
                     .foregroundColor(.gray)
             }
-            .padding(.horizontal, 8)
-            .padding(.top, 8)
+            .padding(.horizontal, 20) // Increased padding slightly
 
-            // Event body
-            HStack(alignment: .top, spacing: 12) {
-                // Event Image
+            // Event Body
+            HStack(spacing: 0) {
+                // Event Image (takes 35% width with rounded corners)
                 Image(eventImage)
                     .resizable()
                     .scaledToFill()
-                    .frame(width: 80, height: 80)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                
-                // Event Info
-                VStack(alignment: .leading, spacing: 4) {
+                    .frame(width: UIScreen.main.bounds.width * 0.35, height: 140) // Scaled up proportionally
+                    .clipShape(
+                        .rect(
+                            topLeadingRadius: 14,
+                            bottomLeadingRadius: 14,
+                            bottomTrailingRadius: 0,
+                            topTrailingRadius: 0
+                        )
+                    )
+                    .clipped()
+
+                // Event Info (takes remaining space)
+                VStack(alignment: .leading, spacing: 10) { // Increased spacing slightly
                     Text(eventTitle)
-                        .font(.headline)
+                        .font(.title3) // Slightly larger font
                         .lineLimit(2)
-                    
+
                     Text(eventDescription)
-                        .font(.subheadline)
+                        .font(.footnote) // Adjusted font size to balance scale
                         .foregroundColor(.gray)
                         .lineLimit(3)
-                    
+
                     Text(eventDate)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
-                
-                Spacer()
+                .padding(16) // Increased padding slightly
             }
-            .padding(.horizontal, 8)
-            
-            // Bookmark Icon
-            HStack {
-                Spacer()
-                Image(systemName: "bookmark")
-                    .foregroundColor(.gray)
-                    .padding(8)
-            }
+            .background(
+                RoundedRectangle(cornerRadius: 14) // Increased corner radius
+                    .fill(Color(.systemBackground))
+                    .shadow(radius: 10) // Increased shadow for emphasis
+            )
         }
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color(.systemBackground))
-                .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
-        )
-        .padding(.vertical, 4)
+        .frame(maxWidth: UIScreen.main.bounds.width * 0.9) // Slightly larger card width
+        .padding(.vertical, 10) // Added vertical padding between cards
     }
 }

@@ -1,5 +1,5 @@
 //
-//  EventCardComponent.swift
+//  RecommendCard.swift
 //  Unimap
 //
 //  Created by Bhavya Patel on 2025-01-22.

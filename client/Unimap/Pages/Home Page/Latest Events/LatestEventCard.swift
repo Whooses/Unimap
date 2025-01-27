@@ -8,105 +8,53 @@
 
 import SwiftUI
 
-struct RecommendCard: View {
+struct LatestEventCard: View {
     var username: String
     var userPFP: String
     var eventImage: String = "empty"
-    var eventTitle: String = "Event Title"
-    var eventDate: String = "Jan 18, 2025"
 
     var body: some View {
-        VStack(spacing: 0) {
-            // Header
-            HStack {
-                // User PFP and Username
-                HStack {
-                    Image(userPFP)
-                        .resizable()
-                        .frame(width: 30, height: 30)
-                        .clipShape(Circle())
-                        .overlay(Circle().stroke(Color.gray, lineWidth: 1))
+        ZStack(alignment: .bottomLeading) {
+            // Background Image
+            Image(eventImage)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 200, height: 200) // Square size
+                .clipShape(RoundedRectangle(cornerRadius: 16)) // Curved square shape
+                .clipped()
 
-                    Text(username)
-                        .font(.headline)
-                        .foregroundColor(.primary)
-                        .lineLimit(1)
-                }
+            // Gradient Overlay for Bottom
+            LinearGradient(
+                gradient: Gradient(colors: [
+                    Color.black.opacity(0.7),
+                    Color.black.opacity(0.0)
+                ]),
+                startPoint: .bottom,
+                endPoint: .top
+            )
+            .frame(height: 60)
+            .clipShape(RoundedRectangle(cornerRadius: 16)) // Match shape to image
 
-                Spacer()
+            // User Info
+            HStack(spacing: 8) {
+                // User PFP
+                Image(userPFP)
+                    .resizable()
+                    .frame(width: 30, height: 30)
+                    .clipShape(Circle())
+                    .overlay(Circle().stroke(Color.white, lineWidth: 2))
 
-                // Triple-dot menu and Save button
-                HStack(spacing: 12) {
-                    Button(action: {
-                        // Action for triple-dot menu
-                    }) {
-                        Image(systemName: "ellipsis")
-                            .font(.system(size: 18))
-                            .foregroundColor(.gray)
-                    }
-
-                    Button(action: {
-                        // Action for save button
-                    }) {
-                        Image(systemName: "bookmark")
-                            .font(.system(size: 18))
-                            .foregroundColor(.gray)
-                    }
-                }
+                // Username
+                Text(username)
+                    .font(.subheadline)
+                    .foregroundColor(.white)
+                    .bold()
+                    .lineLimit(1)
             }
-            .padding(.horizontal, 12)
-            .padding(.bottom, 16)
-
-            // Main Content with Shadow
-            VStack(spacing: 0) {
-                // Event Image with Title Overlay
-                ZStack(alignment: .bottomLeading) {
-                    Image(eventImage)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 200, height: 200)
-                        .clipped()
-
-                    // Gradient Blur Background for Title
-                    LinearGradient(
-                        gradient: Gradient(colors: [
-                            Color.black.opacity(0.8),
-                            Color.black.opacity(0.0)
-                        ]),
-                        startPoint: .bottom,
-                        endPoint: .top
-                    )
-                    .frame(height: 60)
-                    .blur(radius: 4)
-                    .overlay(
-                        Text(eventTitle)
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .lineLimit(1)
-                            .bold()
-                            .padding(8),
-                        alignment: .bottomLeading
-                    )
-                }
-                .frame(width: 200, height: 200)
-
-                // Footer with Date
-                HStack {
-                    Text(eventDate)
-                        .font(.subheadline)
-                        .bold()
-                        .foregroundColor(.gray)
-                        .padding(.top, 8)
-                    Spacer()
-                }
-                .padding(.horizontal, 12)
-                .padding(.bottom, 8)
-            }
-            .background(Color(.systemBackground))
-            .cornerRadius(12)
-            .shadow(radius: 5)
+            .padding(8) // Padding for username and PFP
         }
-        .frame(width: 200, height: 260)
+        .frame(width: 200, height: 200) // Ensure consistent square size
+        .shadow(radius: 5) // Shadow for elevation
         .padding(16)
     }
 }

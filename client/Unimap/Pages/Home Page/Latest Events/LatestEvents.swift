@@ -1,13 +1,5 @@
 //
-//  Recommendations.swift
-//  Unimap
-//
-//  Created by Bhavya Patel on 2025-01-22.
-//
-
-
-//
-//  Recommendations.swift
+//  LatestEvents.swift
 //  Unimap
 //
 //  Created by Bhavya Patel on 2025-01-22.
@@ -15,10 +7,10 @@
 
 import SwiftUI
 
-struct Recommendations: View {
+struct LatestEvents: View {
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Recommendations")
+            Text("Latest Events")
                 .font(.title2)
                 .bold()
                 .padding(.leading, 16)
@@ -27,27 +19,20 @@ struct Recommendations: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 0) {
                     // Example Event Cards
-                    RecommendCard(
+                    LatestEventCard(
                         username: "AMACSS",
                         userPFP: "stockUser",
-                        eventImage: "eventImage1",
-                        eventTitle: "MATB41 Final Exam Review Seminar",
-
-                        eventDate: "In 4 days"
+                        eventImage: "eventImage1"
                     )
-                    RecommendCard(
+                    LatestEventCard(
                         username: "AMACSS",
                         userPFP: "stockUser",
-                        eventImage: "eventImage1",
-                        eventTitle: "MATB41 Final Exam Review Seminar",
-                        eventDate: "In 4 days"
+                        eventImage: "eventImage1"
                     )
-                    RecommendCard(
+                    LatestEventCard(
                         username: "AMACSS",
                         userPFP: "stockUser",
-                        eventImage: "eventImage1",
-                        eventTitle: "MATB41 Final Exam Review Seminar",
-                        eventDate: "In 4 days"
+                        eventImage: "eventImage1"
                     )
                 }
                 .padding(.horizontal, 16)
