@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct Recommendations: View {
+    @State private var events: [Event] = []
+
     var body: some View {
         VStack(alignment: .leading) {
             Text("Recommendations")
@@ -17,20 +19,56 @@ struct Recommendations: View {
                 .padding(.bottom, 8)
 
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 0) {
-                    // Example Event Cards
-                    ForEach(1...3, id: \.self) { _ in
-                                    RecommendCard(
-                                        username: "AMACSS",
-                                        userPFP: "stockUser",
-                                        eventImage: "eventImage1",
-                                        eventTitle: "MATB41 Final Exam Review Seminar",
-                                        eventDate: "In 4 days"
-                                    )
-                                }
+                HStack(spacing: 16) {
+                    if events.isEmpty {
+                        Text("No events found.")
+                            .foregroundColor(.gray)
+                            .padding()
+                    } else {
+                        ForEach(events) { event in
+                            RecommendCard(
+                                username: event.username,
+                                userPFP: "stockUser",
+                                eventImage: "eventImage1",
+                                eventTitle: event.title,
+                                eventDate: event.date
+                            )
+                        }
+                    }
                 }
                 .padding(.horizontal, 16)
             }
         }
+        .onAppear {
+            fetchEvents()
+        }
+    }
+
+    private func fetchEvents() {
+        guard let url = URL(string: "http://127.0.0.1:8000/events") else {
+            print("Invalid URL")
+            return
+        }
+
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                print("Fetch failed: \(error.localizedDescription)")
+                return
+            }
+
+            if let data = data {
+                let jsonString = String(data: data, encoding: .utf8)
+                print("API Response: \(jsonString ?? "No data")")
+
+                do {
+                    let decodedResponse = try JSONDecoder().decode([Event].self, from: data)
+                    DispatchQueue.main.async {
+                        self.events = decodedResponse
+                    }
+                } catch {
+                    print("Decoding failed: \(error.localizedDescription)")
+                }
+            }
+        }.resume()
     }
 }
