@@ -27,6 +27,7 @@ extension Color {
     }
 }
 
+
 struct ContentView: View {
     @StateObject private var authViewModel = AuthViewModel()
     
