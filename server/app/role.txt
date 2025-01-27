@@ -1,0 +1,2 @@
+The purpose of this folder is to orchestrate different services together
+to form a complete sequence that serve a purpose 
