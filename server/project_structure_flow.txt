@@ -1,0 +1,1 @@
+Incoming requests -> routers -> app -> services -> database

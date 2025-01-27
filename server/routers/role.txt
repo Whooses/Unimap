@@ -1,0 +1,2 @@
+The role of this folder is to only handle incoming requests and then call
+a specific app to handle the logic.
