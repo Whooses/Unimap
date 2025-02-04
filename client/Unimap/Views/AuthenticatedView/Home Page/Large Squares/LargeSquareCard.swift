@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct RecommendCard: View {
+struct LargeSquareCard: View {
     var username: String
     var userPFP: String
     var eventImage: String = "empty"

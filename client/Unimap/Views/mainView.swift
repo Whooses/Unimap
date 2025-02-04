@@ -33,11 +33,11 @@ struct MainView: View {
     @StateObject private var authViewModel = AuthViewModel()
 
     var body: some View {
-        if authViewModel.isAuthenticated {
+//        if authViewModel.isAuthenticated {
             AuthenticatedView(authViewModel: authViewModel)
-        } else {
-            UnauthenticatedView(authViewModel: authViewModel)
-        }
+//        } else {
+//            UnauthenticatedView(authViewModel: authViewModel)
+//        }
     }
 }
 

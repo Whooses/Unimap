@@ -7,43 +7,39 @@
 
 import SwiftUI
 
-struct Upcoming: View {
+struct Rectangles: View {
     @State private var events: [Event] = [] // State to hold fetched events
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Your Upcoming")
-                .font(.title2)
-                .bold()
-                .padding(.leading, 16)
-
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 20) {
-                    if events.isEmpty {
-                        Text("No upcoming events found.")
-                            .foregroundColor(.gray)
-                            .padding()
-                    } else {
+            if events.isEmpty {
+                Text("No events found.")
+                    .foregroundColor(.gray)
+                    .padding()
+            } else {
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 5) {  // Vertical stack with spacing
                         ForEach(events) { event in
-                            UpcomingCard(
-                                username: "Whooses", // Replace with actual username if available
+                            RectangleCard(
+                                username: "Whooses",
                                 userPFP: "stockUser",
-                                eventImage: "eventImage1", // Use the image URL from the API
+                                eventImage: "eventImage1",
                                 eventTitle: event.title,
                                 eventDescription: event.description,
                                 eventDate: event.date
                             )
                         }
                     }
+                    .padding(.horizontal, 16)
                 }
-                .padding(.horizontal, 16)
             }
         }
         .onAppear {
-            fetchEvents() // Fetch events when the view appears
+            fetchEvents()
         }
     }
 
+    // Keep the existing fetchEvents() implementation
     private func fetchEvents() {
         guard let url = URL(string: "http://127.0.0.1:8000/events") else {
             print("Invalid URL")

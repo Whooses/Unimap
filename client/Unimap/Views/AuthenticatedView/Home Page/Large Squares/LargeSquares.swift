@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct Recommendations: View {
+struct LargeSquares: View {
     @State private var events: [Event] = []
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Recommendations")
+            Text("Title Text")
                 .font(.title2)
                 .bold()
                 .padding(.leading, 16)
@@ -26,7 +26,7 @@ struct Recommendations: View {
                             .padding()
                     } else {
                         ForEach(events) { event in
-                            RecommendCard(
+                            LargeSquareCard(
                                 username: event.username,
                                 userPFP: "stockUser",
                                 eventImage: "eventImage1",

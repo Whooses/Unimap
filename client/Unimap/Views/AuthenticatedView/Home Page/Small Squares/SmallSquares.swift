@@ -12,7 +12,7 @@ struct SmallSquares: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Latest Events")
+            Text("Title Text")
                 .font(.title2)
                 .bold()
                 .padding(.leading, 16)
@@ -26,7 +26,7 @@ struct SmallSquares: View {
                             .padding()
                     } else {
                         ForEach(events) { event in
-                            LargeSquaresCard(
+                            SmallSquareCard(
                                 username: "Whooses", // Replace with actual username if available
                                 userPFP: "stockUser",
                                 eventImage: "eventImage1"

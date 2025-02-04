@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct UpcomingCard: View {
+struct RectangleCard: View {
     let username: String
     let userPFP: String
     let eventImage: String
@@ -16,12 +16,12 @@ struct UpcomingCard: View {
     let eventDate: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) { // Increased spacing slightly
-            // Header (Username and Profile Picture)
+        VStack(alignment: .leading, spacing: 10) {
+            // Header
             HStack {
                 Image(userPFP)
                     .resizable()
-                    .frame(width: 30, height: 30) // Increased size
+                    .frame(width: 30, height: 30)
                     .clipShape(Circle())
 
                 Text(username)
@@ -34,15 +34,15 @@ struct UpcomingCard: View {
                     .rotationEffect(.degrees(90))
                     .foregroundColor(.gray)
             }
-            .padding(.horizontal, 20) // Increased padding slightly
+            .padding(.horizontal, 16)
 
-            // Event Body
+            // Event Content
             HStack(spacing: 0) {
-                // Event Image (takes 35% width with rounded corners)
+                // Square Event Image
                 Image(eventImage)
                     .resizable()
                     .scaledToFill()
-                    .frame(width: UIScreen.main.bounds.width * 0.35, height: 140) // Scaled up proportionally
+                    .frame(width: 140, height: 140) // Ensuring square shape
                     .clipShape(
                         .rect(
                             topLeadingRadius: 14,
@@ -53,30 +53,35 @@ struct UpcomingCard: View {
                     )
                     .clipped()
 
-                // Event Info (takes remaining space)
-                VStack(alignment: .leading, spacing: 10) { // Increased spacing slightly
+                // Event Info
+                VStack(alignment: .leading, spacing: 6) {
                     Text(eventTitle)
-                        .font(.title3) // Slightly larger font
+                        .font(.title3)
                         .lineLimit(2)
+                        .truncationMode(.tail)
 
                     Text(eventDescription)
-                        .font(.footnote) // Adjusted font size to balance scale
+                        .font(.footnote)
                         .foregroundColor(.gray)
                         .lineLimit(3)
+                        .truncationMode(.tail)
 
                     Text(eventDate)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
-                .padding(16) // Increased padding slightly
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(16)
             }
+            .frame(width: 320, height: 140) // Ensures fixed width and height
             .background(
-                RoundedRectangle(cornerRadius: 14) // Increased corner radius
+                RoundedRectangle(cornerRadius: 14)
                     .fill(Color(.systemBackground))
-                    .shadow(radius: 10) // Increased shadow for emphasis
+                    .shadow(radius: 10)
             )
         }
-        .frame(maxWidth: UIScreen.main.bounds.width * 0.9) // Slightly larger card width
-        .padding(.vertical, 10) // Added vertical padding between cards
+        .frame(width: 320) // Ensures all cards are the same width
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
     }
 }

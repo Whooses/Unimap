@@ -14,11 +14,7 @@ struct HomeView: View {
             VStack {
                 SearchBarComponent()
                     .padding(.top, 16)
-                
-                Recommendations()
-                Upcoming()
-                    .padding(.top, 16)
-                LatestEvents()
+                Rectangles()
                     .padding(.top, 16)
             }
         }
