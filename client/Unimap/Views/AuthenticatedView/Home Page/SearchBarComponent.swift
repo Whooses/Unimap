@@ -13,30 +13,23 @@ struct SearchBarComponent: View {
 
     var body: some View {
         HStack {
+            // Logo image on the left
+            Image("logo")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 50, height: 50)
+
+            // TextField with left-aligned placeholder
+            TextField("Search", text: $searchText)
+                .foregroundColor(.primary)
+            
             // Magnifying glass icon
             Image(systemName: "magnifyingglass")
                 .foregroundColor(.gray)
-                .padding(.leading, 8)
-
-            // TextField for search input
-            TextField("Search...", text: $searchText)
-                .padding(8)
-                .background(Color(.systemGray6))
-                .cornerRadius(8)
-                .padding(.trailing, 8)
-
-            // Optional: Add a cancel button (not functional yet)
-            Button(action: {
-                searchText = ""
-            }) {
-                Text("Cancel")
-                    .foregroundColor(.blue)
-                    .padding(.trailing, 8)
-            }
         }
         .padding(.horizontal)
-        .background(Color(.systemGray5))
+        .background(.gray.opacity(0.1))
         .cornerRadius(10)
-        .padding()
+        .frame(width: 350)
     }
 }

@@ -8,22 +8,31 @@
 import SwiftUI
 
 struct Rectangles: View {
-    @State private var events: [Event] = [] // State to hold fetched events
+    @State private var events: [Event] = []
+    @State private var isLoading = false
+    @State private var errorMessage: String?
 
     var body: some View {
         VStack(alignment: .leading) {
-            if events.isEmpty {
+            if isLoading {
+                ProgressView()
+                    .padding()
+            } else if let errorMessage = errorMessage {
+                Text("Error: \(errorMessage)")
+                    .foregroundColor(.red)
+                    .padding()
+            } else if events.isEmpty {
                 Text("No events found.")
                     .foregroundColor(.gray)
                     .padding()
             } else {
                 ScrollView(showsIndicators: false) {
-                    VStack(spacing: 5) {  // Vertical stack with spacing
+                    VStack(spacing: 5) {
                         ForEach(events) { event in
                             RectangleCard(
-                                username: "Whooses",
-                                userPFP: "stockUser",
-                                eventImage: "eventImage1",
+                                username: "Whooses", // Hardcoded value
+                                userPFP: "stockUser", // Hardcoded value
+                                eventImage: "eventImage1", // Hardcoded value
                                 eventTitle: event.title,
                                 eventDescription: event.description,
                                 eventDate: event.date
@@ -34,37 +43,22 @@ struct Rectangles: View {
                 }
             }
         }
-        .onAppear {
-            fetchEvents()
-        }
+        .onAppear(perform: loadEvents)
     }
 
-    // Keep the existing fetchEvents() implementation
-    private func fetchEvents() {
-        guard let url = URL(string: "http://127.0.0.1:8000/events") else {
-            print("Invalid URL")
-            return
-        }
-
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                print("Fetch failed: \(error.localizedDescription)")
-                return
-            }
-
-            if let data = data {
-                let jsonString = String(data: data, encoding: .utf8)
-                print("API Response: \(jsonString ?? "No data")")
-
-                do {
-                    let decodedResponse = try JSONDecoder().decode([Event].self, from: data)
-                    DispatchQueue.main.async {
-                        self.events = decodedResponse
-                    }
-                } catch {
-                    print("Decoding failed: \(error.localizedDescription)")
+    private func loadEvents() {
+        isLoading = true
+        APIRequest.fetchEvents { result in
+            DispatchQueue.main.async {
+                isLoading = false
+                switch result {
+                case .success(let fetchedEvents):
+                    self.events = fetchedEvents
+                case .failure(let error):
+                    self.errorMessage = error.localizedDescription
+                    print("Failed to load events: \(error.localizedDescription)")
                 }
             }
-        }.resume()
+        }
     }
 }
