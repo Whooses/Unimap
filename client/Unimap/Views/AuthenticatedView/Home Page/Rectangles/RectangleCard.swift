@@ -21,20 +21,13 @@ struct RectangleCard: View {
             HStack {
                 Image(userPFP)
                     .resizable()
-                    .frame(width: 30, height: 30)
+                    .frame(width: 35, height: 30)
                     .clipShape(Circle())
 
                 Text(username)
-                    .font(.subheadline)
+                    .font(.headline)
                     .bold()
-
-                Spacer()
-
-                Image(systemName: "ellipsis")
-                    .rotationEffect(.degrees(90))
-                    .foregroundColor(.gray)
             }
-            .padding(.horizontal, 16)
 
             // Event Content
             HStack(spacing: 0) {
@@ -54,29 +47,36 @@ struct RectangleCard: View {
                     .clipped()
 
                 // Event Info
-                VStack(alignment: .leading, spacing: 6) {
+                VStack(alignment: .leading) {
+
                     Text(eventTitle)
                         .font(.title3)
+                        .bold()
+                        .foregroundColor(.white)
                         .lineLimit(2)
-                        .truncationMode(.tail)
-
+                        .padding(.bottom, 10)
+                    
                     Text(eventDescription)
                         .font(.footnote)
-                        .foregroundColor(.gray)
+                        .foregroundColor(.white)
                         .lineLimit(3)
-                        .truncationMode(.tail)
+                        .padding(.bottom, 10)
 
                     Text(eventDate)
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.white)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(16)
+                .background(
+                    RoundedRectangle(cornerRadius: 14)
+                        .fill(Color(red: 91/255, green: 101/255, blue: 86/255))
+                )
             }
             .frame(width: 350, height: 140) // Ensures fixed width and height
             .background(
                 RoundedRectangle(cornerRadius: 14)
-                    .fill(Color(.systemBackground))
+                    .fill(Color(red: 91/255, green: 101/255, blue: 86/255)) // Updated color
                     .shadow(radius: 10)
             )
         }
