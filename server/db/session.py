@@ -3,8 +3,12 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # Replace with your Supabase database URL
-DATABASE_URL = "postgresql://postgres.olxchrqwobbpgwqyuvos:x7OwMPNJElTCCR0C@aws-0-ca-central-1.pooler.supabase.com:6543/postgres"
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 # Create the database engine
 engine = create_engine(DATABASE_URL)

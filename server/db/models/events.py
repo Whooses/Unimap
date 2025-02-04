@@ -10,7 +10,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.sql import func
 from db.session import Base
-
+from sqlalchemy.dialects.postgresql import ARRAY
 
 class Events(Base):
     __tablename__ = "events"
@@ -30,3 +30,9 @@ class Events(Base):
     )
     updated_at = Column(DateTime(timezone=True), nullable=True)
     username = Column(String, nullable=False)
+
+    departments = Column(ARRAY(Text), nullable=True)
+    categories = Column(ARRAY(Text), nullable=True)
+    clubs = Column(ARRAY(Text), nullable=True)
+    types = Column(ARRAY(Text), nullable=True)
+
