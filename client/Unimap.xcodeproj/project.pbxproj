@@ -38,7 +38,7 @@
 		566A853E2D2F7FC5008EFFEF /* Exceptions for "Unimap" folder in "Unimap" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				Configs/Info.plist,
 			);
 			target = 56D0FC782D236A59005B296A /* Unimap */;
 		};
@@ -424,7 +424,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Unimap/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Unimap/Info.plist;
+				INFOPLIST_FILE = Unimap/Configs/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -453,7 +453,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Unimap/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Unimap/Info.plist;
+				INFOPLIST_FILE = Unimap/Configs/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
