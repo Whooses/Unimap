@@ -73,7 +73,7 @@ struct RectangleCard: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(16)
             }
-            .frame(width: 320, height: 140) // Ensures fixed width and height
+            .frame(width: 350, height: 140) // Ensures fixed width and height
             .background(
                 RoundedRectangle(cornerRadius: 14)
                     .fill(Color(.systemBackground))
