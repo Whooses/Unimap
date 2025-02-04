@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct LatestEvents: View {
+struct SmallSquares: View {
     @State private var events: [Event] = [] // State to hold fetched events
 
     var body: some View {
@@ -26,7 +26,7 @@ struct LatestEvents: View {
                             .padding()
                     } else {
                         ForEach(events) { event in
-                            LatestEventCard(
+                            LargeSquaresCard(
                                 username: "Whooses", // Replace with actual username if available
                                 userPFP: "stockUser",
                                 eventImage: "eventImage1"

@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct LatestEventCard: View {
+struct LargeSquaresCard: View {
     var username: String
     var userPFP: String
     var eventImage: String = "empty"
