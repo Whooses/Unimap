@@ -14,6 +14,7 @@ struct Rectangles: View {
 
     var body: some View {
         VStack(alignment: .leading) {
+            // ... existing code
             if isLoading {
                 ProgressView()
                     .padding()
@@ -30,9 +31,9 @@ struct Rectangles: View {
                     VStack(spacing: 5) {
                         ForEach(events) { event in
                             RectangleCard(
-                                username: "Whooses", // Hardcoded value
-                                userPFP: "stockUser", // Hardcoded value
-                                eventImage: "eventImage1", // Hardcoded value
+                                username: event.username, // Use event's username
+                                userPFP: "stockUser",
+                                eventImageURL: URL(string: event.image_url),
                                 eventTitle: event.title,
                                 eventDescription: event.description,
                                 eventDate: event.date

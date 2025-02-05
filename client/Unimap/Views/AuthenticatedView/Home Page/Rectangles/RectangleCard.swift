@@ -10,45 +10,50 @@ import SwiftUI
 struct RectangleCard: View {
     let username: String
     let userPFP: String
-    let eventImage: String
+    let eventImageURL: URL?
     let eventTitle: String
     let eventDescription: String
     let eventDate: String
-
+    
+    @StateObject private var imageLoader = ImageLoader(url: nil)
+    @State private var cardColor = Color(.systemGray)
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            // Header
+            // Header (unchanged)
             HStack {
                 Image(userPFP)
                     .resizable()
                     .frame(width: 35, height: 30)
                     .clipShape(Circle())
-
                 Text(username)
                     .font(.headline)
                     .bold()
             }
-
+            
             // Event Content
             HStack(spacing: 0) {
-                // Square Event Image
-                Image(eventImage)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 140, height: 140) // Ensuring square shape
-                    .clipShape(
-                        .rect(
-                            topLeadingRadius: 14,
-                            bottomLeadingRadius: 14,
-                            bottomTrailingRadius: 0,
-                            topTrailingRadius: 0
-                        )
-                    )
-                    .clipped()
-
-                // Event Info
+                // Image Section
+                Group {
+                    if let image = imageLoader.image {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFill()
+                    } else {
+                        ProgressView()
+                    }
+                }
+                .frame(width: 140, height: 140)
+                .clipShape(.rect(
+                    topLeadingRadius: 14,
+                    bottomLeadingRadius: 14,
+                    bottomTrailingRadius: 0,
+                    topTrailingRadius: 0
+                ))
+                .clipped()
+                
+                // Text Section
                 VStack(alignment: .leading) {
-
                     Text(eventTitle)
                         .font(.title3)
                         .bold()
@@ -61,7 +66,7 @@ struct RectangleCard: View {
                         .foregroundColor(.white)
                         .lineLimit(3)
                         .padding(.bottom, 10)
-
+                    
                     Text(eventDate)
                         .font(.caption)
                         .foregroundColor(.white)
@@ -70,18 +75,27 @@ struct RectangleCard: View {
                 .padding(16)
                 .background(
                     RoundedRectangle(cornerRadius: 14)
-                        .fill(Color(red: 91/255, green: 101/255, blue: 86/255))
+                        .fill(cardColor)
                 )
             }
-            .frame(width: 350, height: 140) // Ensures fixed width and height
+            .frame(width: 350, height: 140)
             .background(
                 RoundedRectangle(cornerRadius: 14)
-                    .fill(Color(red: 91/255, green: 101/255, blue: 86/255)) // Updated color
+                    .fill(cardColor)
                     .shadow(radius: 10)
             )
         }
-        .frame(width: 320) // Ensures all cards are the same width
+        .frame(width: 320)
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
+        .onAppear {
+            imageLoader.url = eventImageURL
+            Task {
+                await imageLoader.load()
+                if let newColor = imageLoader.averageColor {
+                    cardColor = newColor
+                }
+            }
+        }
     }
 }
