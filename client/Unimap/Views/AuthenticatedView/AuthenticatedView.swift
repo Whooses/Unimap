@@ -12,6 +12,6 @@ struct AuthenticatedView: View {
     @ObservedObject var authViewModel: AuthViewModel
     
     var body: some View {
-        NavBarComponent()
+        HomeView()
     }
 }

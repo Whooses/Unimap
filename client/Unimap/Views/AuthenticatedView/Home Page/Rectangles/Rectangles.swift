@@ -1,10 +1,3 @@
-//
-//  Upcoming.swift
-//  Unimap
-//
-//  Created by Bhavya Patel on 2025-01-22.
-//
-
 import SwiftUI
 
 struct Rectangles: View {
@@ -14,7 +7,6 @@ struct Rectangles: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            // ... existing code
             if isLoading {
                 ProgressView()
                     .padding()

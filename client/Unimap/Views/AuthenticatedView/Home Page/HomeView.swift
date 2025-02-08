@@ -13,9 +13,8 @@ struct HomeView: View {
         ScrollView {
             VStack {
                 SearchBarComponent()
-                    .padding(.top, 16)
+                FilterBarComponent()
                 Rectangles()
-                    .padding(.top, 16)
             }
         }
         .background(Color.white)
