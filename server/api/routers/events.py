@@ -15,7 +15,10 @@ def get_events(
     skip: int = 0,
     limit: int = 100,
 
+
     # Filters
+    owner_id: Optional[int] = Query(None),  # Example: ?owner_id=4
+
     search: Optional[str] = Query(None),
 
     departments: List[str] = Query([]),  # Example: ?departments=cms&departments=management
@@ -26,6 +29,10 @@ def get_events(
     event_type: Optional[str] = Query(None),  # Example: ?event_type=rsvp
 ):
     query = db.query(Events)
+
+
+    if owner_id:
+        query = query.filter(Events.owner_id == owner_id)
 
     if search:
         query = query.filter(
