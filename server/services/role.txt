@@ -1,1 +1,0 @@
-The role of this folder to only perform a specific task.

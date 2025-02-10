@@ -20,9 +20,7 @@ class Events(Base):
     description = Column(Text, nullable=True)
     date = Column(Date, nullable=True)
     location = Column(String, nullable=True)
-    user = Column(
-        BigInteger, ForeignKey("users.id"), nullable=False
-    )  # Assuming "users" table exists
+
     image_url = Column(String, nullable=False)
     is_public = Column(Boolean, nullable=True)
     created_at = Column(
