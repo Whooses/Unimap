@@ -6,11 +6,20 @@ from sqlalchemy.orm import Session
 from db.session import SessionLocal, engine, Base
 from db.models.events import Events
 
+
+from fastapi.middleware.cors import CORSMiddleware
+
 # Create tables in the database (if they don't exist)
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://127.0.0.1:8000", "http://localhost:8000"],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE"],  # Restrict to necessary HTTP methods
+)
 
 # Dependency to get the database session
 def get_db():
