@@ -1,2 +1,0 @@
-The purpose of this folder is to handle any database related things.
-Note that it is not for any business logic tasks. 
