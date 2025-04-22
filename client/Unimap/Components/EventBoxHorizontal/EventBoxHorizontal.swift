@@ -41,10 +41,11 @@ struct EventBoxHorizontal: View {
 
     private func loadEvents() {
         isLoading = true
-        let apiURL = "http://127.0.0.1:8000/events?" // Define your API URL here
+        let apiURL = "http://127.0.0.1:8000/events" // Define your API URL here
         EventService().loadEvents(from: apiURL) { result in
             DispatchQueue.main.async {
                 isLoading = false
+                
                 switch result {
                 case .success(let fetchedEvents):
                     self.events = fetchedEvents

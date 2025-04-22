@@ -14,7 +14,7 @@ struct HomeView: View {
             VStack {
                 SearchBarComponent()
                 FilterBarComponent()
-                Rectangles()
+                EventBoxHorizontal()
             }
         }
         .background(Color.white)
