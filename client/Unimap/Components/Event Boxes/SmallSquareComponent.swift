@@ -20,6 +20,7 @@ struct SmallSquareCard: View {
                 .resizable()
                 .scaledToFill()
                 .frame(width: 200, height: 200) // Square size
+                .background(Color.gray)
                 .clipShape(RoundedRectangle(cornerRadius: 16)) // Curved square shape
                 .clipped()
 
@@ -55,6 +56,5 @@ struct SmallSquareCard: View {
         }
         .frame(width: 200, height: 200) // Ensure consistent square size
         .shadow(radius: 5) // Shadow for elevation
-        .padding(16)
     }
 }

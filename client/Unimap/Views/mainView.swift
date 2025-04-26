@@ -26,6 +26,20 @@ struct MainView: View {
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView()
+//        MainView()
+        
+//        RectangleComponent(
+//            username: "JaneDoe",
+//            userPFP: URL(string: "https://tinyurl.com/yvdpv8rx"),
+//            eventImageURL: URL(string: "https://tinyurl.com/3athtwm4"),
+//            eventTitle: "Birthday Party 🎉",
+//            eventDescription: "Join us for a fun-filled birthday bash with music and food!",
+//            eventDate: "April 30, 2025"
+//        )
+        PFPComponent(
+            imageUrl: URL(string: "https://i.pravatar.cc/150?img=12"),
+            size: 120,
+            showPlusIcon: true
+        )
     }
 }

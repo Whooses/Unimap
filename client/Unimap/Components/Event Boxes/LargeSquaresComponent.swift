@@ -27,7 +27,7 @@ struct LargeSquares: View {
                     } else {
                         ForEach(events) { event in
                             LargeSquareCard(
-                                username: event.username,
+                                username: "Username",
                                 userPFP: "stockUser",
                                 eventImage: "eventImage1",
                                 eventTitle: event.title,

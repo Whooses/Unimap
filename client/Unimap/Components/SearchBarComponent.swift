@@ -27,9 +27,10 @@ struct SearchBarComponent: View {
             Image(systemName: "magnifyingglass")
                 .foregroundColor(.gray)
         }
-        .padding(.horizontal)
+        .padding(.trailing, 17)
+        .padding(.leading, 5)
         .background(.gray.opacity(0.1))
         .cornerRadius(10)
-        .frame(width: 350)
+        .padding(.horizontal, 25) // 20 points gap on left and right
     }
 }

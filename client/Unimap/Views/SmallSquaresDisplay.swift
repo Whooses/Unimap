@@ -12,11 +12,6 @@ struct SmallSquares: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Title Text")
-                .font(.title2)
-                .bold()
-                .padding(.leading, 16)
-                .padding(.bottom, 8)
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 16) {
