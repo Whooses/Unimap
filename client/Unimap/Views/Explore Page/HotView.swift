@@ -14,7 +14,7 @@ struct HotView: View {
             
             FilterBarComponent()
             
-            EventBoxDisplay()
+            RectangleEventView()
             
             Spacer()
         }

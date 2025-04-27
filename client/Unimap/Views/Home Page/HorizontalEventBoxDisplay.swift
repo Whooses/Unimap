@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct HorizontalEventBoxDisplay: View {
+struct HorizontalRectangleEventView: View {
     @StateObject private var viewModel = EventViewModel()
 
     var body: some View {
@@ -17,15 +17,12 @@ struct HorizontalEventBoxDisplay: View {
                     .foregroundColor(.gray)
                     .padding()
             } else {
-                // 1) Specify horizontal axis
-                // 2) Use LazyHStack for better performance
-                // 3) Give the scrollview a fixed height so it doesn't expand vertically forever
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 16) {
                         ForEach(viewModel.events) { event in
                             RectangleComponent(
-                                username: event.username ?? "Unknown User",
-                                userPFP: "stockuser",
+                                username: event.user.username,
+                                userPFP: PFPComponent(imageUrl: event.user.pfpURL),
                                 eventImageURL: event.imageURL,
                                 eventTitle: event.title,
                                 eventDescription: event.description,

@@ -1,14 +1,7 @@
-//
-//  EventViewModel.swift
-//  Unimap
-//
-//  Created by Tony Nguyen on 2025-04-21.
-//
-
 import Foundation
 import Combine
 
-final class EventViewModel: ObservableObject {
+class EventViewModel: ObservableObject {
     @Published var events: [Event] = []
     @Published var isLoading = false
     @Published var errorMessage: String?

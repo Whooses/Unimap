@@ -25,7 +25,7 @@ struct HomeView: View {
                     Spacer()
                 }
                 
-                HorizontalEventBoxDisplay()
+                HorizontalRectangleEventView()
                 
                 HStack {
                     Text("Latest Events")
@@ -35,7 +35,6 @@ struct HomeView: View {
                         .padding(.leading, 25)
                     Spacer()
                 }
-                LargeSquares()
                 
                 Spacer()
             }

@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct EventBoxDisplay: View {
+struct RectangleEventView: View {
     @StateObject private var viewModel = EventViewModel()
 
     var body: some View {
@@ -21,8 +21,8 @@ struct EventBoxDisplay: View {
                     VStack(spacing: 5) {
                         ForEach(viewModel.events) { event in
                             RectangleComponent(
-                              username: event.username ?? "Unknown User",
-                              userPFP: "test",
+                              username: event.user.username,
+                              userPFP: PFPComponent(imageUrl: event.user.pfpURL),
                               eventImageURL: event.imageURL,
                               eventTitle: event.title,
                               eventDescription: event.description,

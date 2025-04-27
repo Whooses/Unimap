@@ -31,22 +31,34 @@ struct MainView_Previews: PreviewProvider {
         
 //        PFPComponent(
 //                imageUrl: URL(string: "https://i.pravatar.cc/150?img=12"),
-//                size: 45,
+//                size: 40,
 //                showPlusIcon: true
 //            )
         
         
-        testRectangleComponent(
-            username: "JaneDoe",
+//        RectangleComponent(
+//            username: "JaneDoe",
+//            userPFP: PFPComponent(
+//                    imageUrl: URL(string: "https://i.pravatar.cc/150?img=12"),
+//                    size: 40,
+//                    showPlusIcon: true
+//                ),
+//            eventImageURL: URL(string: "https://tinyurl.com/3athtwm4"),
+//            eventTitle: "Birthday Party 🎉",
+//            eventDescription: "Join us for a fun-filled birthday bash with music and food!",
+//            eventDate: "April 30, 2025"
+//        )
+        
+        MediumSquareCard(
+            username: "John Doe",
             userPFP: PFPComponent(
-                    imageUrl: URL(string: "https://i.pravatar.cc/150?img=12"),
-                    size: 45,
-                    showPlusIcon: true
-                ),
-            eventImageURL: URL(string: "https://tinyurl.com/3athtwm4"),
-            eventTitle: "Birthday Party 🎉",
-            eventDescription: "Join us for a fun-filled birthday bash with music and food!",
-            eventDate: "April 30, 2025"
+                imageUrl: URL(string: "https://i.pravatar.cc/150?img=12"),
+                size: 40,
+                showPlusIcon: true
+            ),
+            eventImageURL: URL(string:"https://tinyurl.com/2s3erc73"),
+            eventTitle: "Summer Festival",
+            eventDate: "July 20, 2025"
         )
         
     }

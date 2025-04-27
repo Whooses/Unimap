@@ -15,7 +15,7 @@ struct UpcomingView: View {
             
             FilterBarComponent()
             
-            EventBoxDisplay()
+            RectangleEventView()
 
             Spacer()
         }

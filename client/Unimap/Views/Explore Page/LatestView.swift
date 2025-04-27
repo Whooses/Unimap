@@ -14,7 +14,6 @@ struct LatestView: View {
             
             FilterBarComponent()
             
-            EventBoxDisplay()
 
             Spacer()
         }
