@@ -67,7 +67,19 @@ class EventService {
             let events = try decoder.decode([Event].self, from: data)
             return .success(events)
         } catch let decodingError as DecodingError {
-            // You can add more granular logging here if desired
+            // Log detailed decoding error
+            switch decodingError {
+            case .typeMismatch(let type, let context):
+                print("Type mismatch for type \(type): \(context.debugDescription)")
+            case .valueNotFound(let type, let context):
+                print("Value not found for type \(type): \(context.debugDescription)")
+            case .keyNotFound(let key, let context):
+                print("Key '\(key)' not found: \(context.debugDescription)")
+            case .dataCorrupted(let context):
+                print("Data corrupted: \(context.debugDescription)")
+            @unknown default:
+                print("Unknown decoding error")
+            }
             return .failure(decodingError)
         } catch {
             return .failure(error)
