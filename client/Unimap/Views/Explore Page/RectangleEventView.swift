@@ -22,7 +22,10 @@ struct RectangleEventView: View {
                         ForEach(viewModel.events) { event in
                             RectangleComponent(
                               username: event.user.username,
-                              userPFP: PFPComponent(imageUrl: event.user.pfpURL),
+                              userPFP: PFPComponent(
+                                imageUrl: event.user.pfpURL,
+                                size: 40
+                              ),
                               eventImageURL: event.imageURL,
                               eventTitle: event.title,
                               eventDescription: event.description,

@@ -15,7 +15,7 @@ class AuthViewModel: ObservableObject {
                 case .success(let credentials):
                     DispatchQueue.main.async { // Ensure this runs on the main thread
                         self.isAuthenticated = true
-                        self.decodeUserInfo(from: credentials.idToken)
+                        self.decodeUserInfo(idToken: credentials.idToken)
                         print("Logged in successfully!")
                     }
                 case .failure(let error):
@@ -41,7 +41,7 @@ class AuthViewModel: ObservableObject {
             }
     }
 
-    private func decodeUserInfo(from idToken: String) {
+    private func decodeUserInfo(idToken: String) {
         do {
             let jwt = try decode(jwt: idToken)
             print("\(jwt)")
