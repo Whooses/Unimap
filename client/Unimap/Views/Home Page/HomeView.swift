@@ -6,35 +6,11 @@ struct HomeView: View {
             VStack {
                 SearchBarComponent()
                 
-                HStack {
-                    Text("Reccomendation")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .padding(.bottom, -2)
-                        .padding(.leading, 25)
-                    Spacer()
-                }
-                SmallSquares()
+                RecommendationView()
                 
-                HStack {
-                    Text("Your Upcoming")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .padding(.bottom, -2)
-                        .padding(.leading, 25)
-                    Spacer()
-                }
+                YourUpcomingView()
                 
-                HorizontalRectangleEventView()
-                
-                HStack {
-                    Text("Latest Events")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .padding(.bottom, -2)
-                        .padding(.leading, 25)
-                    Spacer()
-                }
+                LastestEventsView()
                 
                 Spacer()
             }

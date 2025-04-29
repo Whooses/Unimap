@@ -10,13 +10,16 @@ import SwiftUI
 
 struct SmallSquareCard: View {
     var username: String
-    var userPFP: String
-    var eventImage: String = "empty"
+    var userPFP: PFPComponent
+    let eventImageURL: URL?
+    
+    @StateObject private var imageLoader = ImageLoader(url: nil)
+    @State private var cardColor = Color(.systemGray)
 
     var body: some View {
         ZStack(alignment: .bottomLeading) {
             // Background Image
-            Image(eventImage)
+            Image(uiImage: imageLoader.image ?? UIImage())
                 .resizable()
                 .scaledToFill()
                 .frame(width: 200, height: 200) // Square size
@@ -39,11 +42,7 @@ struct SmallSquareCard: View {
             // User Info
             HStack(spacing: 8) {
                 // User PFP
-                Image(userPFP)
-                    .resizable()
-                    .frame(width: 30, height: 30)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.white, lineWidth: 2))
+                userPFP
 
                 // Username
                 Text(username)
@@ -56,5 +55,14 @@ struct SmallSquareCard: View {
         }
         .frame(width: 200, height: 200) // Ensure consistent square size
         .shadow(radius: 5) // Shadow for elevation
+        .onAppear {
+            imageLoader.url = eventImageURL
+            Task {
+                await imageLoader.load()
+                if let newColor = imageLoader.averageColor {
+                    cardColor = newColor
+                }
+            }
+        }
     }
 }

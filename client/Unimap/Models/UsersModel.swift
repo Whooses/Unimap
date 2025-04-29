@@ -9,7 +9,7 @@ struct UserInfo: Codable {
         case pfpURL = "pfp_url"
     }
     
-    init(from decoder: Decoder) throws {
+    init(decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         username = try container.decode(String.self, forKey: .username)
         

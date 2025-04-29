@@ -62,6 +62,7 @@ struct MediumSquareCard: View {
                         .font(.subheadline)
                         .bold()
                         .padding(.top, 8)
+                        .foregroundColor(.white)
                     Spacer()
                 }
                 .padding(.horizontal, 12)
