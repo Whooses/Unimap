@@ -28,3 +28,4 @@ struct MainView: View {
         eventDescription: "I want to make post",
         eventDate: "In 4 days")
 }
+
