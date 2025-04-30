@@ -14,7 +14,7 @@ class EventOut(BaseModel):
     date: Optional[datetime.date] = None              # was start_at/end_at
     location: Optional[str]
     image_url: str
-    is_public: Optional[bool]
+    is_public: bool
     created_at: datetime.datetime
     updated_at: Optional[datetime.datetime]
     username: Optional[str]
@@ -24,7 +24,7 @@ class EventOut(BaseModel):
     types: Optional[List[str]]
     owner_id: int
     user_id: int
-    user: Optional[UserInfo] = None
+    user: UserInfo
 
     model_config = {
         "from_attributes": True
@@ -37,7 +37,7 @@ class EventCreate(BaseModel):
     date: Optional[datetime.date] = None
     location: Optional[str] = None
     image_url: str
-    is_public: Optional[bool] = None
+    is_public: bool
     username: Optional[str] = None
     departments: Optional[List[str]] = None
     categories: Optional[List[str]] = None
