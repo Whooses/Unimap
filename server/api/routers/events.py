@@ -5,7 +5,8 @@ from sqlalchemy.orm import Session, joinedload
 from typing import List, Optional
 from datetime import date
 from db.models.events import Events
-from api.dependencies import get_db
+from api.dependencies import get_db, get_current_user
+from db.models.users import Users
 from api.schemas.event import EventOut, EventCreate
 
 router = APIRouter(prefix="/events", tags=["events"])
@@ -78,3 +79,16 @@ def delete_event(event_id: int, db: Session = Depends(get_db)):
     db.delete(event)
     db.commit()
     return Response(status_code=204)
+
+
+@router.post("/favourite/{event_id}")
+def favourite_event(event_id: int, db: Session = Depends(get_db), current_user: Users = Depends(get_current_user)):
+    event = db.query(Events).get(event_id)
+    if not event:
+        raise HTTPException(status_code=404, detail="Event not found")
+
+    if event not in current_user.favourites:
+        current_user.favourites.append(event)
+        db.commit()
+
+    return {"message": "Event added to favourites"}

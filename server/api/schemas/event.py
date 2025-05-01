@@ -1,11 +1,10 @@
 from __future__ import annotations
-
-from typing import Optional, List
+from typing import Optional, List, TYPE_CHECKING
 import datetime
-
 from pydantic import BaseModel
-from .user import UserInfo
 
+if TYPE_CHECKING:
+    from .user import UserInfo  # forward reference only
 
 class EventOut(BaseModel):
     id: int
@@ -24,7 +23,7 @@ class EventOut(BaseModel):
     types: Optional[List[str]]
     owner_id: int
     user_id: int
-    user: UserInfo
+    user: "UserInfo"
 
     model_config = {
         "from_attributes": True

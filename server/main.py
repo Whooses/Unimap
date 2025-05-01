@@ -2,7 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from db.session import engine, Base
-from api.routers import events
+from api.routers import events, auth
+from api.schemas.schema_init import rebuild_schemas
 from db import init_db
 
 # Initialize the database
@@ -24,3 +25,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(events.router)
+app.include_router(auth.router)
+
+# Rebuild Pydantic schemas
+rebuild_schemas()

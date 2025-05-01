@@ -1,4 +1,16 @@
+# Node.js
 server/node_modules/
-server/.env
+
+# Python virtual environment
 .venv/
+
+# Python bytecode
 *.cpython-*.pyc
+__pycache__/
+*.pyc
+
+# Environment variables
+server/.env
+
+# macOS system files
+.DS_Store

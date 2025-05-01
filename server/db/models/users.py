@@ -13,6 +13,7 @@ from sqlalchemy import (
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import relationship
 from db.session import Base
+from db.models.associations import user_favourites
 
 
 class Users(Base):
@@ -29,4 +30,10 @@ class Users(Base):
         "Events",
         back_populates="user",
         cascade="all, delete-orphan"
+    )
+
+    favourites = relationship(
+        "Events",
+        secondary=user_favourites,
+        back_populates="favourited_by"
     )
