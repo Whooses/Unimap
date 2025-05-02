@@ -5,6 +5,8 @@ from db.session import engine, Base
 from api.routers import events
 from db import init_db
 
+from config import CORS_ALLOWED_ORIGINS
+
 # Initialize the database
 init_db()
 
@@ -17,7 +19,7 @@ app = FastAPI()
 # Add CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:8000", "http://localhost:8000"],
+    allow_origins=CORS_ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE"],  # Restrict to necessary HTTP methods
 )
