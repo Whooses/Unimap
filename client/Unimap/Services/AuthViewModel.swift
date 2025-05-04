@@ -7,21 +7,17 @@ class AuthViewModel: ObservableObject {
     @Published var userName: String?
 
     func login() {
-        print("Login button clicked") // Debug print
         Auth0
             .webAuth()
+            .audience("https://dev-3pwlmiwfun0hmi7r.us.auth0.com/api/v2/")
             .start { result in
                 switch result {
                 case .success(let credentials):
-                    let accessToken = credentials.accessToken
-                    print("Access Token: \(accessToken)")
-
-                                
+                    print("Access Token: \(credentials.accessToken)")
                     
                     DispatchQueue.main.async { // Ensure this runs on the main thread
                         self.isAuthenticated = true
-                        self.decodeUserInfo(idToken: credentials.idToken)
-                        print()
+//                        self.decodeUserInfo(idToken: credentials.idToken)
                         print("Logged in successfully!")
                     }
                 case .failure(let error):
@@ -50,7 +46,7 @@ class AuthViewModel: ObservableObject {
     private func decodeUserInfo(idToken: String) {
         do {
             let jwt = try decode(jwt: idToken)
-            print("\(jwt)")
+//            print("\(jwt)")
             self.userName = jwt.claim(name: "name").string // Extract the "name" claim
         } catch {
             print("Failed to decode ID token: \(error)")

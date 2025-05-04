@@ -7,6 +7,7 @@ from datetime import date
 from db.models.events import Events
 from api.dependencies import get_db
 from api.schemas.event import EventOut, EventCreate
+from auth.dependencies import get_current_user
 
 router = APIRouter(prefix="/events", tags=["events"])
 
@@ -19,6 +20,7 @@ def get_events(
     search: Optional[str] = Query(None),
     start_date: Optional[date] = Query(None),
     end_date: Optional[date] = Query(None),
+    user=Depends(get_current_user)
 ):
     query = db.query(Events).options(joinedload(Events.user))
 

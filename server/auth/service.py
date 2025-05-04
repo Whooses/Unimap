@@ -15,6 +15,9 @@ class AuthService:
     def _get_signing_key(token: str):
         unverified_header = jwt.get_unverified_header(token)
         jwks = AuthService._get_jwks()
+        print("Unverified Header:", unverified_header)
+        print("JWKS:", jwks)
+
         for key in jwks:
             if key["kid"] == unverified_header["kid"]:
                 return {
