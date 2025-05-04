@@ -11,7 +11,7 @@ struct MainView: View {
             AuthenticatedView(authViewModel: authViewModel)
         }
         else {
-            AuthenticatedView(authViewModel: authViewModel)
+            UnauthenticatedView(authViewModel: authViewModel)
         }
     }
 }
@@ -19,5 +19,4 @@ struct MainView: View {
 #Preview {
     MainView()
 }
-
 

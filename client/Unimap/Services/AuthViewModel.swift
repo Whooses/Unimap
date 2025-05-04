@@ -13,9 +13,15 @@ class AuthViewModel: ObservableObject {
             .start { result in
                 switch result {
                 case .success(let credentials):
+                    let accessToken = credentials.accessToken
+                    print("Access Token: \(accessToken)")
+
+                                
+                    
                     DispatchQueue.main.async { // Ensure this runs on the main thread
                         self.isAuthenticated = true
                         self.decodeUserInfo(idToken: credentials.idToken)
+                        print()
                         print("Logged in successfully!")
                     }
                 case .failure(let error):
