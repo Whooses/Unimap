@@ -8,7 +8,7 @@ struct RectangleComponent: View {
     let eventDescription: String?
     let eventDate: String?
     
-    @StateObject private var imageLoader = ImageLoader(url: nil)
+    @StateObject private var imageLoaderService = ImageLoaderService(url: nil)
     @State private var cardColor = Color(.systemGray)
     
     var body: some View {
@@ -24,7 +24,7 @@ struct RectangleComponent: View {
             // Event content text
             HStack(spacing: 0) {
                 // Image
-                Image(uiImage: imageLoader.image ?? UIImage())
+                Image(uiImage: imageLoaderService.image ?? UIImage())
                     .resizable()
                     .scaledToFill()
                     .frame(width: 140, height: 140)
@@ -60,10 +60,10 @@ struct RectangleComponent: View {
         .frame(width: 320)
         .padding(.horizontal, 16)
         .onAppear {
-            imageLoader.url = eventImageURL
+            imageLoaderService.url = eventImageURL
             Task {
-                await imageLoader.load()
-                if let newColor = imageLoader.averageColor {
+                await imageLoaderService.load()
+                if let newColor = imageLoaderService.averageColor {
                     cardColor = newColor
                 }
             }

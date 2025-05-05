@@ -3,3 +3,4 @@ server/.env
 .venv/
 *.cpython-*.pyc
 !.env.example
+.xcodeproj
