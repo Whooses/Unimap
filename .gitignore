@@ -3,4 +3,6 @@ server/.env
 .venv/
 *.cpython-*.pyc
 !.env.example
-.xcodeproj
+*.xcuserdatad
+*.xcuserstate
+xcuserdata/
