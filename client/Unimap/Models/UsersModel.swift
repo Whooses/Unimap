@@ -1,6 +1,6 @@
 import Foundation
 
-struct UserInfo: Codable {
+struct User: Codable {
     let username: String
     let pfpURL: URL?
 

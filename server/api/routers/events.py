@@ -20,7 +20,6 @@ def get_events(
     search: Optional[str] = Query(None),
     start_date: Optional[date] = Query(None),
     end_date: Optional[date] = Query(None),
-    user=Depends(get_current_user)
 ):
     query = db.query(Events).options(joinedload(Events.user))
 
