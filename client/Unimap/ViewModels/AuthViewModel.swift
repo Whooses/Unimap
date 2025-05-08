@@ -6,7 +6,7 @@ import Combine
 class AuthViewModel: ObservableObject {
     
     // Published properties for UI binding
-    @Published var isAuthenticated = true
+    @Published var isAuthenticated = false
     @Published var userInfo: UserInfo? = nil
     @Published var authError: String? = nil
 
@@ -29,7 +29,12 @@ class AuthViewModel: ObservableObject {
                 case .success(let credentials):
                     // Persist securely in Keychain
                     _ = self?.credentialsManager.store(credentials: credentials)
-                    self?.userInfo = self?.credentialsManager.user
+                    print("Access token: \(credentials.accessToken)\n")
+                    print("Refresh token: \(credentials.refreshToken ?? "None")")
+                    
+                    DispatchQueue.main.async {
+                        self?.userInfo = self?.credentialsManager.user
+                    }
                 case .failure(let error):
                     DispatchQueue.main.async {
                         self?.authError = error.localizedDescription
@@ -92,7 +97,9 @@ class AuthViewModel: ObservableObject {
                     .start { result in
                         switch result {
                         case .success(let userInfo):
-                            self.userInfo = userInfo  // ← Updated user info here
+                            DispatchQueue.main.async {
+                                self.userInfo = userInfo  // ← Updated user info here
+                            }
                         case .failure(let error):
                             print("Failed to fetch user info: \(error)")
                         }
