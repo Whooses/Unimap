@@ -1,0 +1,8 @@
+server/node_modules/
+server/.env
+.venv/
+*.cpython-*.pyc
+!.env.example
+*.xcuserdatad
+*.xcuserstate
+xcuserdata/
