@@ -15,9 +15,10 @@ private extension UIColor {
 }
 
 @MainActor
-class ImageLoader: ObservableObject {
+class ImageLoaderService: ObservableObject {
     @Published var image: UIImage?
     @Published var averageColor: Color?
+    
     var url: URL?
     
     init(url: URL?) {

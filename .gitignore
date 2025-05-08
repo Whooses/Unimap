@@ -3,3 +3,6 @@ server/.env
 .venv/
 *.cpython-*.pyc
 !.env.example
+*.xcuserdatad
+*.xcuserstate
+xcuserdata/

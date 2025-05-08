@@ -13,13 +13,13 @@ struct SmallSquareCard: View {
     var userPFP: PFPComponent
     let eventImageURL: URL?
     
-    @StateObject private var imageLoader = ImageLoader(url: nil)
+    @StateObject private var imageLoaderService = ImageLoaderService(url: nil)
     @State private var cardColor = Color(.systemGray)
 
     var body: some View {
         ZStack(alignment: .bottomLeading) {
             // Background Image
-            Image(uiImage: imageLoader.image ?? UIImage())
+            Image(uiImage: imageLoaderService.image ?? UIImage())
                 .resizable()
                 .scaledToFill()
                 .frame(width: 200, height: 200) // Square size
@@ -56,10 +56,10 @@ struct SmallSquareCard: View {
         .frame(width: 200, height: 200) // Ensure consistent square size
         .shadow(radius: 5) // Shadow for elevation
         .onAppear {
-            imageLoader.url = eventImageURL
+            imageLoaderService.url = eventImageURL
             Task {
-                await imageLoader.load()
-                if let newColor = imageLoader.averageColor {
+                await imageLoaderService.load()
+                if let newColor = imageLoaderService.averageColor {
                     cardColor = newColor
                 }
             }

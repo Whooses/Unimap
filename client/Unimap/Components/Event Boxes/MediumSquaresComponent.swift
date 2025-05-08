@@ -7,7 +7,7 @@ struct MediumSquareCard: View {
     var eventTitle: String
     var eventDate: String?
     
-    @StateObject private var imageLoader = ImageLoader(url: nil)
+    @StateObject private var imageLoaderService = ImageLoaderService(url: nil)
     @State private var cardColor = Color(.systemGray)
 
     var body: some View {
@@ -48,7 +48,7 @@ struct MediumSquareCard: View {
             VStack(spacing: 0) {
                 // Event Image with Title Overlay
                 ZStack(alignment: .bottomLeading) {
-                    Image(uiImage: imageLoader.image ?? UIImage())
+                    Image(uiImage: imageLoaderService.image ?? UIImage())
                         .resizable()
                         .scaledToFill()
                         .frame(width: 200, height: 200)
@@ -73,10 +73,10 @@ struct MediumSquareCard: View {
         }
         .frame(width: 200, height: 285)
         .onAppear {
-            imageLoader.url = eventImageURL
+            imageLoaderService.url = eventImageURL
             Task {
-                await imageLoader.load()
-                if let newColor = imageLoader.averageColor {
+                await imageLoaderService.load()
+                if let newColor = imageLoaderService.averageColor {
                     cardColor = newColor
                 }
             }

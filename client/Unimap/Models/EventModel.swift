@@ -17,7 +17,7 @@ struct Event: Codable, Identifiable {
     let types: [String]?
     let ownerId: Int               // maps to "owner_id"
     let userId: Int                // maps to "user_id"
-    let user: UserInfo
+    let user: User
 
     enum CodingKeys: String, CodingKey {
         case id, title, description, date, location

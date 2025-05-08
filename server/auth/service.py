@@ -6,6 +6,7 @@ from config import AUTH0_DOMAIN, API_AUDIENCE, ALGORITHMS
 class AuthService:
     @staticmethod
     def _get_jwks():
+        """Fetches the JSON Web Key Set (JWKS) from Auth0."""
         jwks_url = f"https://{AUTH0_DOMAIN}/.well-known/jwks.json"
         response = get(jwks_url)
         response.raise_for_status()
@@ -13,6 +14,7 @@ class AuthService:
 
     @staticmethod
     def _get_signing_key(token: str):
+        """Extracts the signing key from the token's header and matches it with the JWKS."""
         unverified_header = jwt.get_unverified_header(token)
         jwks = AuthService._get_jwks()
         print("Unverified Header:", unverified_header)
@@ -31,6 +33,7 @@ class AuthService:
 
     @staticmethod
     def verify_token(token: str):
+        """Verifies the JWT token and returns the payload if valid."""
         try:
             key = AuthService._get_signing_key(token)
             payload = jwt.decode(

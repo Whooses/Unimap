@@ -40,8 +40,7 @@ class EventService {
         guard let data = data else {
             let noDataError = NSError(
                 domain: "EventService",
-                code: 0,
-                userInfo: [NSLocalizedDescriptionKey: "No data received"]
+                code: 0
             )
             return .failure(noDataError)
         }
