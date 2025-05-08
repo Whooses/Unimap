@@ -6,7 +6,7 @@ import Combine
 class AuthViewModel: ObservableObject {
     
     // Published properties for UI binding
-    @Published var isAuthenticated = false
+    @Published var isAuthenticated = true
     @Published var userInfo: UserInfo? = nil
     @Published var authError: String? = nil
 
