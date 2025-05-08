@@ -4,7 +4,7 @@ import Combine
 
 // ViewModel for handling Auth0 authentication and token management
 class AuthViewModel: ObservableObject {
-    
+
     // Published properties for UI binding
     @Published var isAuthenticated = false
     @Published var userInfo: UserInfo? = nil
@@ -31,9 +31,11 @@ class AuthViewModel: ObservableObject {
                     _ = self?.credentialsManager.store(credentials: credentials)
                     print("Access token: \(credentials.accessToken)\n")
                     print("Refresh token: \(credentials.refreshToken ?? "None")")
-                    
+
                     DispatchQueue.main.async {
                         self?.userInfo = self?.credentialsManager.user
+                        self?.isAuthenticated = true
+                        self?.authError = nil
                     }
                 case .failure(let error):
                     DispatchQueue.main.async {
@@ -42,7 +44,7 @@ class AuthViewModel: ObservableObject {
                 }
             }
     }
-    
+
     // Silent token renewal
     func renewToken() {
         credentialsManager.credentials { [weak self] result in
@@ -67,7 +69,7 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
-    
+
     // Logout and clear credentials
     func logout() {
         Auth0
@@ -77,6 +79,9 @@ class AuthViewModel: ObservableObject {
                 case .success:
                     DispatchQueue.main.async {
                         _ = self?.credentialsManager.clear()
+                        self?.isAuthenticated = false
+                        self?.userInfo = nil
+                        self?.authError = nil
                     }
                 case .failure(let error):
                     DispatchQueue.main.async {
@@ -85,7 +90,7 @@ class AuthViewModel: ObservableObject {
                 }
             }
     }
-    
+
     private func fetchUserInfo() {
         credentialsManager.credentials { result in
             switch result {
