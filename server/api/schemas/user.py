@@ -7,6 +7,7 @@ from pydantic import BaseModel
 
 
 class UserInfo(BaseModel):
+    id: int
     username: str
     pfp_url: Optional[str]
 

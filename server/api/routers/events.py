@@ -24,7 +24,7 @@ def get_events(
     query = db.query(Events).options(joinedload(Events.user))
 
     if owner_id:
-        query = query.filter(Events.user_id == owner_id)
+        query = query.filter(Events.user.id == owner_id)
 
     if search:
         query = query.filter(
