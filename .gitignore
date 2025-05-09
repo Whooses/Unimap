@@ -5,4 +5,4 @@ server/.env
 !.env.example
 *.xcuserdatad
 *.xcuserstate
-xcuserdata/
+*.xcbkptlist
