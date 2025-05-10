@@ -9,7 +9,7 @@ struct HomeView: View {
                 RecommendationView()
                 
                 YourUpcomingView()
-                
+//                
                 LastestEventsView()
                 
                 Spacer()
