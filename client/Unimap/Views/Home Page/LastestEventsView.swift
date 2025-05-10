@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct LastestEventsView: View {
-    @StateObject private var viewModel = EventViewModel()
+    @StateObject private var eventViewModel = EventViewModel()
 
     var body: some View {
         VStack {
@@ -15,21 +15,21 @@ struct LastestEventsView: View {
             }
             
             HStack {
-                if viewModel.isLoading {
+                if eventViewModel.isLoading {
                     ProgressView()
                         .padding()
-                } else if let errorMessage = viewModel.errorMessage {
+                } else if let errorMessage = eventViewModel.errorMessage {
                     Text("Error: \(errorMessage)")
                         .foregroundColor(.red)
                         .padding()
-                } else if viewModel.events.isEmpty {
+                } else if eventViewModel.events.isEmpty {
                     Text("No events found.")
                         .foregroundColor(.gray)
                         .padding()
                 } else {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 16) {
-                            ForEach(viewModel.events) { event in
+                            ForEach(eventViewModel.events) { event in
                                 MediumSquareCard(
                                     username: event.user.username,
                                     userPFP: PFPComponent(
@@ -47,7 +47,13 @@ struct LastestEventsView: View {
             }
             .padding(.leading, 25)
             .onAppear {
-                viewModel.loadEvents()
+                Task {
+                    do {
+                        try await eventViewModel.loadEvents()
+                    } catch {
+                        eventViewModel.errorMessage = "Failed to fetch events: \(error.localizedDescription)"
+                    }
+                }
             }
         }
     }

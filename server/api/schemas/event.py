@@ -11,19 +11,15 @@ class EventOut(BaseModel):
     id: int
     title: str
     description: Optional[str]
-    date: Optional[datetime.date] = None              # was start_at/end_at
+    date: Optional[datetime.date]
     location: Optional[str]
     image_url: str
     is_public: bool
-    created_at: datetime.datetime
-    updated_at: Optional[datetime.datetime]
-    username: Optional[str]
     departments: Optional[List[str]]
     categories: Optional[List[str]]
     clubs: Optional[List[str]]
     types: Optional[List[str]]
-    owner_id: int
-    user_id: int
+
     user: UserInfo
 
     model_config = {

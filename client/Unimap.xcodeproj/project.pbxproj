@@ -39,6 +39,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Configs/Info.plist,
+				Info.plist,
 			);
 			target = 56D0FC782D236A59005B296A /* Unimap */;
 		};
