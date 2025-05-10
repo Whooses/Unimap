@@ -1,10 +1,11 @@
+
 import SwiftUI
 
-struct HotView: View {
+struct UpcomingView: View {
     var body: some View {
         VStack(alignment: .center) {
             HStack(alignment: .firstTextBaseline) {
-                Text("Hot Events")
+                Text("Upcoming Events")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .padding(.bottom, 8)
@@ -14,8 +15,8 @@ struct HotView: View {
             
             FilterBarComponent()
             
-            RectangleEventView()
-            
+            RectangleVerLayout()
+
             Spacer()
         }
     }

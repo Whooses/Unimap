@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ExploreView: View {
+struct ExplorePage: View {
     @State private var selectedIndex = 0
     private let titles = ["Hot", "Latest", "Upcoming"]
 

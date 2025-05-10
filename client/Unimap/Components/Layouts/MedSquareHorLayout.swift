@@ -1,27 +1,10 @@
-//
-//  LatestEvents.swift
-//  Unimap
-//
-//  Created by Bhavya Patel on 2025-01-22.
-//
-
 import SwiftUI
 
-struct RecommendationView: View {
-
+struct MedSquareHorLayout: View {
     @StateObject private var eventViewModel = EventViewModel()
 
     var body: some View {
         VStack {
-            HStack {
-                Text("Reccomendation")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .padding(.bottom, -2)
-                    .padding(.leading, 25)
-                Spacer()
-            }
-
             HStack {
                 if eventViewModel.isLoading {
                     ProgressView()
@@ -38,13 +21,15 @@ struct RecommendationView: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 16) {
                             ForEach(eventViewModel.events) { event in
-                                SmallSquareCard(
+                                MediumSquareCard(
                                     username: event.user.username,
                                     userPFP: PFPComponent(
                                         imageUrl: event.user.pfpURL,
                                         size: 40
                                     ),
-                                    eventImageURL: event.imageURL
+                                    eventImageURL: event.imageURL,
+                                    eventTitle: event.title,
+                                    eventDate: event.date
                                 )
                             }
                         }
