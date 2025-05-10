@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct HomeView: View {
+struct HomePage: View {
     var body: some View {
         ScrollView() {
             VStack {

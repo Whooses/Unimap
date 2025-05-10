@@ -1,19 +1,11 @@
 import SwiftUI
 
-struct YourUpcomingView: View {
+struct SmallSquareHorLayout: View {
+
     @StateObject private var eventViewModel = EventViewModel()
 
     var body: some View {
         VStack {
-            HStack {
-                Text("Your Upcoming")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .padding(.bottom, -2)
-                    .padding(.leading, 25)
-                Spacer()
-            }
-            
             HStack {
                 if eventViewModel.isLoading {
                     ProgressView()
@@ -30,15 +22,13 @@ struct YourUpcomingView: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 16) {
                             ForEach(eventViewModel.events) { event in
-                                RectangleComponent(
+                                SmallSquareCard(
                                     username: event.user.username,
                                     userPFP: PFPComponent(
                                         imageUrl: event.user.pfpURL,
-                                        size: 40),
-                                    eventImageURL: event.imageURL,
-                                    eventTitle: event.title,
-                                    eventDescription: event.description,
-                                    eventDate: event.date
+                                        size: 40
+                                    ),
+                                    eventImageURL: event.imageURL
                                 )
                             }
                         }
@@ -58,3 +48,5 @@ struct YourUpcomingView: View {
         }
     }
 }
+
+

@@ -1,12 +1,11 @@
 import SwiftUI
 import Combine
 
-struct RectangleEventView: View {
+struct RectangleVerLayout: View {
     @StateObject private var eventViewModel = EventViewModel()
 
     var body: some View {
         VStack(alignment: .center) {
-            
             if eventViewModel.isLoading {
                 ProgressView()
                     .padding()

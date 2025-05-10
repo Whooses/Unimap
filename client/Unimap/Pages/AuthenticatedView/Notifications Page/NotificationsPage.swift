@@ -1,5 +1,5 @@
 //
-//  ProfileView.swift
+//  NotificationsPage.swift
 //  Unimap
 //
 //  Created by Bhavya Patel on 2025-01-22.
@@ -7,17 +7,17 @@
 
 import SwiftUI
 
-struct ProfileView: View {
+struct NotificationsPage: View {
     var body: some View {
         ScrollView { // Enables vertical scrolling
             VStack {
-                Text("Profile Page Content")
+                Text("Notifications Page Content")
                     .font(.title)
                     .padding()
 
-                // Example profile details
-                ForEach(1...5, id: \.self) { index in
-                    Text("Profile Section \(index)")
+                // Example notifications
+                ForEach(1...10, id: \.self) { index in
+                    Text("Notification \(index)")
                         .font(.body)
                         .padding()
                         .frame(maxWidth: .infinity, alignment: .leading)

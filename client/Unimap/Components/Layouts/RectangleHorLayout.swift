@@ -1,19 +1,10 @@
 import SwiftUI
 
-struct LastestEventsView: View {
+struct RectangleHorLayout: View {
     @StateObject private var eventViewModel = EventViewModel()
 
     var body: some View {
         VStack {
-            HStack {
-                Text("Latest Events")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .padding(.bottom, -2)
-                    .padding(.leading, 25)
-                Spacer()
-            }
-            
             HStack {
                 if eventViewModel.isLoading {
                     ProgressView()
@@ -30,14 +21,14 @@ struct LastestEventsView: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 16) {
                             ForEach(eventViewModel.events) { event in
-                                MediumSquareCard(
+                                RectangleComponent(
                                     username: event.user.username,
                                     userPFP: PFPComponent(
                                         imageUrl: event.user.pfpURL,
-                                        size: 40
-                                    ),
+                                        size: 40),
                                     eventImageURL: event.imageURL,
                                     eventTitle: event.title,
+                                    eventDescription: event.description,
                                     eventDate: event.date
                                 )
                             }
@@ -58,3 +49,4 @@ struct LastestEventsView: View {
         }
     }
 }
+

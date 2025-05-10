@@ -13,22 +13,22 @@ struct AuthenticatedView: View {
     
     var body: some View {
         TabView {
-            HomeView()
+            HomePage()
                 .tabItem {
                     Label("Home", systemImage: "house")
                 }
             
-            ExploreView()
+            ExplorePage()
                 .tabItem {
                     Label("Explore", systemImage: "magnifyingglass")
                 }
             
-            NotificationsView()
+            NotificationsPage()
                 .tabItem {
                     Label("Notification", systemImage: "bell")
                 }
             
-            ProfileView()
+            ProfilePage()
                 .tabItem {
                     Label("Profile", systemImage: "person.crop.circle")
                 }
