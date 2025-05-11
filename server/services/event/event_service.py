@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from db.repository.event_repo import EventRepository
 from db.models.events import Events
+from schemas.event import EventCreate
 
 log = logging.getLogger(__name__)
 
