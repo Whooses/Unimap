@@ -5,6 +5,7 @@ if TYPE_CHECKING:
     from api.schemas.event import EventOut
 
 class UserInfo(BaseModel):
+    id: int
     username: str
     pfp_url: Optional[str]
     favourites: Optional[List["EventOut"]] = []
