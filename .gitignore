@@ -6,3 +6,4 @@ server/.env
 *.xcuserdatad
 *.xcuserstate
 *.xcbkptlist
+.vscode/
