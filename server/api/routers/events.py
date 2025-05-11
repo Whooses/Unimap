@@ -18,7 +18,7 @@ def get_events(
     end_date: Optional[date] = Query(None),
     event_service: ProtocolEventService = Depends(get_event_service),
 ):
-    events = event_service.get_event_list(
+    events = event_service.get_events(
         skip=skip,
         limit=limit,
         owner_id=owner_id,
@@ -42,8 +42,6 @@ def update_event(
     event_service: ProtocolEventService = Depends(get_event_service),
 ):
     updated = event_service.update_event(event_id, updated_event)
-    if not updated:
-        raise HTTPException(status_code=404, detail="Event not found")
     return updated
 
 @router.delete("/{event_id}", status_code=204)
@@ -52,6 +50,4 @@ def delete_event(
     event_service: ProtocolEventService = Depends(get_event_service),
 ):
     deleted = event_service.delete_event(event_id)
-    if not deleted:
-        raise HTTPException(status_code=404, detail="Event not found")
     return Response(status_code=204)
