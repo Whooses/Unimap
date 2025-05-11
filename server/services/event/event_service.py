@@ -57,7 +57,7 @@ class EventService:
                 start_date=start_date,
                 end_date=end_date,
             )
-            return [Events.from_orm(e) for e in events]
+            return events
         except SQLAlchemyError as exc:
             log.exception("DB failure in get_events")
             raise self._err500(exc) from exc
@@ -67,15 +67,15 @@ class EventService:
             event = self.repo.get_event(event_id)
             if event is None:
                 raise self._err404()
-            return Events.from_orm(event)
+            return event
         except SQLAlchemyError as exc:
             log.exception("DB failure in get_event")
             raise self._err500(exc) from exc
 
     def create_event(self, data: EventCreate) -> Events:
         try:
-            ev = self.repo.create_event(data.dict())
-            return Events.from_orm(ev)
+            event = self.repo.create_event(data.dict())
+            return event
         except IntegrityError as exc:          # <-- specific first
             log.exception("Integrity failure in create_event")
             raise self._err409(exc) from exc
@@ -85,10 +85,10 @@ class EventService:
 
     def update_event(self, event_id: int, data: EventCreate) -> Events:
         try:
-            ev = self.repo.update_event(event_id, data.dict())
-            if ev is None:
+            event = self.repo.update_event(event_id, data.dict())
+            if event is None:
                 raise self._err404()
-            return Events.from_orm(ev)
+            return event
         except IntegrityError as exc:
             log.exception("Integrity failure in update_event")
             raise self._err409(exc) from exc
