@@ -4,7 +4,7 @@ from schemas.event import EventCreate, EventOut
 from schemas.user import UserInfo
 
 class MockEventService:
-    def get_event_list(
+    def get_events(
         self,
         skip: int = 0,
         limit: int = 100,
