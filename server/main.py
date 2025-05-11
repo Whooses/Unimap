@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from db.session import engine, Base
-from api.routers import events
+from api.routers import events, favourites
 # from db import init_db
 
 from config import CORS_ALLOWED_ORIGINS
@@ -26,3 +26,4 @@ app.add_middleware(
 
 # Include routers
 app.include_router(events.router)
+app.include_router(favourites.router)

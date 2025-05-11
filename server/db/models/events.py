@@ -15,6 +15,7 @@ from sqlalchemy.orm import relationship
 from db.session import Base
 
 from db.models.users import Users
+from .favourites import favourites_table
 
 class Events(Base):
     __tablename__ = "events"
@@ -49,3 +50,10 @@ class Events(Base):
         "Users",
         back_populates="events"
     )
+
+
+liked_by = relationship(
+    "Users",
+    secondary=favourites_table,
+    back_populates="favourites"
+)
