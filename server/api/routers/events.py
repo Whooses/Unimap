@@ -1,81 +1,53 @@
-from fastapi import APIRouter, Depends, Query, HTTPException
-from fastapi.responses import Response
-from sqlalchemy import or_
-from sqlalchemy.orm import Session, joinedload
+from fastapi import APIRouter, Depends, Query, HTTPException, Response
 from typing import List, Optional
 from datetime import date
-from db.models.events import Events
-from api.dependencies import get_db
-from api.schemas.event import EventOut, EventCreate
-from auth.dependencies import get_current_user
+
+from schemas.event import EventCreate, EventOut
+from dependencies.event_dep import get_event_service
+from services.event.protocol_event_service import ProtocolEventService
 
 router = APIRouter(prefix="/events", tags=["events"])
 
 @router.get("/", response_model=List[EventOut])
 def get_events(
-    db: Session = Depends(get_db),
     skip: int = 0,
     limit: int = 100,
     owner_id: Optional[int] = Query(None),
     search: Optional[str] = Query(None),
     start_date: Optional[date] = Query(None),
     end_date: Optional[date] = Query(None),
+    event_service: ProtocolEventService = Depends(get_event_service),
 ):
-    query = db.query(Events).options(joinedload(Events.user))
-
-    if owner_id:
-        query = query.filter(Events.user.id == owner_id)
-
-    if search:
-        query = query.filter(
-            or_(
-                Events.title.ilike(f"%{search}%"),
-                Events.description.ilike(f"%{search}%"),
-                Events.location.ilike(f"%{search}%"),
-            )
-        )
-
-    if start_date and end_date:
-        query = query.filter(Events.date.between(start_date, end_date))
-    elif start_date:
-        query = query.filter(Events.date >= start_date)
-    elif end_date:
-        query = query.filter(Events.date <= end_date)
-
-    events = query.offset(skip).limit(limit).all()
+    events = event_service.get_events(
+        skip=skip,
+        limit=limit,
+        owner_id=owner_id,
+        search=search,
+        start_date=start_date.isoformat() if start_date else None,
+        end_date=end_date.isoformat() if end_date else None,
+    )
     return events
 
-
 @router.post("/", response_model=EventOut)
-def create_event(event: EventCreate, db: Session = Depends(get_db)):
-    db_event = Events(**event.dict())
-    db.add(db_event)
-    db.commit()
-    db.refresh(db_event)
-
-    db_event = db.query(Events).options(joinedload(Events.user)).filter(Events.id == db_event.id).first()
-
-    return db_event
+def create_event(
+    event: EventCreate,
+    event_service: ProtocolEventService = Depends(get_event_service),
+):
+    return event_service.create_event(event)
 
 @router.put("/{event_id}", response_model=EventOut)
-def update_event(event_id: int, updated_event: EventCreate, db: Session = Depends(get_db)):
-    event = db.query(Events).filter(Events.id == event_id).first()
-    if not event:
-        raise HTTPException(status_code=404, detail="Event not found")
-
-    for field, value in updated_event.dict().items():
-        setattr(event, field, value)
-
-    db.commit()
-    db.refresh(event)
-    return event
+def update_event(
+    event_id: int,
+    updated_event: EventCreate,
+    event_service: ProtocolEventService = Depends(get_event_service),
+):
+    updated = event_service.update_event(event_id, updated_event)
+    return updated
 
 @router.delete("/{event_id}", status_code=204)
-def delete_event(event_id: int, db: Session = Depends(get_db)):
-    event = db.query(Events).filter(Events.id == event_id).first()
-    if not event:
-        raise HTTPException(status_code=404, detail="Event not found")
-
-    db.delete(event)
-    db.commit()
+def delete_event(
+    event_id: int,
+    event_service: ProtocolEventService = Depends(get_event_service),
+):
+    deleted = event_service.delete_event(event_id)
     return Response(status_code=204)

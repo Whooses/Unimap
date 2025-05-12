@@ -23,7 +23,7 @@ class EventOut(BaseModel):
     user: UserInfo
 
     model_config = {
-        "from_attributes": True
+        "from_attributes": True,
     }
 
 # Request schema for creating an event
