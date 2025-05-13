@@ -15,7 +15,7 @@ class ProtocolEventService(Protocol):
     should result in exceptions being raised to the caller.
     """
 
-    def get_event_list(
+    async def get_events(
         self,
         skip: int = 0,
         limit: int = 100,
@@ -39,7 +39,7 @@ class ProtocolEventService(Protocol):
         """
         pass
 
-    def get_event(self, event_id: int) -> Optional[Events]:
+    async def get_event(self, event_id: int) -> Optional[Events]:
         """
         Retrieve event details by event ID.
 
@@ -57,7 +57,7 @@ class ProtocolEventService(Protocol):
         """
         pass
 
-    def create_event(self, event_create: EventCreate) -> Events:
+    async def create_event(self, event_create: EventCreate) -> Events:
         """
         Create a new event.
 
@@ -75,7 +75,7 @@ class ProtocolEventService(Protocol):
         """
         pass
 
-    def update_event(self, event_id: int, event_update: EventCreate) -> Optional[Events]:
+    async def update_event(self, event_id: int, event_update: EventCreate) -> Optional[Events]:
         """
         Update an existing event.
 
@@ -95,7 +95,7 @@ class ProtocolEventService(Protocol):
         """
         pass
 
-    def delete_event(self, event_id: int) -> bool:
+    async def delete_event(self, event_id: int) -> bool:
         """
         Delete an event by ID.
 

@@ -4,7 +4,7 @@ from schemas.event import EventCreate, EventOut
 from schemas.user import UserInfo
 
 class MockEventService:
-    def get_events(
+    async def get_events(
         self,
         skip: int = 0,
         limit: int = 100,
@@ -25,13 +25,13 @@ class MockEventService:
         paginated = events[skip:skip+limit]
         return paginated
 
-    def get_event(self, event_id: int) -> Optional[EventOut]:
+    async def get_event(self, event_id: int) -> Optional[EventOut]:
         for event in mock_events:
             if event.id == event_id:
                 return event
         return None
 
-    def create_event(self, event_create: EventCreate) -> EventOut:
+    async def create_event(self, event_create: EventCreate) -> EventOut:
         new_id = max((event.id for event in mock_events), default=0) + 1
         user = UserInfo(
             id=event_create.user_id,
@@ -55,7 +55,7 @@ class MockEventService:
         mock_events.append(event)
         return event
 
-    def update_event(self, event_id: int, event_update: EventCreate) -> Optional[EventOut]:
+    async def update_event(self, event_id: int, event_update: EventCreate) -> Optional[EventOut]:
         for idx, event in enumerate(mock_events):
             if event.id == event_id:
                 user = UserInfo(
@@ -81,7 +81,7 @@ class MockEventService:
                 return updated_event
         return None
 
-    def delete_event(self, event_id: int) -> bool:
+    async def delete_event(self, event_id: int) -> bool:
         for idx, event in enumerate(mock_events):
             if event.id == event_id:
                 del mock_events[idx]

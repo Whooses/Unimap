@@ -6,9 +6,6 @@ from api.routers import events
 
 from config import CORS_ALLOWED_ORIGINS
 
-# Create tables in the database
-Base.metadata.create_all(bind=engine)
-
 # Initialize FastAPI app
 app = FastAPI()
 
