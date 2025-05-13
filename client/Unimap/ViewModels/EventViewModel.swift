@@ -1,30 +1,36 @@
 import Foundation
 import Combine
 
+/// ViewModel for managing and providing event data to the UI.
 class EventViewModel: ObservableObject {
+    /// A published array of events fetched from the API.
     @Published var events: [Event] = []
+    
+    /// Indicates whether a network request is currently in progress.
     @Published var isLoading = false
+    
+    /// Holds any error message resulting from a failed network request.
     @Published var errorMessage: String?
+    
+    /// The URL request used to fetch events from the backend.
+    @Published var request = URLRequest(url: URL(string: "http://127.0.0.1:8000/events")!)
 
-    // now you can tweak this string anytime before calling loadEvents()
-    @Published var apiURL = "http://127.0.0.1:8000/events"
+    /// Service responsible for fetching events from the API.
+    private let eventService = EventService()
 
-    private let service = EventService()
+    /// Loads events asynchronously from the API, updates the events list,
+    /// and handles loading state and errors.
+    func loadEvents() async throws -> Void {
+        isLoading = true  // safe UI update
 
-    func loadEvents() {
-        isLoading = true
-        errorMessage = nil
-
-        service.loadEvents(apiURLString: apiURL) { [weak self] result in
-            DispatchQueue.main.async {
-                self?.isLoading = false
-                switch result {
-                case .success(let fetched):
-                    self?.events = fetched
-                case .failure(let error):
-                    self?.errorMessage = error.localizedDescription
-                }
-            }
+        do {
+            let fetched = try await eventService.getEvents(from: request)
+            events = fetched  // another UI update
+        } catch {
+            errorMessage = error.localizedDescription
         }
+
+        isLoading = false
     }
 }
+
