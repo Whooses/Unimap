@@ -6,7 +6,7 @@ from api.dependencies import get_db
 from auth.dependencies import get_current_user
 from api.schemas.event import EventOut
 
-router = APIRouter(prefix="/favourites", tags=["favourites"])
+router = APIRouter(prefix="/users", tags=["users"])
 
 @router.post("/add", status_code=200)
 def add_favourite(
