@@ -13,7 +13,7 @@ from schemas.event import EventCreate
 log = logging.getLogger(__name__)
 
 class EventService:
-    def __init__(self, db):
+    def __init__(self, db: Session):
         self.repo = EventRepository(db)
 
     # ── tiny helpers ────────────────────────────────────────────────────
