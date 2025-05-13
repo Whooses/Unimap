@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import desc, asc, func
 from datetime import datetime, date
@@ -8,10 +8,10 @@ from typing import List, Optional
 from db.models.events import Events
 
 class EventRepository:
-    def __init__(self, db: Session):
+    def __init__(self, db: AsyncSession):
         self.db = db
 
-    def get_events(
+    async def get_events(
         self,
         skip: int = 0,
         limit: int = 100,
@@ -26,10 +26,12 @@ class EventRepository:
             query = self.db.query(Events)
 
             if search:
-                query = query.filter(
-                    (Events.title.ilike(f"%{search}%")) |
-                    (Events.description.ilike(f"%{search}%")) |
-                    (Events.location.ilike(f"%{search}%"))
+                filters.append(
+                    or_(
+                        Events.title.ilike(f"%{search}%"),
+                        Events.description.ilike(f"%{search}%"),
+                        Events.location.ilike(f"%{search}%"),
+                    )
                 )
             if clubs:
                 query = query.filter(Events.clubs.overlap(clubs))
@@ -66,45 +68,47 @@ class EventRepository:
         except SQLAlchemyError as e:
             raise RuntimeError(f"Database error in get_events: {e}")
 
-    def get_event(self, event_id: int) -> Optional[Events]:
+    async def get_event(self, event_id: int) -> Optional[Events]:
         try:
-            return self.db.query(Events).filter(Events.id == event_id).first()
+            stmt = select(Events).options(selectinload(Events.user)).where(Events.id == event_id)
+            result = await self.db.execute(stmt)
+            return result.scalars().first()
         except SQLAlchemyError as e:
             raise RuntimeError(f"Database error in get_event: {e}")
 
-    def create_event(self, event_data: dict) -> Events:
+    async def create_event(self, event_data: dict) -> Events:
         try:
             db_event = Events(**event_data)
             self.db.add(db_event)
-            self.db.commit()
-            self.db.refresh(db_event)
+            await self.db.commit()
+            await self.db.refresh(db_event)
             return db_event
         except SQLAlchemyError as e:
-            self.db.rollback()
+            await self.db.rollback()
             raise RuntimeError(f"Database error in create_event: {e}")
 
-    def update_event(self, event_id: int, event_data: dict) -> Optional[Events]:
+    async def update_event(self, event_id: int, event_data: dict) -> Optional[Events]:
         try:
-            event = self.get_event(event_id)
+            event = await self.get_event(event_id)
             if not event:
                 return None
             for field, value in event_data.items():
                 setattr(event, field, value)
-            self.db.commit()
-            self.db.refresh(event)
+            await self.db.commit()
+            await self.db.refresh(event)
             return event
         except SQLAlchemyError as e:
-            self.db.rollback()
+            await self.db.rollback()
             raise RuntimeError(f"Database error in update_event: {e}")
 
-    def delete_event(self, event_id: int) -> bool:
+    async def delete_event(self, event_id: int) -> bool:
         try:
-            event = self.get_event(event_id)
+            event = await self.get_event(event_id)
             if not event:
                 return False
-            self.db.delete(event)
-            self.db.commit()
+            await self.db.delete(event)
+            await self.db.commit()
             return True
         except SQLAlchemyError as e:
-            self.db.rollback()
+            await self.db.rollback()
             raise RuntimeError(f"Database error in delete_event: {e}")
