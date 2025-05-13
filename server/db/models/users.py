@@ -32,8 +32,8 @@ class Users(Base):
         cascade="all, delete-orphan"
     )
 
-favourites = relationship(
-    "Events",
-    secondary=favourites_table,
-    back_populates="liked_by"
-)
+    favourites = relationship(
+        "Events",
+        secondary=favourites_table,
+        back_populates="liked_by"
+    )

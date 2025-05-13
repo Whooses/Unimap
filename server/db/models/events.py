@@ -52,8 +52,8 @@ class Events(Base):
     )
 
 
-liked_by = relationship(
-    "Users",
-    secondary=favourites_table,
-    back_populates="favourites"
-)
+    liked_by = relationship(
+        "Users",
+        secondary=favourites_table,
+        back_populates="favourites"
+    )
