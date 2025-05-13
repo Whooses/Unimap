@@ -20,105 +20,35 @@ struct ProfileView: View {
     var body: some View {
         ScrollView { // Enables vertical scrolling
             VStack(spacing: 15) {
-                //Navigation Bar
-                VStack {
-                    HStack(alignment: .center, spacing: 15) {
-                        Button {
-                            //action to go back
-                        } label: {
-                            Image(systemName: "chevron.backward")
-                                .foregroundStyle(.gray)
-                                .font(.system(size: 22, weight: .medium))
-                        }
-                        Spacer()
-                        //Username
-                        Text(username ?? "User")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .foregroundStyle(.primary)
-                            .lineLimit(1)
-                            .truncationMode(.tail)
-                        Spacer()
-                        Button {
-                            //'more' action
-                        } label: {
-                            Image(systemName: "ellipsis")
-                                .foregroundStyle(.gray)
-                                .font(.system(size: 22, weight: .medium))
-                        }
-                        
-                    }
-                }
+                //Navigation, username bar
+                navUserView(userName: username ?? "User")
+                
                 //Profile, buttons, info
                 VStack(alignment: .center) {
                     //Profile Image
-                    VStack(alignment: .center){
-                        VStack{
-                            Image(uiImage: imageLoader.image ?? UIImage())
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 100, height: 100)
-                                .clipShape(Circle())
-                                
-                            }
-                            .background(Circle())
-                            .frame(width: 100, height: 100)
-                            .padding(.bottom, 6)
-
+                    VStack(alignment: .center) {
+                        Image(uiImage: imageLoader.image ?? UIImage(named: "stockUser")!)
+                               .resizable()
+                               .scaledToFill()
+                               .frame(width: 100, height: 100)
+                               .padding(.bottom, 6)
+                               .clipShape(Circle())
                         //user info
-                        HStack(alignment: .center, spacing: 30) {
-                            profileDataView(number: events ?? 0, type: "Events")
-                            profileDataView(number: followers ?? 0, type: "Followers")
-                            profileDataView(number: attended ?? 0, type: "Attended")
-
-                        } .padding(.bottom, 8)
-                    }
+                        userInfoView(events: events ?? 0, followers: followers ?? 0, attended: attended ?? 0)
+                    } //end of vstack
                     
-                    
-                    HStack(alignment: .center, spacing: 10) {
-                        Button("Follow") { /*action*/ }
-                            .buttonStyle(.borderedProminent)
-                            .buttonBorderShape(.roundedRectangle(radius: 16))
-                            .tint(.red)
-
-                        Button("Message") { /*action*/ }
-                            .buttonStyle(.borderedProminent)
-                            .buttonBorderShape(.roundedRectangle(radius: 16))
-                            .tint(.gray)
-                    }
-                    .foregroundStyle(.white)
-                    .fontWeight(.medium)
-
+                    //Follow, message buttons
+                    followMessageView()
 
                 } .padding(.vertical, 8)
                 
                 //Posts of user [lazy vstack]
                 LazyVStack(spacing: 15) {
-                    HStack {
-                        //filter button
-                        HStack{
-                            Button {
-                                //action to go back
-                            } label: {
-                                Image(systemName: "line.3.horizontal.decrease")
-                                    .foregroundStyle(.gray)
-                                    .font(.system(size: 22, weight: .medium))
-                            }
-                            FilterDropdown(selectedFilter: $selectedFilter)
-                        }
-                        Spacer()
-                        //search button
-                        Button {
-                            //action to go back
-                        } label: {
-                            Image(systemName: "magnifyingglass")
-                                .foregroundStyle(.gray)
-                                .font(.system(size: 22, weight: .medium))
-                        }
-                        
-                    }
+                    //Holds the filter action, search button
+                    filterSearchBarView(selectedFilter: $selectedFilter)
+                    //Call the rectangle event
                     RectangleEventView()
-                }
+                } //end of lazy v-stack
                 
             } //end of wrap vstack
             .padding(.top, 8)
@@ -136,18 +66,6 @@ struct ProfileView: View {
     }
 }
 
-
-//To format number
-func formatNumber(_ number: Int) -> String {
-    if number < 1000 {
-        return "\(number)"
-    } else {
-        let truncated = Double(number) / 1000.0
-        let rounded = (truncated * 10).rounded() / 10  // 1 decimal point
-        return "\(rounded)k"
-    }
-}
-
 //For profile data
 struct profileDataView: View {
     var number: Int
@@ -162,6 +80,97 @@ struct profileDataView: View {
                 .font(.body)
                 .foregroundStyle(.gray)
                 .fontWeight(.medium)
+        }
+    }
+}
+
+//For user stats - formatted
+struct userInfoView: View {
+    var events: Int
+    var followers: Int
+    var attended: Int
+    var body: some View {
+        HStack(alignment: .center, spacing: 30) {
+            profileDataView(number: events, type: "Events")
+            profileDataView(number: followers, type: "Followers")
+            profileDataView(number: attended, type: "Attended")
+
+        } .padding(.bottom, 8)
+            .padding(.leading, 10)
+    }
+}
+
+
+//For upper navigation view
+struct navUserView: View {
+    var userName: String
+    var body: some View {
+        VStack {
+            HStack(alignment: .center, spacing: 15) {
+                Button {
+                    //action to go back
+                } label: {
+                    IconButtonLabel(systemName: "chevron.backward")
+                }
+                Spacer()
+                //Username
+                Text(userName)
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.primary)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                Spacer()
+                Button {
+                    //'more' action
+                } label: {
+                    IconButtonLabel(systemName: "ellipsis")
+                }
+                
+            }
+        }
+    }
+}
+
+//For follow, message buttons
+struct followMessageView: View {
+    var body: some View {
+        HStack(alignment: .center, spacing: 10) {
+            Button("Follow") { /*action*/ }
+                .tint(.red)
+
+            Button("Message") { /*action*/ }
+                .tint(.gray)
+        }
+        .buttonStyle(.borderedProminent)
+        .buttonBorderShape(.roundedRectangle(radius: 16))
+        .foregroundStyle(.white)
+        .fontWeight(.medium)
+    }
+}
+
+//Filter & search bar view
+struct filterSearchBarView: View {
+    @Binding var selectedFilter: String
+    var body: some View {
+        HStack {
+            HStack{
+                //Filter button
+                Button {
+                    //action to filter
+                } label: {
+                    IconButtonLabel(systemName: "line.3.horizontal.decrease")
+                }
+                //Holds the filter dropdown button
+                FilterDropdown(selectedFilter: $selectedFilter)
+            }
+            Spacer()
+            //Search button
+            Button {
+                //action to search
+            } label: {
+                IconButtonLabel(systemName: "magnifyingglass")
+            }
         }
     }
 }
