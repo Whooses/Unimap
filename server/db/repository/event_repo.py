@@ -34,9 +34,9 @@ class EventRepository:
                 )
             if start_date and end_date:
                 filters.append(Events.date.between(start_date, end_date))
-            elif start_date:
+            if start_date:
                 filters.append(Events.date >= start_date)
-            elif end_date:
+            if end_date:
                 filters.append(Events.date <= end_date)
             if filters:
                 stmt = stmt.where(and_(*filters))
