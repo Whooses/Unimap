@@ -7,3 +7,4 @@ server/.env
 *.xcuserstate
 *.xcbkptlist
 .vscode/
+.DS_Store
