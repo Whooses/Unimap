@@ -1,5 +1,5 @@
 //
-//  ProfileView.swift
+//  ProfilePage.swift
 //  Unimap
 //
 //  Created by Krisha Patel on 2025-05-05.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ProfileView: View {
+struct ProfilePage: View {
     
     var username: String?
     var userPFP_URL: URL?
@@ -175,6 +175,6 @@ struct filterSearchBarView: View {
     }
 }
 
-#Preview {
-    ProfileView()
-}
+//#Preview {
+//    ProfilePage()
+//}
