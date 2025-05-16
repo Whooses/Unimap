@@ -12,7 +12,7 @@ class EventViewModel: ObservableObject {
     /// Holds any error message resulting from a failed network request.
     @Published var errorMessage: String?
     
-    /// The URL request used to fetch events from the backend.
+    /// The default URLRequest used to fetch events from the backend.
     @Published var request = URLRequest(url: URL(string: "http://127.0.0.1:8000/events")!)
 
     /// Service responsible for fetching events from the API.

@@ -47,6 +47,7 @@ class EventService:
         search: Optional[str] = None,
         start_date: Optional[str] = None,
         end_date: Optional[str] = None,
+        clubs: Optional[List[str]] = None,
     ) -> List[Events]:
         try:
             events = self.repo.get_events(
@@ -56,6 +57,7 @@ class EventService:
                 search=search,
                 start_date=start_date,
                 end_date=end_date,
+                clubs=clubs,
             )
             return events
         except SQLAlchemyError as exc:

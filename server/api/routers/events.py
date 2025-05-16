@@ -17,6 +17,7 @@ def get_events(
     start_date: Optional[date] = Query(None),
     end_date: Optional[date] = Query(None),
     event_service: ProtocolEventService = Depends(get_event_service),
+    clubs: Optional[List[str]] = Query(None),
 ):
     events = event_service.get_events(
         skip=skip,
@@ -25,6 +26,7 @@ def get_events(
         search=search,
         start_date=start_date.isoformat() if start_date else None,
         end_date=end_date.isoformat() if end_date else None,
+        clubs=clubs,
     )
     return events
 
