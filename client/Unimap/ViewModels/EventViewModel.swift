@@ -12,15 +12,13 @@ class EventViewModel: ObservableObject {
     /// Holds any error message resulting from a failed network request.
     @Published var errorMessage: String?
     
-    /// The default URLRequest used to fetch events from the backend.
-    @Published var request = URLRequest(url: URL(string: "http://127.0.0.1:8000/events")!)
 
     /// Service responsible for fetching events from the API.
     private let eventService = EventService()
 
     /// Loads events asynchronously from the API, updates the events list,
     /// and handles loading state and errors.
-    func loadEvents() async throws -> Void {
+    func loadEvents(from request: URLRequest) async throws -> Void {
         isLoading = true  // safe UI update
 
         do {
