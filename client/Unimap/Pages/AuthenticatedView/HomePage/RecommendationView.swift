@@ -6,8 +6,7 @@
 import SwiftUI
 
 struct RecommendationView: View {
-
-    @StateObject private var eventViewModel = EventViewModel()
+    @State private var request: URLRequest? = nil
 
     var body: some View {
         VStack {
@@ -19,8 +18,21 @@ struct RecommendationView: View {
                     .padding(.leading, 25)
                 Spacer()
             }
-
-            MedSquareHorLayout()
+            if let _ = request {
+                MedSquareHorLayout(
+                    request: Binding(
+                        get: { request! },
+                        set: { request = $0 }
+                    )
+                )
+            } else {
+                ProgressView()
+            }
+        }
+        .onAppear {
+            request = EventRequestBuilder()
+                .setPath(.events)
+                .build()
         }
     }
 }

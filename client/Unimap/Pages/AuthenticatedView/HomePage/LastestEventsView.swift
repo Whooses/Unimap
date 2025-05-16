@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct LastestEventsView: View {
-    @StateObject private var eventViewModel = EventViewModel()
+    @State private var request: URLRequest? = nil
 
     var body: some View {
         VStack {
@@ -14,7 +14,22 @@ struct LastestEventsView: View {
                 Spacer()
             }
             
-            SmallSquareHorLayout()
+            
+            if let _ = request {
+                SmallSquareHorLayout(
+                    request: Binding(
+                        get: { request! },
+                        set: { request = $0 }
+                    )
+                )
+            } else {
+                ProgressView()
+            }
+        }
+        .onAppear {
+            request = EventRequestBuilder()
+                .setPath(.events)
+                .build()
         }
     }
 }

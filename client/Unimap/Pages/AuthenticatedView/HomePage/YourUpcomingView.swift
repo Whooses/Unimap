@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct YourUpcomingView: View {
-    @StateObject private var eventViewModel = EventViewModel()
+    @State private var request: URLRequest? = nil
 
     var body: some View {
         VStack {
@@ -14,7 +14,21 @@ struct YourUpcomingView: View {
                 Spacer()
             }
             
-            RectangleHorLayout()
+            if let _ = request {
+                RectangleHorLayout(
+                    request: Binding(
+                        get: { request! },
+                        set: { request = $0 }
+                    )
+                )
+            } else {
+                ProgressView()
+            }
+        }
+        .onAppear {
+            request = EventRequestBuilder()
+                .setPath(.events)
+                .build()
         }
     }
 }

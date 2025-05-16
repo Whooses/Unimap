@@ -6,7 +6,7 @@ struct FilterBarComponent: View {
     @State private var selectedDate = "Latest"
 
     var body: some View {
-        Text("FilterbarLayout")
+        Text("FilterBarLayout")
     }
 }
 

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct RectangleHorLayout: View {
     @StateObject private var eventViewModel = EventViewModel()
+    @Binding var request: URLRequest
 
     var body: some View {
         VStack {
@@ -40,7 +41,7 @@ struct RectangleHorLayout: View {
             .onAppear {
                 Task {
                     do {
-                        try await eventViewModel.loadEvents()
+                        try await eventViewModel.loadEvents(from: request)
                     } catch {
                         eventViewModel.errorMessage = "Failed to fetch events: \(error.localizedDescription)"
                     }
