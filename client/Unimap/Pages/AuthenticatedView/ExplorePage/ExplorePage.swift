@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct ExplorePage: View {
+    @StateObject private var builder = EventRequestBuilder().setPath(.events)
+    
     @State private var selectedIndex = 0
     private let titles = ["Hot", "Latest", "Upcoming"]
 
@@ -9,7 +11,7 @@ struct ExplorePage: View {
 
     var body: some View {
         VStack() {
-            SearchBarComponent()
+            SearchBarComponent(builder: builder)
                 .padding(.bottom, 12)
             
             // MARK: – Custom Tab Bar
@@ -50,13 +52,23 @@ struct ExplorePage: View {
             // MARK: – Content
             Group {
                 switch selectedIndex {
-                case 1: LatestView()
-                case 2: UpcomingView()
-                default: HotView()
+                case 1: LatestView(builder: builder)
+                case 2: UpcomingView(builder: builder)
+                default: HotView(builder: builder)
                 }
             }
             .animation(.default, value: selectedIndex)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
+        .onReceive(builder.$lastUpdated) { _ in
+            if let url = builder.build()?.url {
+                print("Updated URL →", url.absoluteString)
+            }
+        }
+
     }
+}
+
+#Preview {
+    ExplorePage()
 }

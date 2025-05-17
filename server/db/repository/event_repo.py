@@ -17,6 +17,7 @@ class EventRepository:
         search: Optional[str] = None,
         start_date: Optional[str] = None,
         end_date: Optional[str] = None,
+        clubs: Optional[List[str]] = None,
     ) -> List[Events]:
         try:
             query = self.db.query(Events)
@@ -28,6 +29,8 @@ class EventRepository:
                     (Events.description.ilike(f"%{search}%")) |
                     (Events.location.ilike(f"%{search}%"))
                 )
+            if clubs:
+                query = query.filter(Events.clubs.overlap(clubs))
             if start_date and end_date:
                 query = query.filter(Events.date.between(start_date, end_date))
             if start_date:

@@ -12,6 +12,7 @@ class MockEventService:
         search: Optional[str] = None,
         start_date: Optional[str] = None,
         end_date: Optional[str] = None,
+        clubs: Optional[List[str]] = None,
     ) -> List[EventOut]:
         events = mock_events
         if owner_id is not None:

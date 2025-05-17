@@ -2,6 +2,7 @@ import Foundation
 import Combine
 
 /// ViewModel for managing and providing event data to the UI.
+@MainActor
 class EventViewModel: ObservableObject {
     /// A published array of events fetched from the API.
     @Published var events: [Event] = []
@@ -12,15 +13,13 @@ class EventViewModel: ObservableObject {
     /// Holds any error message resulting from a failed network request.
     @Published var errorMessage: String?
     
-    /// The URL request used to fetch events from the backend.
-    @Published var request = URLRequest(url: URL(string: "http://127.0.0.1:8000/events")!)
 
     /// Service responsible for fetching events from the API.
     private let eventService = EventService()
 
     /// Loads events asynchronously from the API, updates the events list,
     /// and handles loading state and errors.
-    func loadEvents() async throws -> Void {
+    func loadEvents(from request: URLRequest) async throws -> Void {
         isLoading = true  // safe UI update
 
         do {

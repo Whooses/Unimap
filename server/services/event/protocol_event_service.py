@@ -23,6 +23,7 @@ class ProtocolEventService(Protocol):
         search: Optional[str] = None,
         start_date: Optional[str] = None,
         end_date: Optional[str] = None,
+        clubs: Optional[List[str]] = None,
     ) -> List[Events]:
         """
         Retrieve a list of events with optional filters and pagination.
