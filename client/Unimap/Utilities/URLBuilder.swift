@@ -7,17 +7,24 @@ class EventRequestBuilder: ObservableObject {
     
     enum Sort: String {
         case latest = "latest"
-        case upcoming = "upcomming"
+        case upcoming = "upcoming"
         case recentlyAdded = "recently added"
+        case past = "past"
         case alphabetical = "alphabetical"
         case hot = "hot"
     }
     
     enum Club: String {
-        case amacs = "amacss"
-        case vsa = "VSA"
-        case dsh3 = "DSH3"
+        case amacss = "amacss"
+        case vsa = "vsa"
+        case create = "create"
+        
+        /// Case-insensitive initializer
+        init?(caseInsensitive value: String) {
+            self.init(rawValue: value.lowercased())
+        }
     }
+    @Published private(set) var lastUpdated = UUID()
     
     private var components: URLComponents
     private var queryItems: [URLQueryItem] = []
@@ -37,6 +44,7 @@ class EventRequestBuilder: ObservableObject {
     func setPath(_ path: Path) -> Self {
         if case .events = path {
             components.path = Path.events.rawValue
+            lastUpdated = UUID() // Trigger update
         }
         return self
     }
@@ -44,19 +52,29 @@ class EventRequestBuilder: ObservableObject {
     func setSearch(_ text: String) -> Self {
         queryItems.removeAll { $0.name == "search" }
         queryItems.append(URLQueryItem(name: "search", value: text))
+        lastUpdated = UUID() // Trigger update
         return self
     }
     
     func setSort(_ option: Sort) -> Self {
         queryItems.removeAll { $0.name == "sort" }
         queryItems.append(URLQueryItem(name: "sort", value: option.rawValue))
+        lastUpdated = UUID() // Trigger update
         return self
     }
 
     func setClubs(_ clubs: [Club]) -> Self {
         queryItems.removeAll { $0.name == "clubs" }
+
+        // Remove the param entirely when nothing is selected
+        guard !clubs.isEmpty else {
+            lastUpdated = UUID()
+            return self
+        }
+
         let value = clubs.map(\.rawValue).joined(separator: ",")
         queryItems.append(URLQueryItem(name: "clubs", value: value))
+        lastUpdated = UUID()
         return self
     }
     
@@ -64,12 +82,14 @@ class EventRequestBuilder: ObservableObject {
         let dateFormatter: DateFormatter = {
             let fmt = DateFormatter()
             fmt.dateFormat = "yyyy-MM-dd"
+            lastUpdated = UUID() // Trigger update
             return fmt
         }()
         
         let value = dateFormatter.string(from: date)
         queryItems.removeAll { $0.name == "startDate" }
         queryItems.append(URLQueryItem(name: "startDate", value: value))
+        lastUpdated = UUID() // Trigger update
         return self
     }
     
@@ -83,6 +103,7 @@ class EventRequestBuilder: ObservableObject {
         let value = dateFormatter.string(from: date)
         queryItems.removeAll { $0.name == "endDate" }
         queryItems.append(URLQueryItem(name: "endDate", value: value))
+        lastUpdated = UUID() // Trigger update
         return self
     }
     

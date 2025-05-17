@@ -2,9 +2,10 @@ import SwiftUI
 
 struct SSFilterBtn: View {
     @State var label: String
-    @State private var selectedOption: String?
     @State var options: [String]
+    @ObservedObject var builder: EventRequestBuilder
 
+    @State private var selectedOption: String?
     @State private var showSheet = false
 
     var body: some View {
@@ -23,6 +24,10 @@ struct SSFilterBtn: View {
                     get: { selectedOption ?? label },
                     set: { newValue in
                         selectedOption = newValue
+                        if let sortEnum = EventRequestBuilder
+                            .Sort(rawValue: newValue.lowercased()) {
+                            _ = builder.setSort(sortEnum)
+                        }
                     }
                 ),
                 options: $options
@@ -84,10 +89,12 @@ struct SSFilterBtnSheet: View {
 }
 
 //struct SSFilterBtnView: View {
+//    @StateObject var builder  = EventRequestBuilder()
 //    var body: some View {
 //        SSFilterBtn(
 //            label: "Sort",
-//            options: ["Option A", "Option B", "Option C"]
+//            options: ["Option A", "Option B", "Option C"],
+//            builder: builder
 //        )
 //    }
 //}

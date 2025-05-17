@@ -1,9 +1,10 @@
 import SwiftUI
 
 struct DRFilterBtn: View {
-    @State var label: String
+    @State var label: String = "Date"
     @State private var startDate: Date? = nil
     @State private var endDate: Date? = nil
+    @ObservedObject var builder: EventRequestBuilder
 
     @State private var showSheet = false
 
@@ -59,7 +60,7 @@ struct DRFilterBtnSheet: View {
                     )
                     .labelsHidden()
                     .blendMode(startDate == nil ? .destinationOver : .normal)
-                    
+
                     if startDate == nil {
                         Text("Tap to select")
                             .font(.footnote)
@@ -87,7 +88,7 @@ struct DRFilterBtnSheet: View {
                     )
                     .labelsHidden()
                     .blendMode(endDate == nil ? .destinationOver : .normal)
-                    
+
                     if endDate == nil {
                         Text("Tap to select")
                             .font(.footnote)
@@ -138,8 +139,10 @@ struct DRFilterBtnSheet: View {
 }
 
 struct DRFilterBtnView: View {
+    @StateObject var builder  = EventRequestBuilder()
+
     var body: some View {
-        DRFilterBtn(label: "Date")
+        DRFilterBtn(label: "Date", builder: builder)
     }
 }
 

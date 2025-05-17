@@ -1,38 +1,48 @@
 import SwiftUI
 
 struct HotView: View {
-    @State private var request: URLRequest? = nil
+    @ObservedObject var builder: EventRequestBuilder
+    @State private var request: URLRequest?                       // parent owns optionality
 
     var body: some View {
         VStack(alignment: .center) {
-            HStack(alignment: .firstTextBaseline) {
-                Text("Hot Events")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .padding(.bottom, 8)
-                    .padding(.leading, 25)
-                Spacer()
-            }
+            header
+            ExploreFilterLayout(builder: builder)
 
-            FilterBarComponent()
-
-            if let _ = request {
-                RectangleVerLayout(
-                    request: Binding(
-                        get: { request! },
-                        set: { request = $0 }
-                    )
-                )
+            if let binding = nonOptionalRequestBinding {          // use derived binding
+                RectangleVerLayout(request: binding)              // child gets non-optional
             } else {
                 ProgressView()
             }
 
             Spacer()
         }
-        .onAppear {
-            request = EventRequestBuilder()
-                .setPath(.events)
-                .build()
+        .task {                                                   // main-actor safe
+            request = builder.build()
+        }
+        .onReceive(builder.$lastUpdated) { _ in
+            request = builder.build()
+        }
+    }
+
+    // MARK: - Helpers
+
+    /// `Binding<URLRequest>` only when `request` is set
+    private var nonOptionalRequestBinding: Binding<URLRequest>? {
+        guard request != nil else { return nil }
+        return Binding(
+            get: { request! },            // safe: guarded above
+            set: { request = $0 }
+        )
+    }
+
+    private var header: some View {
+        HStack(alignment: .firstTextBaseline) {
+            Text("Hot Events")
+                .font(.largeTitle.bold())
+                .padding(.bottom, 8)
+                .padding(.leading, 25)
+            Spacer()
         }
     }
 }

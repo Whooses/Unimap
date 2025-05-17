@@ -3,7 +3,8 @@ import SwiftUI
 struct MSFilterBtn: View {
     @State var label: String
     @State var options: [String]
-    
+    @ObservedObject var builder: EventRequestBuilder
+
     @State private var selectedOptions: [String] = []
     @State private var showSheet = false
 
@@ -17,7 +18,11 @@ struct MSFilterBtn: View {
             }
         }
         .sheet(isPresented: $showSheet) {
-            MSFilterBtnSheet(options: $options, selectedOptions: $selectedOptions)
+            MSFilterBtnSheet(
+                options: $options,
+                selectedOptions: $selectedOptions,
+                builder: builder
+            )
         }
     }
 }
@@ -25,6 +30,7 @@ struct MSFilterBtn: View {
 struct MSFilterBtnSheet: View {
     @Binding var options: [String]
     @Binding var selectedOptions: [String]
+    @ObservedObject var builder: EventRequestBuilder
 
     private let rowHeight: CGFloat = 55
     private let headerHeight: CGFloat = 60
@@ -47,11 +53,18 @@ struct MSFilterBtnSheet: View {
                 LazyVStack(spacing: 0) {
                     ForEach(options, id: \.self) { option in
                         Button {
+                            // 1️⃣ toggle the option in/out of the array
                             if selectedOptions.contains(option) {
                                 selectedOptions.removeAll { $0 == option }
                             } else {
                                 selectedOptions.append(option)
                             }
+
+                            // 2️⃣ build the enum list in a case-insensitive way
+                            let selectedClubs = selectedOptions.compactMap {
+                                EventRequestBuilder.Club(caseInsensitive: $0)   // ← use the new init
+                            }
+                            _ = builder.setClubs(selectedClubs)
                         } label: {
                             HStack {
                                 Image(systemName: selectedOptions.contains(option)
@@ -77,17 +90,20 @@ struct MSFilterBtnSheet: View {
 }
 
 
-struct MSFilterBtnView: View {
-    var body: some View {
-        MSFilterBtn(
-            label: "Clubs",
-            options: ["Option A", "Option B", "Option C"]
-        )
-    }
-}
-
-
-#Preview {
-    MSFilterBtnView()
-}
+//struct MSFilterBtnView: View {
+//    @StateObject var builder  = EventRequestBuilder()
+//
+//    var body: some View {
+//        MSFilterBtn(
+//            label: "Clubs",
+//            options: ["Option A", "Option B", "Option C"],
+//            builder: builder
+//        )
+//    }
+//}
+//
+//
+//#Preview {
+//    MSFilterBtnView()
+//}
 

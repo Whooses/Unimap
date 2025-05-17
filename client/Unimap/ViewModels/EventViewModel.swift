@@ -2,6 +2,7 @@ import Foundation
 import Combine
 
 /// ViewModel for managing and providing event data to the UI.
+@MainActor
 class EventViewModel: ObservableObject {
     /// A published array of events fetched from the API.
     @Published var events: [Event] = []

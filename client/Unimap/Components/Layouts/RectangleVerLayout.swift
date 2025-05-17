@@ -48,6 +48,10 @@ struct RectangleVerLayout: View {
                 }
             }
         }
+        .task(id: request) {
+            do   { try await eventViewModel.loadEvents(from: request) }
+            catch { eventViewModel.errorMessage = "Failed to fetch events: \(error.localizedDescription)" }
+        }
     }
 }
 
