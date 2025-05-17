@@ -50,11 +50,18 @@ class EventRequestBuilder: ObservableObject {
     }
     
     func setSearch(_ text: String) -> Self {
+        // Always start by removing any existing "search" item
         queryItems.removeAll { $0.name == "search" }
-        queryItems.append(URLQueryItem(name: "search", value: text))
-        lastUpdated = UUID() // Trigger update
+
+        // Only add the parameter when there's something to search for
+        if !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            queryItems.append(URLQueryItem(name: "search", value: text))
+        }
+
+        lastUpdated = UUID()          // notify observers
         return self
     }
+
     
     func setSort(_ option: Sort) -> Self {
         queryItems.removeAll { $0.name == "sort" }

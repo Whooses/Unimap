@@ -11,7 +11,7 @@ struct ExplorePage: View {
 
     var body: some View {
         VStack() {
-            SearchBarComponent()
+            SearchBarComponent(builder: builder)
                 .padding(.bottom, 12)
             
             // MARK: – Custom Tab Bar
