@@ -1,5 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import desc, asc, func
+from datetime import datetime, date
 
 from typing import List, Optional
 
@@ -18,9 +20,12 @@ class EventRepository:
         start_date: Optional[str] = None,
         end_date: Optional[str] = None,
         clubs: Optional[List[str]] = None,
+        sort: Optional[str] = None,  # Add sort param
     ) -> List[Events]:
         try:
             query = self.db.query(Events)
+            print(sort)
+
             if owner_id:
                 query = query.filter(Events.user_id == owner_id)
             if search:
@@ -37,6 +42,21 @@ class EventRepository:
                 query = query.filter(Events.date >= start_date)
             if end_date:
                 query = query.filter(Events.date <= end_date)
+
+            now = func.current_date()
+
+            # Sorting logic
+            if sort == "latest":
+                query = query.order_by(desc(Events.date))
+            elif sort == "upcoming":
+                query = query.filter(Events.date >= now).order_by(asc(Events.date))
+            elif sort == "recently_added":
+                query = query.order_by(desc(Events.created_at))
+            elif sort == "past":
+                query = query.filter(Events.date < now).order_by(desc(Events.date))
+            else:
+                query = query.order_by(desc(Events.date))  # Default
+
             return query.offset(skip).limit(limit).all()
         except SQLAlchemyError as e:
             raise RuntimeError(f"Database error in get_events: {e}")

@@ -16,8 +16,9 @@ class EventRequestBuilder: ObservableObject {
     
     enum Club: String {
         case amacss = "amacss"
-        case vsa = "vsa"
-        case create = "create"
+        case csec = "csec"
+        case mathematics_club = "mathematics club"
+        case programming_club = "programming club"
         
         /// Case-insensitive initializer
         init?(caseInsensitive value: String) {
@@ -85,32 +86,27 @@ class EventRequestBuilder: ObservableObject {
         return self
     }
     
-    func setStartDate(_ date: Date) -> Self {
-        let dateFormatter: DateFormatter = {
+    private func formatted(_ date: Date) -> String {
             let fmt = DateFormatter()
             fmt.dateFormat = "yyyy-MM-dd"
-            lastUpdated = UUID() // Trigger update
-            return fmt
-        }()
-        
-        let value = dateFormatter.string(from: date)
-        queryItems.removeAll { $0.name == "startDate" }
-        queryItems.append(URLQueryItem(name: "startDate", value: value))
-        lastUpdated = UUID() // Trigger update
-        return self
-    }
+            return fmt.string(from: date)
+        }
     
-    func setEndDate(_ date: Date) -> Self {
-        let dateFormatter: DateFormatter = {
-            let fmt = DateFormatter()
-            fmt.dateFormat = "yyyy-MM-dd"
-            return fmt
-        }()
+    @discardableResult
+    func setDateRange(start: Date?, end: Date?) -> Self {
+        // 1) Remove any existing date params
+        queryItems.removeAll { $0.name == "start_date" || $0.name == "end_date" }
         
-        let value = dateFormatter.string(from: date)
-        queryItems.removeAll { $0.name == "endDate" }
-        queryItems.append(URLQueryItem(name: "endDate", value: value))
-        lastUpdated = UUID() // Trigger update
+        // 2) Append if non-nil
+        if let sd = start {
+            queryItems.append(URLQueryItem(name: "start_date", value: formatted(sd)))
+        }
+        if let ed = end {
+            queryItems.append(URLQueryItem(name: "end_date", value: formatted(ed)))
+        }
+        
+        // 3) Trigger a single update
+        lastUpdated = UUID()
         return self
     }
     

@@ -1,5 +1,6 @@
 import SwiftUI
 
+// MARK: – Button that opens the sheet
 struct MSFilterBtn: View {
     @State var label: String
     @State var options: [String]
@@ -10,11 +11,8 @@ struct MSFilterBtn: View {
 
     var body: some View {
         VStack {
-            Button(action: {showSheet = true}) {
-                buttonLabel(
-                    selected: label,
-                    icon: "chevron.down"
-                )
+            Button { showSheet = true } label: {
+                buttonLabel(selected: label, icon: "chevron.down")
             }
         }
         .sheet(isPresented: $showSheet) {
@@ -27,10 +25,14 @@ struct MSFilterBtn: View {
     }
 }
 
+// MARK: – Sheet
 struct MSFilterBtnSheet: View {
     @Binding var options: [String]
     @Binding var selectedOptions: [String]
     @ObservedObject var builder: EventRequestBuilder
+
+    // Work-in-progress copy; starts equal to selectedOptions
+    @State private var tempSelected: [String] = []
 
     private let rowHeight: CGFloat = 55
     private let headerHeight: CGFloat = 60
@@ -49,29 +51,23 @@ struct MSFilterBtnSheet: View {
 
             Divider()
 
+            // List
             ScrollView {
                 LazyVStack(spacing: 0) {
                     ForEach(options, id: \.self) { option in
                         Button {
-                            // 1️⃣ toggle the option in/out of the array
-                            if selectedOptions.contains(option) {
-                                selectedOptions.removeAll { $0 == option }
+                            // Toggle inside the *local* copy
+                            if tempSelected.contains(option) {
+                                tempSelected.removeAll { $0 == option }
                             } else {
-                                selectedOptions.append(option)
+                                tempSelected.append(option)
                             }
-
-                            // 2️⃣ build the enum list in a case-insensitive way
-                            let selectedClubs = selectedOptions.compactMap {
-                                EventRequestBuilder.Club(caseInsensitive: $0)   // ← use the new init
-                            }
-                            _ = builder.setClubs(selectedClubs)
                         } label: {
                             HStack {
-                                Image(systemName: selectedOptions.contains(option)
-                                    ? "checkmark.circle.fill"
-                                    : "circle"
-                                )
-                                .font(.title2)
+                                Image(systemName: tempSelected.contains(option)
+                                      ? "checkmark.circle.fill"
+                                      : "circle")
+                                    .font(.title2)
                                 Text(option)
                                 Spacer()
                             }
@@ -84,26 +80,53 @@ struct MSFilterBtnSheet: View {
                 .padding(.top)
             }
 
+            // ACTIONS
+            Button("Apply") {
+                selectedOptions = tempSelected
+
+                let clubs = selectedOptions.compactMap {
+                    EventRequestBuilder.Club(caseInsensitive: $0)
+                }
+                _ = builder.setClubs(clubs)
+
+                dismiss()
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
+            .background(Color.black)
+            .foregroundColor(.white)
+            .cornerRadius(15)
+            .padding(.horizontal)
+            .padding(.bottom)
+
+//            Button("Cancel") { dismiss() }
+//                .frame(maxWidth: .infinity)
+//                .frame(height: 50)
+//                .background(Color.white)
+//                .foregroundColor(.black)
+//                .cornerRadius(15)
+//                .padding(.horizontal)
+        }
+        .onAppear {
+            tempSelected = selectedOptions
         }
         .presentationDetents([.height(400), .large])
     }
 }
 
-
+//// MARK: – Preview harness
 //struct MSFilterBtnView: View {
-//    @StateObject var builder  = EventRequestBuilder()
+//    @StateObject var builder = EventRequestBuilder()
 //
 //    var body: some View {
 //        MSFilterBtn(
 //            label: "Clubs",
-//            options: ["Option A", "Option B", "Option C"],
+//            options: ["Option A", "Option B", "Option C",
+//                      "Option D", "Option E", "Option F",
+//                      "Option G", "Option H", "Option I"],
 //            builder: builder
 //        )
 //    }
 //}
 //
-//
-//#Preview {
-//    MSFilterBtnView()
-//}
-
+//#Preview { MSFilterBtnView() }
