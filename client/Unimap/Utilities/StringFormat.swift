@@ -25,6 +25,6 @@ func dateRangeString(from startDate: Date?, to endDate: Date?) -> String {
     } else if let end = endDate {
         return "Until \(format(end))"
     } else {
-        return "Select Date Range"
+        return "Date"
     }
 }

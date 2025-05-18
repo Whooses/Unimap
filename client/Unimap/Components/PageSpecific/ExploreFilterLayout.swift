@@ -6,7 +6,7 @@ struct ExploreFilterLayout: View {
     var body: some View {
         HStack {
             SSFilterBtn(
-                label: "Sort",
+                label: "Latest",
                 options: [
                     "Latest",
                     "Upcoming",
@@ -19,9 +19,10 @@ struct ExploreFilterLayout: View {
             MSFilterBtn(
                 label: "Clubs",
                 options: [
-                    "AMACSS",
-                    "CREATE",
-                    "VSA",
+                    "amacss",
+                    "csec",
+                    "mathematics club",
+                    "programming club"
                 ],
                 builder: builder
             )

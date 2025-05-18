@@ -18,7 +18,12 @@ struct DRFilterBtn: View {
             }
         }
         .sheet(isPresented: $showSheet) {
-            DRFilterBtnSheet(label: $label, startDate: $startDate, endDate: $endDate)
+            DRFilterBtnSheet(
+                label: $label,
+                startDate: $startDate,
+                endDate: $endDate,
+                builder: builder
+            )
         }
     }
 }
@@ -27,8 +32,9 @@ struct DRFilterBtnSheet: View {
     @Binding var label: String
     @Binding var startDate: Date?
     @Binding var endDate: Date?
+    @ObservedObject var builder: EventRequestBuilder
 
-    private let rowHeight: CGFloat = 55
+    private let rowHeight: CGFloat  = 55
     private let headerHeight: CGFloat = 60
     @State private var vStackHeight: CGFloat = 0
 
@@ -36,25 +42,41 @@ struct DRFilterBtnSheet: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            // HEADER
-            Text("Select Date Range")
-                .font(.headline)
-                .frame(maxWidth: .infinity)
-                .frame(height: headerHeight)
-                .padding(.horizontal)
+            // ── HEADER ─────────────────────────────────────────────
+            ZStack {
+                Text("Select Date Range")
+                    .font(.headline)
+                    .frame(height: headerHeight)
+
+                HStack {
+                    Spacer()
+                    Button("Clear") {          // ←-- FIX ①
+                        // reset all state back to “empty”
+                        startDate = nil
+                        endDate = nil
+                        label = "Date"
+                        builder.setDateRange(start: nil, end: nil)
+                        dismiss()
+                    }
+                    .font(.callout)
+                    .foregroundColor(.secondary)
+                }
+            }
+            .frame(height: headerHeight)
+            .padding(.horizontal, 40)
 
             Divider()
 
+            // ── FROM ───────────────────────────────────────────────
             HStack {
-                Text("From")
-                    .font(.headline)
+                Text("From").font(.headline)
                 Spacer()
                 ZStack {
                     DatePicker(
                         "",
                         selection: Binding(
                             get: { startDate ?? Date() },
-                            set: { startDate = $0 }
+                            set: { startDate = $0 }  // ←-- stays the same
                         ),
                         displayedComponents: [.date]
                     )
@@ -65,7 +87,7 @@ struct DRFilterBtnSheet: View {
                         Text("Tap to select")
                             .font(.footnote)
                             .foregroundColor(.gray)
-                            .allowsHitTesting(false) // Don't block touches
+                            .allowsHitTesting(false)
                     }
                 }
             }
@@ -73,9 +95,9 @@ struct DRFilterBtnSheet: View {
             .padding(.horizontal)
             .padding(.top)
 
+            // ── TO ────────────────────────────────────────────────
             HStack {
-                Text("To")
-                    .font(.headline)
+                Text("To").font(.headline)
                 Spacer()
                 ZStack {
                     DatePicker(
@@ -93,7 +115,7 @@ struct DRFilterBtnSheet: View {
                         Text("Tap to select")
                             .font(.footnote)
                             .foregroundColor(.gray)
-                            .allowsHitTesting(false) // Don't block touches
+                            .allowsHitTesting(false)
                     }
                 }
             }
@@ -101,9 +123,9 @@ struct DRFilterBtnSheet: View {
             .padding(.horizontal)
             .padding(.bottom)
 
-
-            // ACTIONS
+            // ── APPLY ─────────────────────────────────────────────
             Button("Apply") {
+                builder.setDateRange(start: startDate, end: endDate)
                 label = dateRangeString(from: startDate, to: endDate)
                 dismiss()
             }
@@ -114,38 +136,29 @@ struct DRFilterBtnSheet: View {
             .cornerRadius(15)
             .padding(.horizontal)
             .padding(.bottom)
-
-            Button("Cancel") {
-                dismiss()
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 50)
-            .background(Color.white)
-            .foregroundColor(.black)
-            .cornerRadius(15)
-            .padding(.horizontal)
         }
         .background(
             GeometryReader { geo in
                 Color.clear
-                    // Use the new iOS 17 two-parameter onChange (with initial run)
-                    .onChange(of: geo.size.height, initial: true) { newHeight, oldHeight in
+                    .onChange(of: geo.size.height, initial: true) { newHeight, _ in
                         vStackHeight = newHeight
                     }
             }
         )
-        .presentationDetents([.height(vStackHeight)])
+        // give SwiftUI a non-zero fallback the first time
+        .presentationDetents([.height(max(vStackHeight, 300))])
     }
 }
 
-struct DRFilterBtnView: View {
-    @StateObject var builder  = EventRequestBuilder()
 
-    var body: some View {
-        DRFilterBtn(label: "Date", builder: builder)
-    }
-}
-
-#Preview {
-    DRFilterBtnView()
-}
+//struct DRFilterBtnView: View {
+//    @StateObject var builder  = EventRequestBuilder()
+//
+//    var body: some View {
+//        DRFilterBtn(label: "Date", builder: builder)
+//    }
+//}
+//
+//#Preview {
+//    DRFilterBtnView()
+//}
