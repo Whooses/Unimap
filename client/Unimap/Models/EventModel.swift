@@ -13,6 +13,8 @@ struct Event: Codable, Identifiable {
     let clubs: [String]?
     let types: [String]?
     let user: User
+    let inPerson: Bool?
+    let online: Bool?
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -27,5 +29,7 @@ struct Event: Codable, Identifiable {
         case clubs
         case types
         case user
+        case inPerson
+        case online
     }
 }

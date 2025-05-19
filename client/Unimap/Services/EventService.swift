@@ -25,3 +25,27 @@ class EventService {
 
     // Error Handling
 }
+
+class TestEventService {
+    private let networkService = NetworkService()
+    
+    func fetchRecommendationEvents(user: User) async throws -> [Event] {
+        fatalError()
+    }
+    
+    func fetchUserUpcomingEvents() async throws -> [Event] {
+        fatalError()
+    }
+    
+    func fetchuserEvents() async throws -> [Event] {
+        fatalError()
+    }
+    
+    func fetchExploreEvents(
+        search: String? = nil,
+        tab: ExploreTab,
+        filter: ExploreFilter
+    ) async throws -> [Event] {
+        fatalError()
+    }
+}
