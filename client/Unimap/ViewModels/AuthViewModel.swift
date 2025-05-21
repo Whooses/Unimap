@@ -9,7 +9,7 @@ class AuthViewModel: ObservableObject {
     // MARK: - Published Properties
 
     /// Indicates whether the user is currently authenticated.
-    @Published var isAuthenticated = true
+    @Published var isAuthenticated = false
 
     /// Stores the authenticated user's information retrieved from Auth0.
     @Published var userInfo: UserInfo? = nil
@@ -48,6 +48,7 @@ class AuthViewModel: ObservableObject {
                     _ = self?.credentialsManager.store(credentials: credentials)
                     print("Access token: \(credentials.accessToken)\n")
                     print("Refresh token: \(credentials.refreshToken ?? "None")")
+                    print("ID token: \(credentials.idToken)")
 
                     DispatchQueue.main.async {
                         self?.userInfo = self?.credentialsManager.user

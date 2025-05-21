@@ -1,19 +1,15 @@
 import Foundation
 
-struct User: Codable {
+struct NewUser: Codable {
     let userID: Int
     let username: String
     let pfpURL: URL?
-    let isVerified: Bool
-    let timeZone: String?
-    let auth0ID: String?
-
+    let school: School
+    
     enum CodingKeys: String, CodingKey {
         case userID = "id"
         case username
         case pfpURL = "pfp_url"
-        case isVerified = "is_verified"
-        case timeZone
-        case auth0ID = "auth0_id"
+        case school = "school_id"
     }
 }

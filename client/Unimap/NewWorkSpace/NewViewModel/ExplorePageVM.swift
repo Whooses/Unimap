@@ -20,11 +20,11 @@ class ExplorePageVM: ObservableObject {
     ]
 
     // MARK: Private properties
-    private let eventService: TestEventService
+    private let eventService: NewEventService
 
 
     // MARK: Init
-    init(eventService: TestEventService) {
+    init(eventService: NewEventService) {
         self.eventService = eventService
     }
 
@@ -93,9 +93,20 @@ class ExplorePageVM: ObservableObject {
 
 // Supported types
 enum ExploreTab: String {
-    case all = "All"
-    case inPerson = "In person"
-    case online = "Online"
+    case all
+    case inPerson = "in_person"
+    case online
+    
+    var displayName: String {
+        switch self {
+        case .all:
+            return "All"
+        case .inPerson:
+            return "In person"
+        case .online:
+            return "Online"
+        }
+    }
 }
 
 struct ExploreFilter {
@@ -105,16 +116,46 @@ struct ExploreFilter {
     var endDate: Date? = nil
 }
 
-enum SortFilter: String {
-    case latest = "Latest"
-    case upcoming = "Upcoming"
-    case recentlyAdded = "Recently added"
-    case past = "Past"
+enum SortFilter: String, CaseIterable, Identifiable {
+    case latest
+    case upcoming
+    case recentlyAdded = "recently_added"
+    case past
+    
+    var id: String { self.rawValue }
+    
+    var displayName: String {
+        switch self {
+        case .latest:
+            return "Latest"
+        case .upcoming:
+            return "Upcoming"
+        case .recentlyAdded:
+            return "Recently added"
+        case .past:
+            return "Past"
+        }
+    }
 }
 
-enum ClubsFilter: String {
-    case amacs = "AMACS"
-    case csec = "CSEC"
-    case mathematicsClub = "Mathematics Club"
-    case programmingClub = "Programming Club"
+enum ClubsFilter: String, CaseIterable, Identifiable {
+    case amacs
+    case csec
+    case mathematicsClub = "mathematics_club"
+    case programmingClub = "programming_club"
+    
+    var id: String { self.rawValue }
+    
+    var displayName: String {
+        switch self {
+        case .amacs:
+            return "AMACS"
+        case .csec:
+            return "CSEC"
+        case .mathematicsClub:
+            return "Mathematics club"
+        case .programmingClub:
+            return "Programming club"
+        }
+    }
 }

@@ -15,19 +15,16 @@ class EventRepository:
         self,
         skip: int = 0,
         limit: int = 100,
-        owner_id: Optional[int] = None,
         search: Optional[str] = None,
+        tab: Optional[str] = None,  # Added tab param
+        sort: Optional[str] = None,
+        clubs: Optional[List[str]] = None,
         start_date: Optional[str] = None,
         end_date: Optional[str] = None,
-        clubs: Optional[List[str]] = None,
-        sort: Optional[str] = None,  # Add sort param
     ) -> List[Events]:
         try:
             query = self.db.query(Events)
-            print(sort)
 
-            if owner_id:
-                query = query.filter(Events.user_id == owner_id)
             if search:
                 query = query.filter(
                     (Events.title.ilike(f"%{search}%")) |
@@ -43,7 +40,15 @@ class EventRepository:
             if end_date:
                 query = query.filter(Events.date <= end_date)
 
+                        # Tab filtering logic
+            if tab == "inPerson":
+                query = query.filter(Events.types.contains(["In person"]))
+            elif tab == "online":
+                query = query.filter(Events.types.contains(["Online"]))
+
             now = func.current_date()
+
+            # If tab == "all" or None, do not filter by type
 
             # Sorting logic
             if sort == "latest":
