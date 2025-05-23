@@ -1,8 +1,8 @@
 import Foundation
 
 struct Favourites: Codable {
-    let user: NewUser
-    let event: NewEvent
+    let user: User
+    let event: Event
     
     enum CodingKeys: String, CodingKey {
         case user = "user_id"

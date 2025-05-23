@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct NewRectangleComponent: View {
+struct RectangleComponent: View {
     let username: String
     let userPFP: PFPComponent
     let eventImageURL: URL?

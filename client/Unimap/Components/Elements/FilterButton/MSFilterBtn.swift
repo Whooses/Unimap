@@ -1,7 +1,7 @@
 import SwiftUI
 
 // MARK: Main button - State holder
-struct NewMSFilterBtn<Item: NamedIdentifiable>: View {
+struct MSFilterBtn<Item: NamedIdentifiable>: View {
     let label: String
     let options: [Item]
     let selectedOptions: [Item]
@@ -19,7 +19,7 @@ struct NewMSFilterBtn<Item: NamedIdentifiable>: View {
             }
         }
         .sheet(isPresented: $showSheet) {
-            NewMSFilterBtnSheet(
+            MSFilterBtnSheet(
                 label: label,
                 options: options,
                 selectedOptions: selectedOptions,
@@ -30,7 +30,7 @@ struct NewMSFilterBtn<Item: NamedIdentifiable>: View {
 }
 
 // MARK: Button sheet - State modifier
-private struct NewMSFilterBtnSheet<Item: NamedIdentifiable>: View {
+private struct MSFilterBtnSheet<Item: NamedIdentifiable>: View {
     let label: String
     let options: [Item]
     let selectedOptions: [Item]
@@ -141,7 +141,7 @@ private struct ApplyButton<Item>: View {
 //}
 //
 //// MARK: - Preview
-//struct NewMSFilterBtn_Previews: PreviewProvider {
+//struct MSFilterBtn_Previews: PreviewProvider {
 //    struct PreviewWrapper: View {
 //        @State private var selectedSchools: [SampleSchool] = []
 //        
@@ -152,7 +152,7 @@ private struct ApplyButton<Item>: View {
 //        ]
 //        
 //        var body: some View {
-//            NewMSFilterBtn(
+//            MSFilterBtn(
 //                label: "School",
 //                options: sampleSchools,
 //                selectedOptions: selectedSchools

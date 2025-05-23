@@ -13,8 +13,8 @@ struct InPersonEventsView: View {
                 Spacer()
             }
             
-            NewExploreFilterLayout()
-            NewRectangleVerLayout(events: explorePageVM.events)
+            ExploreFilterLayout()
+            RectangleVerLayout(events: explorePageVM.events)
 //            Spacer()
         }
     }

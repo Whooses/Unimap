@@ -4,7 +4,7 @@ struct MainView: View {
     @StateObject private var authViewModel = AuthViewModel()
     @StateObject private var explorePageVM = ExplorePageVM(
         schoolService: SchoolService(),
-        eventService: NewEventService()
+        eventService: EventService()
     )
 
     var body: some View {
@@ -18,7 +18,7 @@ struct MainView: View {
     }
 }
 
-#Preview {
-    MainView()
-}
+//#Preview {
+//    MainView()
+//}
 

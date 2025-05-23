@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct NewSmallSquareHorLayout: View {
-    let events: [NewEvent]
+struct SmallSquareHorLayout: View {
+    let events: [Event]
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {

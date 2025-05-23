@@ -1,6 +1,6 @@
 import Foundation
 
-struct NewUser: Codable, NamedIdentifiable {
+struct User: Codable, NamedIdentifiable {
     let userID: Int
     let name: String
     var pfpURL: URL? = nil

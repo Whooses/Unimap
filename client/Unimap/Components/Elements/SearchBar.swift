@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct NewSearchBarComponent: View {
+struct SearchBarComponent: View {
     @Binding var searchText: String
     @FocusState private var isTextFieldFocused: Bool
     
@@ -58,7 +58,7 @@ struct searchingView: View {
 //private struct ContentView: View {
 //    @State var searchText: String = ""
 //    var body: some View {
-//        NewSearchBarComponent(searchText: $searchText)
+//        SearchBarComponent(searchText: $searchText)
 //    }
 //}
 //

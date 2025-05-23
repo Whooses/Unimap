@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct NewExploreFilterLayout: View {
+struct ExploreFilterLayout: View {
     @EnvironmentObject private var explorePageVM: ExplorePageVM
     
     var body: some View {
@@ -12,7 +12,7 @@ struct NewExploreFilterLayout: View {
                     .foregroundColor(Color.black)
                     .opacity(0.6)
                 
-                NewSSFilterBtn(
+                SSFilterBtn(
                     options: Sort.allCases,
                     selectedOption: explorePageVM.filter[explorePageVM.currTab]?.sort ?? .latest,
                     sheetTitle: "Select Sort"
@@ -20,7 +20,7 @@ struct NewExploreFilterLayout: View {
                     explorePageVM.updateSort(newSelect)
                 }
                 
-                NewMSFilterBtn(
+                MSFilterBtn(
                     label: "Clubs",
                     options: explorePageVM.schoolService.getSchoolClubs(schoolID: 1),
                     selectedOptions: explorePageVM.filter[explorePageVM.currTab]?.clubs ?? [],
@@ -28,7 +28,7 @@ struct NewExploreFilterLayout: View {
                     explorePageVM.updateClubs(newSelect)
                 }
                 
-                NewDRFilterBtn(
+                DRFilterBtn(
                     startDate: explorePageVM
                         .filter[explorePageVM.currTab]?
                         .startDate ?? nil,
@@ -48,6 +48,6 @@ struct NewExploreFilterLayout: View {
 
 
 //#Preview {
-//    NewExploreFilterLayout()
+//    ExploreFilterLayout()
 //}
 

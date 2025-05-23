@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct NewLargeSquareComponent: View {
+struct LargeSquareComponent: View {
     var username: String
     var userPFP: PFPComponent
     var eventImageURL: URL?

@@ -1,16 +1,18 @@
 import SwiftUI
 
-struct NewHomePage: View {
+struct HomePage: View {
     @StateObject private var VM: HomePageVM = HomePageVM(
         schoolService: SchoolService(),
-        eventService: NewEventService()
+        eventService: EventService()
     )
+    
+//    @EnvironmentObject private var VM: HomePageVM
     
     @FocusState private var isSearching: Bool
     
     var body: some View {
         VStack {
-            NewSearchBarComponent(searchText: $VM.search)
+            SearchBarComponent(searchText: $VM.search)
                 .focused($isSearching)
                 .padding(.bottom)
             
@@ -43,4 +45,10 @@ struct NewHomePage: View {
             }
         }
     }
+}
+
+
+
+#Preview {
+    HomePage()
 }

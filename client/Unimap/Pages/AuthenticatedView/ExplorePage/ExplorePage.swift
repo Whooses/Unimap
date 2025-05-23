@@ -1,13 +1,13 @@
 import SwiftUI
 
-struct NewExplorePage: View {
+struct ExplorePage: View {
     @EnvironmentObject private var explorePageVM: ExplorePageVM
     
     @FocusState private var isSearching: Bool
     
     var body: some View {
         VStack {
-            NewSearchBarComponent(searchText: $explorePageVM.search)
+            SearchBarComponent(searchText: $explorePageVM.search)
                 .focused($isSearching)
                         
             ZStack {
@@ -55,11 +55,11 @@ struct NewExplorePage: View {
 //private struct ExploreWrapper: View {
 //    @StateObject private var explorePageVM = ExplorePageVM(
 //        schoolService: SchoolService(),
-//        eventService: NewEventService()
+//        eventService: EventService()
 //    )
 //    
 //    var body: some View {
-//        NewExplorePage()
+//        ExplorePage()
 //            .environmentObject(explorePageVM)
 //    }
 //}

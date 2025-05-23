@@ -1,13 +1,13 @@
 import SwiftUI
 
-struct NewRectangleHorLayout: View {
-    let events: [NewEvent]
+struct RectangleVerLayout: View {
+    let events: [Event]
 
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 5) {
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 5) {
                 ForEach(events) { event in
-                    NewRectangleComponent(
+                    RectangleComponent(
                         username: event.user.name,
                         userPFP: PFPComponent(
                             imageUrl: event.user.pfpURL,

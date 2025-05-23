@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct RecommendationView: View {
-    let events: [NewEvent]
+    let events: [Event]
     
     var body: some View {
         VStack {
@@ -13,7 +13,7 @@ struct RecommendationView: View {
                     .padding(.leading)
                 Spacer()
             }
-            NewMedSquareHorLayout(events: events)
+            MedSquareHorLayout(events: events)
         }
         .frame(alignment: .topLeading)
     }

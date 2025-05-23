@@ -1,7 +1,7 @@
 import SwiftUI
 
 // MARK: Main button - State Holder
-struct NewDRFilterBtn: View {
+struct DRFilterBtn: View {
     let startDate: Date?
     let endDate: Date?
     let onSelect: ((Date?, Date?) -> Void)?
@@ -19,7 +19,7 @@ struct NewDRFilterBtn: View {
             }
         }
         .sheet(isPresented: $showSheet) {
-            NewDRFilterBtnSheet(
+            DRFilterBtnSheet(
                 label: $label,
                 startDate: startDate,
                 endDate: endDate,
@@ -30,7 +30,7 @@ struct NewDRFilterBtn: View {
 }
 
 // MARK: Button sheet - State Modifier
-private struct NewDRFilterBtnSheet: View {
+private struct DRFilterBtnSheet: View {
     @Binding var label: String
     let startDate: Date?
     let endDate: Date?
@@ -171,7 +171,7 @@ private struct ApplyButton: View {
 //    @State private var endDate: Date? = nil
 //    
 //    var body: some View {
-//        NewDRFilterBtn(startDate: $startDate, endDate: $endDate)
+//        DRFilterBtn(startDate: $startDate, endDate: $endDate)
 //    }
 //}
 //

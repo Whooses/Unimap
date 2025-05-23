@@ -6,8 +6,8 @@ class ExplorePageVM: ObservableObject {
     @Published var errorMessage: String? = nil
     @Published var search: String = ""
     @Published var currTab: ExploreTab = .all
-    @Published var events: [NewEvent] = []
-    @Published var filteredEvents: [NewEvent] = []
+    @Published var events: [Event] = []
+    @Published var filteredEvents: [Event] = []
     @Published var filter: [ExploreTab: ExploreFilter] = [
         .all: ExploreFilter(),
         .inPerson: ExploreFilter(),
@@ -20,12 +20,12 @@ class ExplorePageVM: ObservableObject {
     ]
 
     // MARK: Private properties
-    private let eventService: NewEventService
+    private let eventService: EventService
     let schoolService: SchoolService
 
 
     // MARK: Init
-    init(schoolService: SchoolService, eventService: NewEventService) {
+    init(schoolService: SchoolService, eventService: EventService) {
         self.eventService = eventService
         self.schoolService = schoolService
     }
@@ -91,7 +91,7 @@ class ExplorePageVM: ObservableObject {
         }
     }
     
-    func updateClubs(_ clubs: [NewUser]) {
+    func updateClubs(_ clubs: [User]) {
         if var currFilter = filter[currTab] {
             if currFilter.clubs != clubs {
                 currFilter.clubs = clubs
@@ -143,7 +143,7 @@ enum ExploreTab: String, StringIdentifiableEnum {
 
 struct ExploreFilter {
     var sort: Sort = .latest
-    var clubs: [NewUser] = []
+    var clubs: [User] = []
     var startDate: Date? = nil
     var endDate: Date? = nil
 }

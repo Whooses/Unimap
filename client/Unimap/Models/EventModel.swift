@@ -1,6 +1,6 @@
 import Foundation
 
-struct NewEvent: Codable, Identifiable {
+struct Event: Codable, Identifiable {
     let id: Int
     let title: String
     var description: String? = nil
@@ -12,7 +12,7 @@ struct NewEvent: Codable, Identifiable {
     var categories: [String]? = nil
     var clubs: [String]? = nil
     var types: [String]? = nil
-    let user: NewUser
+    let user: User
     var inPerson: Bool? = nil
     var online: Bool? = nil
 

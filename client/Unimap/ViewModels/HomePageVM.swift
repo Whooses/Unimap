@@ -4,7 +4,7 @@ import Combine
 class HomePageVM: ObservableObject {
     // MARK: Published properties
     @Published var search: String = ""
-    @Published var events: [HomePageSection: [NewEvent]] = [
+    @Published var events: [HomePageSection: [Event]] = [
         .recommendations: [],
         .yourUpcoming: [],
         .latestEvents: []
@@ -21,12 +21,12 @@ class HomePageVM: ObservableObject {
     ]
 
     // MARK: Private properties
-    private let eventService: NewEventService
+    private let eventService: EventService
     let schoolService: SchoolService
 
 
     // MARK: Init
-    init(schoolService: SchoolService, eventService: NewEventService) {
+    init(schoolService: SchoolService, eventService: EventService) {
         self.eventService = eventService
         self.schoolService = schoolService
     }

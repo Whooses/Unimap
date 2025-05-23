@@ -1,7 +1,7 @@
 import SwiftUI
 
 // MARK: Main button - State holder
-struct NewSSFilterBtn<E: StringIdentifiableEnum>: View {
+struct SSFilterBtn<E: StringIdentifiableEnum>: View {
     let options: [E]
     let selectedOption: E
     let sheetTitle: String
@@ -19,7 +19,7 @@ struct NewSSFilterBtn<E: StringIdentifiableEnum>: View {
             }
         }
         .sheet(isPresented: $showSheet) {
-            NewSSFilterBtnSheet(
+            SSFilterBtnSheet(
                 options: options,
                 selectedOption: selectedOption,
                 sheetTitle: sheetTitle,
@@ -30,7 +30,7 @@ struct NewSSFilterBtn<E: StringIdentifiableEnum>: View {
 }
 
 // MARK: Button sheet - State modifier
-private struct NewSSFilterBtnSheet<E: StringIdentifiableEnum>: View {
+private struct SSFilterBtnSheet<E: StringIdentifiableEnum>: View {
     let options: [E]
     let selectedOption: E
     let sheetTitle: String
@@ -104,12 +104,12 @@ private struct OptionRow: View {
 
 
 //// MARK: - Preview
-//struct NewSSFilterBtn_Previews: PreviewProvider {
+//struct SSFilterBtn_Previews: PreviewProvider {
 //    struct PreviewWrapper: View {
 //        @State private var selectedOption = Sort.latest
 //        
 //        var body: some View {
-//            NewSSFilterBtn(
+//            SSFilterBtn(
 //                options: Sort.allCases,
 //                selectedOption: selectedOption,
 //                sheetTitle: "Select sort"

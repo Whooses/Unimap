@@ -1,8 +1,8 @@
 import Foundation
 
 struct follows: Codable {
-    let user: NewUser
-    let follower: NewUser
+    let user: User
+    let follower: User
     let createdAt: Date
     
     enum CodingKeys: String, CodingKey {

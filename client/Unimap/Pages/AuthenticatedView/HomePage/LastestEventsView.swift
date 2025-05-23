@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct LastestEventsView: View {
-    let events: [NewEvent]
+    let events: [Event]
 
     var body: some View {
         VStack {
@@ -13,7 +13,7 @@ struct LastestEventsView: View {
                     .padding(.leading)
                 Spacer()
             }
-            NewSmallSquareHorLayout(events: events)
+            SmallSquareHorLayout(events: events)
         }
         .frame(height: 250, alignment: .topLeading)
     }

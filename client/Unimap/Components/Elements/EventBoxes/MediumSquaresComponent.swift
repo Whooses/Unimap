@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct NewMediumSquareCard: View {
+struct MediumSquareCard: View {
     var username: String
     var userPFP: PFPComponent
     var eventImageURL: URL?

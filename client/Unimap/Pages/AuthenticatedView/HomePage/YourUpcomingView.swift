@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct YourUpcomingView: View {
-    let events: [NewEvent]
+    let events: [Event]
     
     var body: some View {
         VStack {
@@ -13,7 +13,7 @@ struct YourUpcomingView: View {
                     .padding(.leading)
                 Spacer()
             }
-            NewRectangleHorLayout(events: events)
+            RectangleHorLayout(events: events)
         }
         .frame(height: 250, alignment: .topLeading)
     }
