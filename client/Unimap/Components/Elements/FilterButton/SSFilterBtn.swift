@@ -88,7 +88,7 @@ struct SSFilterBtnSheet: View {
     }
 }
 
-//struct SSFilterBtnView: View {
+//private struct ContentView: View {
 //    @StateObject var builder  = EventRequestBuilder()
 //    var body: some View {
 //        SSFilterBtn(
@@ -101,5 +101,5 @@ struct SSFilterBtnSheet: View {
 //
 //
 //#Preview {
-//    SSFilterBtnView()
+//    ContentView()
 //}

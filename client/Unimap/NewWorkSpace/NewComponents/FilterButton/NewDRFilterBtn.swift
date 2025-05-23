@@ -2,8 +2,9 @@ import SwiftUI
 
 // MARK: Main button - State Holder
 struct NewDRFilterBtn: View {
-    @Binding var startDate: Date?
-    @Binding var endDate: Date?
+    let startDate: Date?
+    let endDate: Date?
+    let onSelect: ((Date?, Date?) -> Void)?
     
     @State private var label: String = "Date"
     @State private var showSheet = false
@@ -20,8 +21,9 @@ struct NewDRFilterBtn: View {
         .sheet(isPresented: $showSheet) {
             NewDRFilterBtnSheet(
                 label: $label,
-                startDate: $startDate,
-                endDate: $endDate
+                startDate: startDate,
+                endDate: endDate,
+                onSelect: onSelect
             )
         }
     }
@@ -30,8 +32,9 @@ struct NewDRFilterBtn: View {
 // MARK: Button sheet - State Modifier
 private struct NewDRFilterBtnSheet: View {
     @Binding var label: String
-    @Binding var startDate: Date?
-    @Binding var endDate: Date?
+    let startDate: Date?
+    let endDate: Date?
+    let onSelect: ((Date?, Date?) -> Void)?
     
     @State private var tempStartDate: Date?
     @State private var tempEndDate: Date?
@@ -75,11 +78,10 @@ private struct NewDRFilterBtnSheet: View {
 
             // Apply button
             ApplyButton(
-                startDate: $startDate,
-                endDate: $endDate,
                 label: $label,
                 tempStartDate: tempStartDate,
-                tempEndDate: tempEndDate
+                tempEndDate: tempEndDate,
+                onSelect: onSelect
             )
             .padding(.bottom)
         }
@@ -133,20 +135,19 @@ private struct DatePickerBtn: View {
 
 // MARK: Apply button - State Modifier
 private struct ApplyButton: View {
-    @Binding var startDate: Date?
-    @Binding var endDate: Date?
     @Binding var label: String
-    
     let tempStartDate: Date?
     let tempEndDate: Date?
+    let onSelect: ((Date?, Date?) -> Void)?
     
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         Button("Apply") {
-            startDate = tempStartDate
-            endDate = tempEndDate
-            label = dateRangeString(from: startDate, to: endDate)
+            if let onSelect = onSelect {
+                onSelect(tempStartDate, tempEndDate)
+            }
+            label = dateRangeString(from: tempStartDate, to: tempEndDate)
             dismiss()
         }
         .frame(maxWidth: .infinity)
@@ -165,15 +166,15 @@ private struct ApplyButton: View {
 
 
 
-private struct DRFilterBtnView: View {
-    @State private var startDate: Date? = nil
-    @State private var endDate: Date? = nil
-    
-    var body: some View {
-        NewDRFilterBtn(startDate: $startDate, endDate: $endDate)
-    }
-}
-
-#Preview {
-    DRFilterBtnView()
-}
+//private struct ContentView: View {
+//    @State private var startDate: Date? = nil
+//    @State private var endDate: Date? = nil
+//    
+//    var body: some View {
+//        NewDRFilterBtn(startDate: $startDate, endDate: $endDate)
+//    }
+//}
+//
+//#Preview {
+//    ContentView()
+//}

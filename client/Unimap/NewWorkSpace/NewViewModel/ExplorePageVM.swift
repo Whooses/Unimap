@@ -4,9 +4,9 @@ import Combine
 class ExplorePageVM: ObservableObject {
     // MARK: Published properties
     @Published var errorMessage: String? = nil
-    @Published var search: String? = nil
+    @Published var search: String = ""
     @Published var currTab: ExploreTab = .all
-    @Published var events: [Event] = []
+    @Published var events: [NewEvent] = []
     @Published var filteredEvents: [Event] = []
     @Published var filter: [ExploreTab: ExploreFilter] = [
         .all: ExploreFilter(),
@@ -21,11 +21,13 @@ class ExplorePageVM: ObservableObject {
 
     // MARK: Private properties
     private let eventService: NewEventService
+    let schoolService: SchoolService
 
 
     // MARK: Init
-    init(eventService: NewEventService) {
+    init(schoolService: SchoolService, eventService: NewEventService) {
         self.eventService = eventService
+        self.schoolService = schoolService
     }
 
     // MARK: Operations
@@ -50,7 +52,7 @@ class ExplorePageVM: ObservableObject {
         }
     }
 
-    func updateSearch(_ newSearch: String?) async {
+    func updateSearch(_ newSearch: String) async {
         isLoading[currTab] = true
         
         search = newSearch
@@ -79,6 +81,34 @@ class ExplorePageVM: ObservableObject {
         
         isLoading[currTab] = false
     }
+    
+    func updateSort(_ sort: Sort) {
+        if var currFilter = filter[currTab] {
+            if currFilter.sort != sort {
+                currFilter.sort = sort
+                filter[currTab] = currFilter
+            }
+        }
+    }
+    
+    func updateClubs(_ clubs: [NewUser]) {
+        if var currFilter = filter[currTab] {
+            if currFilter.clubs != clubs {
+                currFilter.clubs = clubs
+                filter[currTab] = currFilter
+            }
+        }
+    }
+    
+    func updateDR(_ startDate: Date?, _ endDate: Date?) {
+        if var currFilter = filter[currTab] {
+            if (currFilter.startDate != startDate || currFilter.endDate != endDate) {
+                currFilter.startDate = startDate
+                currFilter.endDate = endDate
+                filter[currTab] = currFilter
+            }
+        }
+    }
 
     func resetFilters() async {
         isLoading[currTab] = true
@@ -92,10 +122,12 @@ class ExplorePageVM: ObservableObject {
 }
 
 // Supported types
-enum ExploreTab: String {
+enum ExploreTab: String, StringIdentifiableEnum {
     case all
     case inPerson = "in_person"
     case online
+    
+    var id: String { self.rawValue }
     
     var displayName: String {
         switch self {
@@ -110,13 +142,13 @@ enum ExploreTab: String {
 }
 
 struct ExploreFilter {
-    var sort: SortFilter = .latest
-    var clubs: [ClubsFilter] = []
+    var sort: Sort = .latest
+    var clubs: [NewUser] = []
     var startDate: Date? = nil
     var endDate: Date? = nil
 }
 
-enum SortFilter: String, CaseIterable, Identifiable {
+enum SortFilter: String, StringIdentifiableEnum {
     case latest
     case upcoming
     case recentlyAdded = "recently_added"
@@ -138,7 +170,7 @@ enum SortFilter: String, CaseIterable, Identifiable {
     }
 }
 
-enum ClubsFilter: String, CaseIterable, Identifiable {
+enum ClubsFilter: String, StringIdentifiableEnum {
     case amacs
     case csec
     case mathematicsClub = "mathematics_club"

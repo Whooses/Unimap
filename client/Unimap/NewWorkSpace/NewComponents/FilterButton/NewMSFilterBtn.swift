@@ -2,10 +2,10 @@ import SwiftUI
 
 // MARK: Main button - State holder
 struct NewMSFilterBtn<Item: NamedIdentifiable>: View {
-    let label: String // Constant label, unlike SSFilterBtn's label that reflect on the choosen option
+    let label: String
     let options: [Item]
-    
-    @Binding var selectedOptions: [Item]
+    let selectedOptions: [Item]
+    let onSelection: (([Item]) -> Void)?
     
     @State private var showSheet = false
     
@@ -22,7 +22,8 @@ struct NewMSFilterBtn<Item: NamedIdentifiable>: View {
             NewMSFilterBtnSheet(
                 label: label,
                 options: options,
-                selectedOptions: $selectedOptions
+                selectedOptions: selectedOptions,
+                onSelection: onSelection
             )
         }
     }
@@ -32,10 +33,12 @@ struct NewMSFilterBtn<Item: NamedIdentifiable>: View {
 private struct NewMSFilterBtnSheet<Item: NamedIdentifiable>: View {
     let label: String
     let options: [Item]
-    @Binding var selectedOptions: [Item]
+    let selectedOptions: [Item]
+    let onSelection: (([Item]) -> Void)?
     
     @State private var tempSelected: [Item] = []
     @Environment(\.dismiss) private var dismiss
+    
     private let rowHeight: CGFloat = 55
     private let headerHeight: CGFloat = 60
     
@@ -53,7 +56,7 @@ private struct NewMSFilterBtnSheet<Item: NamedIdentifiable>: View {
             
             // Displaying each option
             ScrollView {
-                LazyVStack(spacing: 0, pinnedViews: []) {
+                LazyVStack(spacing: 0) {
                     ForEach(options) { option in
                         Button {
                             // Toggle inside the *local* copy
@@ -74,7 +77,7 @@ private struct NewMSFilterBtnSheet<Item: NamedIdentifiable>: View {
                 }
             }
             
-            ApplyButton(selectedOptions: $selectedOptions, tempSelected: tempSelected)
+            ApplyButton(tempSelected: tempSelected, onSelection: onSelection)
                 .padding(.bottom)
         }
         .presentationDetents([.height(400), .large])
@@ -104,14 +107,16 @@ private struct OptionRow: View {
 
 // MARK: Sheet apply button
 private struct ApplyButton<Item>: View {
-    @Binding var selectedOptions: [Item]
     let tempSelected: [Item]
+    let onSelection: (([Item]) -> Void)?
     
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         Button("Apply") {
-            selectedOptions = tempSelected
+            if let onSelection = onSelection {
+                onSelection(tempSelected)
+            }
             dismiss()
         }
         .frame(maxWidth: .infinity)
@@ -147,7 +152,13 @@ private struct ApplyButton<Item>: View {
 //        ]
 //        
 //        var body: some View {
-//            NewMSFilterBtn(label: "School", options: sampleSchools, selectedOptions: $selectedSchools)
+//            NewMSFilterBtn(
+//                label: "School",
+//                options: sampleSchools,
+//                selectedOptions: selectedSchools
+//            ) { newSelections in
+//                selectedSchools = newSelections
+//            }
 //        }
 //    }
 //    

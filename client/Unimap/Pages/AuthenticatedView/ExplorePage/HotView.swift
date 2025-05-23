@@ -1,13 +1,11 @@
 import SwiftUI
 
 struct HotView: View {
-    @ObservedObject var builder: EventRequestBuilder
     @State private var request: URLRequest?                       // parent owns optionality
 
     var body: some View {
         VStack(alignment: .center) {
             header
-            ExploreFilterLayout(builder: builder)
 
             if let binding = nonOptionalRequestBinding {          // use derived binding
                 RectangleVerLayout(request: binding)              // child gets non-optional
@@ -16,12 +14,6 @@ struct HotView: View {
             }
 
             Spacer()
-        }
-        .task {                                                   // main-actor safe
-            request = builder.build()
-        }
-        .onReceive(builder.$lastUpdated) { _ in
-            request = builder.build()
         }
     }
 

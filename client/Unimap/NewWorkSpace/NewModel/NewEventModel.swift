@@ -4,7 +4,7 @@ struct NewEvent: Codable, Identifiable {
     let id: Int
     let title: String
     let description: String?
-    let date: String?
+    let date: Date?
     let location: String?
     let imageURL: URL?
     let isPublic: Bool?

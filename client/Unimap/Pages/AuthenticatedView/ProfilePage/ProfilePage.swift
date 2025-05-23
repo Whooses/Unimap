@@ -45,7 +45,7 @@ struct ProfilePage: View {
                 //Posts of user [lazy vstack]
                 LazyVStack(spacing: 15) {
                     //Holds the filter action, search button
-                    filterSearchBarView(selectedFilter: $selectedFilter)
+//                    filterSearchBarView(selectedFilter: $selectedFilter)
                     //Call the rectangle event
 //                    RectangleVerLayout(request: )
                 } //end of lazy v-stack
@@ -149,32 +149,32 @@ struct followMessageView: View {
     }
 }
 
-//Filter & search bar view
-struct filterSearchBarView: View {
-    @Binding var selectedFilter: String
-    var body: some View {
-        HStack {
-            HStack{
-                //Filter button
-                Button {
-                    //action to filter
-                } label: {
-//                    IconButtonLabel(systemName: "line.3.horizontal.decrease")
-                }
-                //Holds the filter dropdown button
-//                FilterDropdown(selectedFilter: $selectedFilter)
-            }
-            Spacer()
-            //Search button
-            Button {
-                //action to search
-            } label: {
-//                IconButtonLabel(systemName: "magnifyingglass")
-            }
-        }
-    }
-}
-
-#Preview {
-    ProfilePage()
-}
+////Filter & search bar view
+//private struct ContentView: View {
+//    @Binding var selectedFilter: String
+//    var body: some View {
+//        HStack {
+//            HStack{
+//                //Filter button
+//                Button {
+//                    //action to filter
+//                } label: {
+////                    IconButtonLabel(systemName: "line.3.horizontal.decrease")
+//                }
+//                //Holds the filter dropdown button
+////                FilterDropdown(selectedFilter: $selectedFilter)
+//            }
+//            Spacer()
+//            //Search button
+//            Button {
+//                //action to search
+//            } label: {
+////                IconButtonLabel(systemName: "magnifyingglass")
+//            }
+//        }
+//    }
+//}
+//
+//#Preview {
+//    ContentView()
+//}

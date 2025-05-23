@@ -5,4 +5,6 @@ protocol NamedIdentifiable: Identifiable, Equatable{
 }
 
 
-protocol StringIdentifiableEnum: RawRepresentable, CaseIterable, Identifiable where RawValue == String {}
+protocol StringIdentifiableEnum: RawRepresentable, CaseIterable, Identifiable where RawValue == String {
+    var displayName: String { get }
+}

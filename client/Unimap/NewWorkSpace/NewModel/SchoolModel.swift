@@ -1,6 +1,6 @@
 import Foundation
 
-struct School: Codable {
+struct School: Codable, Equatable {
     let id: Int
     let name: String
     let stateProvince: String?

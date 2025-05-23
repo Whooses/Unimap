@@ -5,6 +5,12 @@ struct ExploreFilterLayout: View {
 
     var body: some View {
         HStack {
+            Image(systemName: "line.3.horizontal.decrease")
+                .font(.system(size: 24))
+                .fontWeight(.bold)
+                .foregroundColor(Color.black)
+                .opacity(0.6)
+
             SSFilterBtn(
                 label: "Latest",
                 options: [

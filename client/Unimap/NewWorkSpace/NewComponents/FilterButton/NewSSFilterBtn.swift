@@ -3,9 +3,9 @@ import SwiftUI
 // MARK: Main button - State holder
 struct NewSSFilterBtn<E: StringIdentifiableEnum>: View {
     let options: [E]
+    let selectedOption: E
     let sheetTitle: String
-    
-    @Binding var label: String
+    let onSelection: ((E) -> Void)?
     
     @State private var showSheet: Bool = false
     
@@ -13,16 +13,17 @@ struct NewSSFilterBtn<E: StringIdentifiableEnum>: View {
         VStack {
             Button(action: {showSheet = true}) {
                 buttonLabel(
-                    selected: label,
+                    selected: selectedOption.displayName,
                     icon: "chevron.down"
                 )
             }
         }
         .sheet(isPresented: $showSheet) {
             NewSSFilterBtnSheet(
-                label: $label,
+                options: options,
+                selectedOption: selectedOption,
                 sheetTitle: sheetTitle,
-                options: options
+                onSelection: onSelection
             )
         }
     }
@@ -30,10 +31,10 @@ struct NewSSFilterBtn<E: StringIdentifiableEnum>: View {
 
 // MARK: Button sheet - State modifier
 private struct NewSSFilterBtnSheet<E: StringIdentifiableEnum>: View {
-    @Binding var label: String
-    
-    let sheetTitle: String
     let options: [E]
+    let selectedOption: E
+    let sheetTitle: String
+    let onSelection: ((E) -> Void)?
     
     private let rowHeight: CGFloat = 55
     private let headerHeight: CGFloat = 60
@@ -43,7 +44,7 @@ private struct NewSSFilterBtnSheet<E: StringIdentifiableEnum>: View {
     var body: some View {
         VStack {
             // Header
-            Text("Select \(sheetTitle)")
+            Text("\(sheetTitle)")
                 .font(.headline)
                 .frame(maxWidth: .infinity)
                 .frame(height: headerHeight)
@@ -57,12 +58,14 @@ private struct NewSSFilterBtnSheet<E: StringIdentifiableEnum>: View {
                 LazyVStack(spacing: 0, pinnedViews: []) {
                     ForEach(options) { option in
                         Button {
-                            label = option.rawValue
+                            if let onSelection = onSelection {
+                                onSelection(option)
+                            }
                             dismiss()
                         } label: {
                             OptionRow(
-                                optionName: option.rawValue,
-                                isSelected: label == option.rawValue,
+                                optionName: option.displayName,
+                                isSelected: selectedOption == option,
                                 rowHeight: rowHeight
                             )
                         }
@@ -100,25 +103,19 @@ private struct OptionRow: View {
 
 
 
-//// MARK: - Sample enum for the preview
-//private enum SampleFilter: String, StringIdentifiableEnum {
-//    case apple, banana, cherry
-//    var id: String { rawValue }
-//}
-//
 //// MARK: - Preview
 //struct NewSSFilterBtn_Previews: PreviewProvider {
 //    struct PreviewWrapper: View {
-//        @State private var selected = SampleFilter.apple.rawValue
+//        @State private var selectedOption = Sort.latest
 //        
 //        var body: some View {
-//            NewSSFilterBtn<SampleFilter>(
-//                options: SampleFilter.allCases,
-//                sheetTitle: "Fruit",
-//                label: $selected
-//            )
-//            .padding()
-//            .previewLayout(.sizeThatFits)
+//            NewSSFilterBtn(
+//                options: Sort.allCases,
+//                selectedOption: selectedOption,
+//                sheetTitle: "Select sort"
+//            ) { newSelect in
+//                selectedOption = newSelect
+//            }
 //        }
 //    }
 //    

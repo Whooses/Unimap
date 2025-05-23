@@ -50,13 +50,13 @@ struct ExplorePage: View {
             ).padding(.bottom, 12)
 
             // MARK: – Content
-            Group {
-                switch selectedIndex {
-                case 1: LatestView(builder: builder)
-                case 2: UpcomingView(builder: builder)
-                default: HotView(builder: builder)
-                }
-            }
+//            Group {
+//                switch selectedIndex {
+//                case 1: LatestView(builder: builder)
+//                case 2: UpcomingView(builder: builder)
+//                default: HotView(builder: builder)
+//                }
+//            }
             .animation(.default, value: selectedIndex)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
@@ -69,6 +69,6 @@ struct ExplorePage: View {
     }
 }
 
-#Preview {
-    ExplorePage()
-}
+//#Preview {
+//    ExplorePage()
+//}

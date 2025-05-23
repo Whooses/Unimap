@@ -19,12 +19,12 @@ class NewEventService {
             search: String? = nil,
             tab: ExploreTab,
             filter: ExploreFilter
-    ) async throws -> [Event] {
+    ) async throws -> [NewEvent] {
         let builder = NewEventRequestBuilder()
             .setSearch(search)
             .setTab(tab)
             .setSort(filter.sort)
-            .setClubs(filter.clubs)
+//            .setClubs(filter.clubs)
             .setDateRange(start: filter.startDate, end: filter.endDate)
 
         guard let request = builder.build() else {
@@ -36,7 +36,7 @@ class NewEventService {
         }
         
         do {
-            let data: [Event] = try await self.networkService.sendRequest(from: request, type: Event.self)
+            let data: [NewEvent] = try await self.networkService.sendRequest(from: request, type: NewEvent.self)
             return data
         } catch {
             throw error

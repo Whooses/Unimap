@@ -115,7 +115,7 @@ struct MSFilterBtnSheet: View {
 }
 
 //// MARK: – Preview harness
-//struct MSFilterBtnView: View {
+//private struct ContentView: View {
 //    @StateObject var builder = EventRequestBuilder()
 //
 //    var body: some View {
@@ -129,4 +129,4 @@ struct MSFilterBtnSheet: View {
 //    }
 //}
 //
-//#Preview { MSFilterBtnView() }
+//#Preview { ContentView() }

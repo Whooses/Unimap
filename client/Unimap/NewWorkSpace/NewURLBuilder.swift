@@ -50,27 +50,27 @@ class NewEventRequestBuilder: ObservableObject {
     }
 
     
-    func setSort(_ option: SortFilter) -> Self {
+    func setSort(_ option: Sort) -> Self {
         queryItems.removeAll { $0.name == "sort" }
         queryItems.append(URLQueryItem(name: "sort", value: option.rawValue))
         lastUpdated = UUID() // Trigger update
         return self
     }
 
-    func setClubs(_ clubs: [ClubsFilter]) -> Self {
-        queryItems.removeAll { $0.name == "clubs" }
-
-        // Remove the param entirely when nothing is selected
-        guard !clubs.isEmpty else {
-            lastUpdated = UUID()
-            return self
-        }
-
-        let value = clubs.map(\.rawValue).joined(separator: ",")
-        queryItems.append(URLQueryItem(name: "clubs", value: value))
-        lastUpdated = UUID()
-        return self
-    }
+//    func setClubs(_ clubs: [NewUser]) -> Self {
+//        queryItems.removeAll { $0.name == "clubs" }
+//
+//        // Remove the param entirely when nothing is selected
+//        guard !clubs.isEmpty else {
+//            lastUpdated = UUID()
+//            return self
+//        }
+//
+//        let value = clubs.map(\.rawValue).joined(separator: ",")
+//        queryItems.append(URLQueryItem(name: "clubs", value: value))
+//        lastUpdated = UUID()
+//        return self
+//    }
     
     private func formatted(_ date: Date) -> String {
             let fmt = DateFormatter()

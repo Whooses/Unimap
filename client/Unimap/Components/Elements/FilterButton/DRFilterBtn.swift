@@ -151,7 +151,7 @@ struct DRFilterBtnSheet: View {
 }
 
 
-//struct DRFilterBtnView: View {
+//private struct ContentView: View {
 //    @StateObject var builder  = EventRequestBuilder()
 //
 //    var body: some View {
@@ -160,5 +160,5 @@ struct DRFilterBtnSheet: View {
 //}
 //
 //#Preview {
-//    DRFilterBtnView()
+//    ContentView()
 //}

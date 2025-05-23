@@ -14,6 +14,6 @@ struct MainView: View {
 }
 
 //#Preview {
-//    MainView()
+//    SearchView()
 //}
 

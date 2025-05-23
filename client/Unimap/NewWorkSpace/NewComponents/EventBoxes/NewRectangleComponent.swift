@@ -1,12 +1,12 @@
 import SwiftUI
 
-struct RectangleComponent: View {
+struct NewRectangleComponent: View {
     let username: String
     let userPFP: PFPComponent
     let eventImageURL: URL?
     let eventTitle: String
     let eventDescription: String?
-    let eventDate: String?
+    let eventDate: Date?
     
     @StateObject private var imageLoaderService = ImageLoaderService(url: nil)
     @State private var cardColor = Color(.systemGray)
@@ -45,7 +45,7 @@ struct RectangleComponent: View {
                         .lineLimit(3)
                         .padding(.bottom, 10)
                     
-                    Text(eventDate ?? "No date yet")
+                    Text(stringDate(Date: eventDate))
                         .font(.caption)
                         .foregroundColor(.white)
                 }
