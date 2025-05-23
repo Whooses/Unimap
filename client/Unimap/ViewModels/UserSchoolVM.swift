@@ -2,11 +2,11 @@ import Foundation
 import Combine
 
 class UserSchoolVM: ObservableObject {
-    @Published var user: User
+    @Published var user: NewUser
     @Published var school: [School]? = nil
-    @Published var clubs: [User]? = nil
+    @Published var clubs: [NewUser]? = nil
     
-    init(user: User) {
+    init(user: NewUser) {
         self.user = user
     }
     

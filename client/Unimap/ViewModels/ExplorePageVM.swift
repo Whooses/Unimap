@@ -7,7 +7,7 @@ class ExplorePageVM: ObservableObject {
     @Published var search: String = ""
     @Published var currTab: ExploreTab = .all
     @Published var events: [NewEvent] = []
-    @Published var filteredEvents: [Event] = []
+    @Published var filteredEvents: [NewEvent] = []
     @Published var filter: [ExploreTab: ExploreFilter] = [
         .all: ExploreFilter(),
         .inPerson: ExploreFilter(),

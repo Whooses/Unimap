@@ -1,13 +1,13 @@
 import SwiftUI
 
-struct NewRectangleHorLayout: View {
+struct NewMedSquareHorLayout: View {
     let events: [NewEvent]
-
+    
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            VStack(spacing: 5) {
+            LazyHStack(spacing: 16) {
                 ForEach(events) { event in
-                    NewRectangleComponent(
+                    NewMediumSquareCard(
                         username: event.user.name,
                         userPFP: PFPComponent(
                             imageUrl: event.user.pfpURL,
@@ -15,16 +15,12 @@ struct NewRectangleHorLayout: View {
                         ),
                         eventImageURL: event.imageURL,
                         eventTitle: event.title,
-                        eventDescription: event.description,
                         eventDate: event.date
                     )
                 }
             }
-            .padding(.horizontal, 16)
+            .padding(.leading)
         }
     }
 }
-
-
-
 

@@ -1,25 +1,25 @@
 import SwiftUI
 
-struct NewMedSquareHorLayout: View {
-    let events: [Event]
-    
+struct NewSmallSquareHorLayout: View {
+    let events: [NewEvent]
+
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 16) {
                 ForEach(events) { event in
-                    MediumSquareCard(
-                        username: event.user.username,
+                    SmallSquareCard(
+                        username: event.user.name,
                         userPFP: PFPComponent(
                             imageUrl: event.user.pfpURL,
                             size: 40
                         ),
-                        eventImageURL: event.imageURL,
-                        eventTitle: event.title,
-                        eventDate: event.date
+                        eventImageURL: event.imageURL
                     )
                 }
             }
+            .padding(.leading)
         }
     }
 }
+
 

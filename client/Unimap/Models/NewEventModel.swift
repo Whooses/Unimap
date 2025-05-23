@@ -1,20 +1,20 @@
 import Foundation
 
-struct Event: Codable, Identifiable {
+struct NewEvent: Codable, Identifiable {
     let id: Int
     let title: String
-    let description: String?
-    let date: String?
-    let location: String?
-    let imageURL: URL?
-    let isPublic: Bool?
-    let departments: [String]?
-    let categories: [String]?
-    let clubs: [String]?
-    let types: [String]?
-    let user: User
-    let inPerson: Bool?
-    let online: Bool?
+    var description: String? = nil
+    var date: Date? = nil
+    var location: String? = nil
+    var imageURL: URL? = nil
+    var isPublic: Bool? = nil
+    var departments: [String]? = nil
+    var categories: [String]? = nil
+    var clubs: [String]? = nil
+    var types: [String]? = nil
+    let user: NewUser
+    var inPerson: Bool? = nil
+    var online: Bool? = nil
 
     enum CodingKeys: String, CodingKey {
         case id

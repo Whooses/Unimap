@@ -1,10 +1,3 @@
-//
-//  LargeSquareComponent.swift
-//  Unimap
-//
-//  Created by Krisha Patel on 2025-05-02.
-//
-
 import SwiftUI
 
 struct NewLargeSquareComponent: View {

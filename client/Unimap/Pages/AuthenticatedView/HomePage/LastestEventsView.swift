@@ -1,35 +1,20 @@
 import SwiftUI
 
 struct LastestEventsView: View {
-    @State private var request: URLRequest? = nil
+    let events: [NewEvent]
 
     var body: some View {
         VStack {
             HStack {
-                Text("Latest Events")
+                Text("Latest events")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .padding(.bottom, -2)
-                    .padding(.leading, 25)
+                    .padding(.leading)
                 Spacer()
             }
-            
-            
-            if let _ = request {
-                SmallSquareHorLayout(
-                    request: Binding(
-                        get: { request! },
-                        set: { request = $0 }
-                    )
-                )
-            } else {
-                ProgressView()
-            }
+            NewSmallSquareHorLayout(events: events)
         }
-        .onAppear {
-            request = EventRequestBuilder()
-                .setPath(.events)
-                .build()
-        }
+        .frame(height: 250, alignment: .topLeading)
     }
 }

@@ -3,11 +3,11 @@ import Foundation
 struct NewUser: Codable, NamedIdentifiable {
     let userID: Int
     let name: String
-    let pfpURL: URL?
+    var pfpURL: URL? = nil
     let isVerified: Bool
-    let timeZone: String?
-    let auth0ID: String?
-    let school: School?
+    var timeZone: String? = nil
+    var auth0ID: String? = nil
+    var school: School?  = nil
     
     var id: Int { userID }
     

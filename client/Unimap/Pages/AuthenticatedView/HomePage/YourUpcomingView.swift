@@ -1,34 +1,20 @@
 import SwiftUI
 
 struct YourUpcomingView: View {
-    @State private var request: URLRequest? = nil
-
+    let events: [NewEvent]
+    
     var body: some View {
         VStack {
             HStack {
-                Text("Your Upcoming")
+                Text("Your upcoming")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .padding(.bottom, -2)
-                    .padding(.leading, 25)
+                    .padding(.leading)
                 Spacer()
             }
-            
-            if let _ = request {
-                RectangleHorLayout(
-                    request: Binding(
-                        get: { request! },
-                        set: { request = $0 }
-                    )
-                )
-            } else {
-                ProgressView()
-            }
+            NewRectangleHorLayout(events: events)
         }
-        .onAppear {
-            request = EventRequestBuilder()
-                .setPath(.events)
-                .build()
-        }
+        .frame(height: 250, alignment: .topLeading)
     }
 }
