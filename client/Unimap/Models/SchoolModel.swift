@@ -1,7 +1,21 @@
 import Foundation
 
 struct School: Codable, Equatable {
-    let id: Int
+    let id: UUID
+    let name: String
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case name
+    }
+    
+    static func mock() -> Self {
+        return .init(id: UUID(), name: "Mock")
+    }
+}
+
+struct SchoolDetails: Codable, Equatable {
+    let id: UUID
     let name: String
     let stateProvince: String?
     let city: String?
@@ -19,5 +33,9 @@ struct School: Codable, Equatable {
         case latitude
         case longitude
         case createdAt = "created_at"
+    }
+    
+    static func mock() -> Self {
+        return .init(id: UUID(), name: "University of Toronto Scarborough", stateProvince: nil, city: nil, country: nil, latitude: nil, longitude: nil, createdAt: nil)
     }
 }

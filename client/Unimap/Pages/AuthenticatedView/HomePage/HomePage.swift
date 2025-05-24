@@ -49,6 +49,6 @@ struct HomePage: View {
 
 
 
-#Preview {
-    HomePage()
-}
+//#Preview {
+//    HomePage()
+//}

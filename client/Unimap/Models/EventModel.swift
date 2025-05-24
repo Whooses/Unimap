@@ -1,7 +1,31 @@
 import Foundation
 
 struct Event: Codable, Identifiable {
-    let id: Int
+    let id: UUID
+    let title: String
+    var description: String? = nil
+    var date: Date? = nil
+    var location: String? = nil
+    var imageURL: URL? = nil
+    let user: User
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case title
+        case description
+        case date
+        case location
+        case imageURL = "image_url"
+        case user
+    }
+    
+    static func mock() -> Event {
+        return Event(id: UUID(), title: "Party Night", imageURL: URL(string: "https://shorturl.at/ISmcS"),user: User.mock())
+    }
+}
+
+struct EventDetails: Codable, Identifiable {
+    let id: UUID
     let title: String
     var description: String? = nil
     var date: Date? = nil
@@ -32,4 +56,9 @@ struct Event: Codable, Identifiable {
         case inPerson
         case online
     }
+    
+    static func mock() -> Event {
+        return Event(id: UUID(), title: "Party Night", imageURL: URL(string: "https://shorturl.at/ISmcS"),user: User.mock())
+    }
 }
+

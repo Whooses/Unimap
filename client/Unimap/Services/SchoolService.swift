@@ -11,60 +11,26 @@ class SchoolService {
         state: String?,
         province: String?,
         city: String?
-    ) async throws -> [School] {
+    ) async throws -> [SchoolDetails] {
         return [
-            School(
-                id: 2,
-                name: "University of Toronto Scarborough",
-                stateProvince: "Ontario",
-                city: "Scarborough",
-                country: "Canada",
-                latitude: nil,
-                longitude: nil,
-                createdAt: Date.now)
+            SchoolDetails.mock()
         ]
     }
     
     // Get school base on a user
-    func getUserSchools(userID: Int) async throws -> [School] {
+    func getUserSchools(userID: Int) async throws -> [SchoolDetails] {
         return [
-            School(
-                id: 2,
-                name: "University of Toronto Scarborough",
-                stateProvince: "Ontario",
-                city: "Scarborough",
-                country: "Canada",
-                latitude: nil,
-                longitude: nil,
-                createdAt: Date.now)
+            SchoolDetails.mock()
         ]
     }
     
     // Get a specific shool's detail
-    func getSchoolDetail(schoolID: Int) async throws -> School {
-        return School(
-            id: 2,
-            name: "University of Toronto Scarborough",
-            stateProvince: "Ontario",
-            city: "Scarborough",
-            country: "Canada",
-            latitude: nil,
-            longitude: nil,
-            createdAt: Date.now)
+    func getSchoolDetail(schoolID: Int) async throws -> SchoolDetails {
+        return SchoolDetails.mock()
     }
     
     // Get all school's clubs
     func getSchoolClubs(schoolID: Int) -> [User] {
-        return [
-            User(userID: 1,  name: "amacss_admin",   pfpURL: URL(string: "https://example.com/pfp1.jpg"),  isVerified: false, timeZone: nil, auth0ID: nil, school: School(id: 1, name: "UTSC", stateProvince: nil, city: nil, country: nil, latitude: nil, longitude: nil, createdAt: nil)),
-            User(userID: 2,  name: "math_user",      pfpURL: URL(string: "https://example.com/pfp2.jpg"),  isVerified: false, timeZone: nil, auth0ID: nil, school: School(id: 1, name: "UTSC", stateProvince: nil, city: nil, country: nil, latitude: nil, longitude: nil, createdAt: nil)),
-            User(userID: 3,  name: "csec_lead",      pfpURL: URL(string: "https://example.com/pfp3.jpg"),  isVerified: false, timeZone: nil, auth0ID: nil, school: School(id: 1, name: "UTSC", stateProvince: nil, city: nil, country: nil, latitude: nil, longitude: nil, createdAt: nil)),
-            User(userID: 4,  name: "csec_admin",     pfpURL: URL(string: "https://example.com/pfp4.jpg"),  isVerified: false, timeZone: nil, auth0ID: nil, school: School(id: 1, name: "UTSC", stateProvince: nil, city: nil, country: nil, latitude: nil, longitude: nil, createdAt: nil)),
-            User(userID: 5,  name: "prog_enthusiast",pfpURL: URL(string: "https://example.com/pfp5.jpg"),  isVerified: false, timeZone: nil, auth0ID: nil, school: School(id: 1, name: "UTSC", stateProvince: nil, city: nil, country: nil, latitude: nil, longitude: nil, createdAt: nil)),
-            User(userID: 6,  name: "techie_tim",     pfpURL: URL(string: "https://example.com/pfp6.jpg"),  isVerified: false, timeZone: nil, auth0ID: nil, school: School(id: 1, name: "UTSC", stateProvince: nil, city: nil, country: nil, latitude: nil, longitude: nil, createdAt: nil)),
-            User(userID: 7,  name: "math_admin",     pfpURL: URL(string: "https://example.com/pfp7.jpg"),  isVerified: false, timeZone: nil, auth0ID: nil, school: School(id: 1, name: "UTSC", stateProvince: nil, city: nil, country: nil, latitude: nil, longitude: nil, createdAt: nil)),
-            User(userID: 8,  name: "csec_member1",   pfpURL: URL(string: "https://example.com/pfp8.jpg"),  isVerified: false, timeZone: nil, auth0ID: nil, school: School(id: 1, name: "UTSC", stateProvince: nil, city: nil, country: nil, latitude: nil, longitude: nil, createdAt: nil)),
-            User(userID: 9,  name: "prog_master",    pfpURL: URL(string: "https://example.com/pfp9.jpg"),  isVerified: false, timeZone: nil, auth0ID: nil, school: School(id: 1, name: "UTSC", stateProvince: nil, city: nil, country: nil, latitude: nil, longitude: nil, createdAt: nil))
-        ]
+        fatalError(#function + " - function not implemented")
     }
 }

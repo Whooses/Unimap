@@ -72,6 +72,12 @@ struct PFPComponent: View {
             }
         }
     }
+    
+    func showPlusIcon(_ showPlusIcon: Bool) -> PFPComponent {
+        var copy = self
+        copy.showPlusIcon = showPlusIcon
+        return copy
+    }
 }
 
 
