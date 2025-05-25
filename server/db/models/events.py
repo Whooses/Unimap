@@ -49,3 +49,9 @@ class Events(Base):
         "Users",
         back_populates="events"
     )
+
+    reports = relationship(
+        "Report",
+        back_populates="event",
+        cascade="all, delete-orphan"
+        )
