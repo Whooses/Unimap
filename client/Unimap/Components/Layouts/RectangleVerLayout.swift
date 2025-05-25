@@ -1,58 +1,31 @@
 import SwiftUI
-import Combine
 
 struct RectangleVerLayout: View {
-    @StateObject private var eventViewModel = EventViewModel()
-    @Binding var request: URLRequest
+    let events: [Event]
 
     var body: some View {
-        VStack(alignment: .center) {
-            if eventViewModel.isLoading {
-                ProgressView()
-                    .padding()
-            } else if let errorMessage = eventViewModel.errorMessage {
-                Text("Error: \(errorMessage)")
-                    .foregroundColor(.red)
-                    .padding()
-            } else if eventViewModel.events.isEmpty {
-                Text("No events found.")
-                    .foregroundColor(.gray)
-                    .padding()
-            } else {
-                ScrollView(showsIndicators: true) {
-                    VStack(spacing: 5) {
-                        ForEach(eventViewModel.events) { event in
-                            RectangleComponent(
-                              username: event.user.username,
-                              userPFP: PFPComponent(
-                                imageUrl: event.user.pfpURL,
-                                size: 40
-                              ),
-                              eventImageURL: event.imageURL,
-                              eventTitle: event.title,
-                              eventDescription: event.description,
-                              eventDate: event.date
-                            )
-                        }
-                    }
-                    .padding(.horizontal, 16)
+        ScrollView(showsIndicators: false) {
+            LazyVStack(spacing: 5) {
+                ForEach(events) { event in
+                    RectangleComponent(
+                        username: event.user.name,
+                        userPFP: PFPComponent(
+                            imageUrl: event.user.pfpURL,
+                            size: 40
+                        ),
+                        eventImageURL: event.imageURL,
+                        eventTitle: event.title,
+                        eventDescription: event.description,
+                        eventDate: event.date
+                    )
                 }
             }
-        }
-        .onAppear {
-            Task {
-                do {
-                    try await eventViewModel.loadEvents(from: request)
-                } catch {
-                    eventViewModel.errorMessage = "Failed to fetch events: \(error.localizedDescription)"
-                }
-            }
-        }
-        .task(id: request) {
-            do   { try await eventViewModel.loadEvents(from: request) }
-            catch { eventViewModel.errorMessage = "Failed to fetch events: \(error.localizedDescription)" }
+            .padding(.horizontal, 16)
         }
     }
 }
+
+
+
 
 

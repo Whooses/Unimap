@@ -1,30 +1,6 @@
 import Foundation
 
 class EventRequestBuilder: ObservableObject {
-    enum Path: String {
-        case events = "/events"
-    }
-    
-    enum Sort: String {
-        case latest = "latest"
-        case upcoming = "upcoming"
-        case recentlyAdded = "recently added"
-        case past = "past"
-        case alphabetical = "alphabetical"
-        case hot = "hot"
-    }
-    
-    enum Club: String {
-        case amacss = "amacss"
-        case csec = "csec"
-        case mathematics_club = "mathematics club"
-        case programming_club = "programming club"
-        
-        /// Case-insensitive initializer
-        init?(caseInsensitive value: String) {
-            self.init(rawValue: value.lowercased())
-        }
-    }
     @Published private(set) var lastUpdated = UUID()
     
     private var components: URLComponents
@@ -38,28 +14,38 @@ class EventRequestBuilder: ObservableObject {
         components.scheme = "http"
         components.host = "127.0.0.1"
         components.port = 8000
+        components.path = "/events"
     }
     
     // MARK: - Builder Methods
-    
-    func setPath(_ path: Path) -> Self {
-        if case .events = path {
-            components.path = Path.events.rawValue
-            lastUpdated = UUID() // Trigger update
-        }
-        return self
-    }
-    
-    func setSearch(_ text: String) -> Self {
+    func setSearch(_ search: String?) -> Self {
         // Always start by removing any existing "search" item
         queryItems.removeAll { $0.name == "search" }
+        
+        guard let search = search else {
+            lastUpdated = UUID()
+            return self
+        }
 
         // Only add the parameter when there's something to search for
-        if !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            queryItems.append(URLQueryItem(name: "search", value: text))
+        if !search.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            queryItems.append(URLQueryItem(name: "search", value: search))
         }
 
         lastUpdated = UUID()          // notify observers
+        return self
+    }
+    
+    func setTab(_ tab: ExploreTab?) -> Self {
+        queryItems.removeAll { $0.name == "tab" }
+        
+        guard let tab = tab else {
+            lastUpdated = UUID()
+            return self
+        }
+        
+        queryItems.append(URLQueryItem(name: "tab", value: tab.rawValue))
+        lastUpdated = UUID()
         return self
     }
 
@@ -71,20 +57,20 @@ class EventRequestBuilder: ObservableObject {
         return self
     }
 
-    func setClubs(_ clubs: [Club]) -> Self {
-        queryItems.removeAll { $0.name == "clubs" }
-
-        // Remove the param entirely when nothing is selected
-        guard !clubs.isEmpty else {
-            lastUpdated = UUID()
-            return self
-        }
-
-        let value = clubs.map(\.rawValue).joined(separator: ",")
-        queryItems.append(URLQueryItem(name: "clubs", value: value))
-        lastUpdated = UUID()
-        return self
-    }
+//    func setClubs(_ clubs: [User]) -> Self {
+//        queryItems.removeAll { $0.name == "clubs" }
+//
+//        // Remove the param entirely when nothing is selected
+//        guard !clubs.isEmpty else {
+//            lastUpdated = UUID()
+//            return self
+//        }
+//
+//        let value = clubs.map(\.rawValue).joined(separator: ",")
+//        queryItems.append(URLQueryItem(name: "clubs", value: value))
+//        lastUpdated = UUID()
+//        return self
+//    }
     
     private func formatted(_ date: Date) -> String {
             let fmt = DateFormatter()

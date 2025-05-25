@@ -28,3 +28,24 @@ func dateRangeString(from startDate: Date?, to endDate: Date?) -> String {
         return "Date"
     }
 }
+
+
+func stringDate(Date date: Date?,
+            format: String = "yyyy-MM-dd",
+            placeholder: String = "") -> String {
+    
+    guard let date else { return placeholder }
+    
+    // Re-use the same formatter instance for speed.
+    struct Cache {
+        static var formatter = DateFormatter()
+    }
+    
+    let formatter = Cache.formatter
+    if formatter.dateFormat != format {
+        formatter.dateFormat = format
+        formatter.locale = Locale.current
+        formatter.timeZone = TimeZone.current
+    }
+    return formatter.string(from: date)
+}

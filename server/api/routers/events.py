@@ -14,21 +14,22 @@ def get_events(
     limit: int = 100,
     owner_id: Optional[int] = Query(None),
     search: Optional[str] = Query(None),
+    tab: str = Query(..., description="Must be one of: all, inPerson, online"),
+    sort: str = Query(..., description="Must be one of: latest, upcoming, recently_added, past"),
+    clubs: Optional[List[str]] = Query(None),
     start_date: Optional[date] = Query(None),
     end_date: Optional[date] = Query(None),
     event_service: ProtocolEventService = Depends(get_event_service),
-    clubs: Optional[List[str]] = Query(None),
-    sort: Optional[str] = Query(None, description="latest, upcoming, recently_added, past"),
 ):
     events = event_service.get_events(
         skip=skip,
         limit=limit,
-        owner_id=owner_id,
         search=search,
+        tab=tab,
+        sort=sort,
+        clubs=clubs,
         start_date=start_date.isoformat() if start_date else None,
         end_date=end_date.isoformat() if end_date else None,
-        clubs=clubs,
-        sort=sort
     )
     return events
 

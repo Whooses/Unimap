@@ -19,12 +19,12 @@ class ProtocolEventService(Protocol):
         self,
         skip: int = 0,
         limit: int = 100,
-        owner_id: Optional[int] = None,
         search: Optional[str] = None,
+        tab: Optional[str] = None,  # Added tab param
+        sort: Optional[str] = None,
+        clubs: Optional[List[str]] = None,
         start_date: Optional[str] = None,
         end_date: Optional[str] = None,
-        clubs: Optional[List[str]] = None,
-        sort: Optional[str] = None,
     ) -> List[Events]:
         """
         Retrieve a list of events with optional filters and pagination.

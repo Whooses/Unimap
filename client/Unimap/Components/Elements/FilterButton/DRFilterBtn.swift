@@ -1,11 +1,12 @@
 import SwiftUI
 
+// MARK: Main button - State Holder
 struct DRFilterBtn: View {
-    @State var label: String = "Date"
-    @State private var startDate: Date? = nil
-    @State private var endDate: Date? = nil
-    @ObservedObject var builder: EventRequestBuilder
-
+    let startDate: Date?
+    let endDate: Date?
+    let onSelect: ((Date?, Date?) -> Void)?
+    
+    @State private var label: String = "Date"
     @State private var showSheet = false
 
     var body: some View {
@@ -20,145 +21,160 @@ struct DRFilterBtn: View {
         .sheet(isPresented: $showSheet) {
             DRFilterBtnSheet(
                 label: $label,
-                startDate: $startDate,
-                endDate: $endDate,
-                builder: builder
+                startDate: startDate,
+                endDate: endDate,
+                onSelect: onSelect
             )
         }
     }
 }
 
-struct DRFilterBtnSheet: View {
+// MARK: Button sheet - State Modifier
+private struct DRFilterBtnSheet: View {
     @Binding var label: String
-    @Binding var startDate: Date?
-    @Binding var endDate: Date?
-    @ObservedObject var builder: EventRequestBuilder
+    let startDate: Date?
+    let endDate: Date?
+    let onSelect: ((Date?, Date?) -> Void)?
+    
+    @State private var tempStartDate: Date?
+    @State private var tempEndDate: Date?
 
     private let rowHeight: CGFloat  = 55
     private let headerHeight: CGFloat = 60
-    @State private var vStackHeight: CGFloat = 0
 
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         VStack(spacing: 0) {
-            // ── HEADER ─────────────────────────────────────────────
-            ZStack {
-                Text("Select Date Range")
-                    .font(.headline)
-                    .frame(height: headerHeight)
-
-                HStack {
-                    Spacer()
-                    Button("Clear") {          // ←-- FIX ①
-                        // reset all state back to “empty”
-                        startDate = nil
-                        endDate = nil
-                        label = "Date"
-                        builder.setDateRange(start: nil, end: nil)
-                        dismiss()
-                    }
-                    .font(.callout)
-                    .foregroundColor(.secondary)
-                }
-            }
-            .frame(height: headerHeight)
-            .padding(.horizontal, 40)
+            // Header
+            Text("Select Date Range")
+                .font(.headline)
+                .frame(maxWidth: .infinity)
+                .frame(height: headerHeight)
+                .padding(.horizontal)
+                .padding(.top, 8)
 
             Divider()
 
-            // ── FROM ───────────────────────────────────────────────
+            // "From" date picker
             HStack {
                 Text("From").font(.headline)
                 Spacer()
-                ZStack {
-                    DatePicker(
-                        "",
-                        selection: Binding(
-                            get: { startDate ?? Date() },
-                            set: { startDate = $0 }  // ←-- stays the same
-                        ),
-                        displayedComponents: [.date]
-                    )
-                    .labelsHidden()
-                    .blendMode(startDate == nil ? .destinationOver : .normal)
-
-                    if startDate == nil {
-                        Text("Tap to select")
-                            .font(.footnote)
-                            .foregroundColor(.gray)
-                            .allowsHitTesting(false)
-                    }
-                }
+                DatePickerBtn(date: $tempStartDate)
             }
             .frame(height: rowHeight)
             .padding(.horizontal)
             .padding(.top)
 
-            // ── TO ────────────────────────────────────────────────
+            // "To" date picker
             HStack {
                 Text("To").font(.headline)
                 Spacer()
-                ZStack {
-                    DatePicker(
-                        "",
-                        selection: Binding(
-                            get: { endDate ?? Date() },
-                            set: { endDate = $0 }
-                        ),
-                        displayedComponents: [.date]
-                    )
-                    .labelsHidden()
-                    .blendMode(endDate == nil ? .destinationOver : .normal)
-
-                    if endDate == nil {
-                        Text("Tap to select")
-                            .font(.footnote)
-                            .foregroundColor(.gray)
-                            .allowsHitTesting(false)
-                    }
-                }
+                DatePickerBtn(date: $tempEndDate)
             }
             .frame(height: rowHeight)
             .padding(.horizontal)
             .padding(.bottom)
 
-            // ── APPLY ─────────────────────────────────────────────
-            Button("Apply") {
-                builder.setDateRange(start: startDate, end: endDate)
-                label = dateRangeString(from: startDate, to: endDate)
-                dismiss()
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 50)
-            .background(Color.black)
-            .foregroundColor(.white)
-            .cornerRadius(15)
-            .padding(.horizontal)
+            // Apply button
+            ApplyButton(
+                label: $label,
+                tempStartDate: tempStartDate,
+                tempEndDate: tempEndDate,
+                onSelect: onSelect
+            )
             .padding(.bottom)
         }
-        .background(
-            GeometryReader { geo in
-                Color.clear
-                    .onChange(of: geo.size.height, initial: true) { newHeight, _ in
-                        vStackHeight = newHeight
-                    }
+        .presentationDetents([.height(275)])
+        .onAppear {
+            tempStartDate = startDate
+            tempEndDate = endDate
+        }
+    }
+}
+
+// MARK: Date picker - State modifier
+private struct DatePickerBtn: View {
+    @Binding var date: Date?
+    
+    var body: some View {
+        HStack {
+            if let _ = date {
+                Button {
+                    date = nil
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.title2)
+                        .foregroundColor(Color.gray)
+                }
             }
-        )
-        // give SwiftUI a non-zero fallback the first time
-        .presentationDetents([.height(max(vStackHeight, 300))])
+            
+            ZStack {
+                DatePicker(
+                    "",
+                    selection: Binding(
+                        get: { date ?? Date() },
+                        set: { date = $0 }
+                    ),
+                    displayedComponents: [.date]
+                )
+                .labelsHidden()
+                .blendMode(date == nil ? .destinationOver : .normal)
+                
+                if date == nil {
+                    Text("Tap to select")
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                        .allowsHitTesting(false)
+                }
+            }
+        }
+    }
+    
+}
+
+// MARK: Apply button - State Modifier
+private struct ApplyButton: View {
+    @Binding var label: String
+    let tempStartDate: Date?
+    let tempEndDate: Date?
+    let onSelect: ((Date?, Date?) -> Void)?
+    
+    @Environment(\.dismiss) private var dismiss
+    
+    var body: some View {
+        Button("Apply") {
+            if let onSelect = onSelect {
+                onSelect(tempStartDate, tempEndDate)
+            }
+            label = dateRangeString(from: tempStartDate, to: tempEndDate)
+            dismiss()
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 50)
+        .background(Color.black)
+        .foregroundColor(.white)
+        .cornerRadius(15)
+        .padding(.horizontal)
     }
 }
 
 
-//struct DRFilterBtnView: View {
-//    @StateObject var builder  = EventRequestBuilder()
-//
+
+
+
+
+
+
+//private struct ContentView: View {
+//    @State private var startDate: Date? = nil
+//    @State private var endDate: Date? = nil
+//    
 //    var body: some View {
-//        DRFilterBtn(label: "Date", builder: builder)
+//        DRFilterBtn(startDate: $startDate, endDate: $endDate)
 //    }
 //}
 //
 //#Preview {
-//    DRFilterBtnView()
+//    ContentView()
 //}
