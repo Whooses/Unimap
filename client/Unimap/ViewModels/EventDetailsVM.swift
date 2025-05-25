@@ -1,7 +1,7 @@
 import Foundation
 
 class EventDetailsVM: ObservableObject {
-    @Published var eventDetails: EventDetails? = nil
+    @Published var EventDetails: EventDetails? = nil
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
     

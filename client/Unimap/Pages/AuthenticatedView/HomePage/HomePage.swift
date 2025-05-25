@@ -1,12 +1,7 @@
 import SwiftUI
 
 struct HomePage: View {
-    @StateObject private var VM: HomePageVM = HomePageVM(
-        schoolService: SchoolService(),
-        eventService: EventService()
-    )
-    
-//    @EnvironmentObject private var VM: HomePageVM
+    @EnvironmentObject private var VM: HomePageVM
     
     @FocusState private var isSearching: Bool
     

@@ -31,6 +31,9 @@ class SchoolService {
     
     // Get all school's clubs
     func getSchoolClubs(schoolID: Int) -> [User] {
-        fatalError(#function + " - function not implemented")
+        return [
+            User.mock(), User.mock(), User.mock(),
+            User.mock(), User.mock(), User.mock()
+        ]
     }
 }
