@@ -23,7 +23,7 @@ struct NetworkService {
     ///           or if decoding the response data fails.
     ///
     /// - Note: This function is generic and works with any type conforming to `Decodable`.
-    func sendRequest<T: Decodable>(from request: URLRequest, type: T.Type) async throws -> [T] {
+    func sendRequest<T: Decodable>(from request: URLRequest, type: T.Type) async throws -> T {
         // Performing network call
         let (data, response) = try await session.data(for: request)
 
@@ -40,7 +40,7 @@ struct NetworkService {
 
         // Handle decoding error
         do {
-            return try JSONDecoder().decode([T].self, from: data)
+            return try JSONDecoder().decode(T.self, from: data)
         } catch {
             throw error
         }

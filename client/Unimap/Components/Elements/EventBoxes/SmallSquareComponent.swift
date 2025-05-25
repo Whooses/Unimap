@@ -1,11 +1,3 @@
-//
-//  LatestEventCard.swift
-//  Unimap
-//
-//  Created by Bhavya Patel on 2025-01-22.
-//
-
-
 import SwiftUI
 
 struct SmallSquareCard: View {
@@ -23,27 +15,29 @@ struct SmallSquareCard: View {
 
     var body: some View {
         ZStack(alignment: .bottomLeading) {
-            // Background Image
             Button (action: {showSheet.toggle()}) {
-                Image(uiImage: imageLoaderService.image ?? UIImage())
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 200, height: 200)
-                    .background(Color.gray)
+                ZStack(alignment: .bottom) {
+                    // Background Image
+                    Image(uiImage: imageLoaderService.image ?? UIImage())
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 200, height: 200)
+                        .background(Color.gray)
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                        .clipped()
+                    
+                    // Gradient Overlay for Bottom
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            Color.black.opacity(0.7),
+                            Color.black.opacity(0.0)
+                        ]),
+                        startPoint: .bottom,
+                        endPoint: .top
+                    )
+                    .frame(height: 60)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
-                    .clipped()
-                
-                // Gradient Overlay for Bottom
-                LinearGradient(
-                    gradient: Gradient(colors: [
-                        Color.black.opacity(0.7),
-                        Color.black.opacity(0.0)
-                    ]),
-                    startPoint: .bottom,
-                    endPoint: .top
-                )
-                .frame(height: 60)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
+                }
             }
             .buttonStyle(PlainButtonStyle())
 
@@ -99,6 +93,7 @@ struct SmallSquareCard: View {
 //                size: 40
 //            ),
 //            eventImageURL: URL(string: "https://marketplace.canva.com/EAFJMl8KcjI/1/0/1131w/canva-purple-black-tropical-party-club-poster-orVwDS2lrfY.jpg")
-//            )
+//        )
+//        .background(.blue)
 //    }
 //}

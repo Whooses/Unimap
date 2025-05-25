@@ -1,5 +1,6 @@
 import Foundation
 
+@MainActor
 class EventDetailsVM: ObservableObject {
     @Published var EventDetails: EventDetails? = nil
     @Published var isLoading: Bool = false

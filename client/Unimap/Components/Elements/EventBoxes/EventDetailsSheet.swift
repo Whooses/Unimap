@@ -22,11 +22,8 @@ struct EventDetailsSheet: View {
                 VStack(alignment: .leading) {
                     // Header
                     HStack(spacing: 10) {
-                        HStack {
-                            pfp
-                            Text(username)
-                                .font(.headline)
-                                .bold()
+                        NavigationLink(destination: ProfilePage()) {
+                            BoxHeaderComponent(pfp: pfp, username: username)
                         }
                         
                         Image(systemName: "circle.fill")

@@ -1,12 +1,12 @@
 import SwiftUI
 
-struct LastestEventsView: View {
+struct YourFollowingView: View {
     let events: [Event]
 
     var body: some View {
         VStack {
             HStack {
-                Text("Latest events")
+                Text("Your following")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .padding(.bottom, -2)

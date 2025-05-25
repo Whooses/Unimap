@@ -1,5 +1,6 @@
 import SwiftUI
 
+// Home page is all about showing personalize content base on user
 struct HomePage: View {
     @EnvironmentObject private var VM: HomePageVM
     
@@ -24,7 +25,7 @@ struct HomePage: View {
                                 
                                 YourUpcomingView(events: VM.events[.yourUpcoming] ?? [])
                                 
-                                LastestEventsView(events: VM.events[.latestEvents] ?? [])
+                                YourFollowingView(events: VM.events[.latestEvents] ?? [])
                                 
                                 Spacer()
                             }
@@ -46,6 +47,20 @@ struct HomePage: View {
 
 
 
-//#Preview {
-//    HomePage()
-//}
+
+
+
+private struct ContentView: View {
+    @StateObject private var homePageVM = HomePageVM(
+        eventService: EventService()
+    )
+    
+    var body: some View {
+        HomePage()
+            .environmentObject(homePageVM)
+    }
+}
+
+#Preview {
+    ContentView()
+}

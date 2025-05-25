@@ -23,13 +23,11 @@ class HomePageVM: ObservableObject {
 
     // MARK: Private properties
     private let eventService: EventService
-    let schoolService: SchoolService
 
 
     // MARK: Init
-    init(schoolService: SchoolService, eventService: EventService) {
+    init(eventService: EventService) {
         self.eventService = eventService
-        self.schoolService = schoolService
     }
 
     // MARK: Operations
@@ -42,12 +40,13 @@ class HomePageVM: ObservableObject {
     }
     
     func fetchUpcomingEvents() async {
+        isLoading[.yourUpcoming] = true
         do {
             events[.yourUpcoming] = try await eventService.fetchUpcomingEvents(user: nil)
         } catch {
             
         }
-        
+        isLoading[.yourUpcoming] = false
     }
     
     func fetchLatestEvents() async {

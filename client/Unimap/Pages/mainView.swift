@@ -3,7 +3,6 @@ import SwiftUI
 struct MainView: View {
     @StateObject private var authViewModel = AuthViewModel()
     @StateObject private var homePageVM = HomePageVM(
-        schoolService: SchoolService(),
         eventService: EventService()
     )
     @StateObject private var explorePageVM = ExplorePageVM(
@@ -23,7 +22,7 @@ struct MainView: View {
     }
 }
 
-#Preview {
-    MainView()
-}
+//#Preview {
+//    MainView()
+//}
 
