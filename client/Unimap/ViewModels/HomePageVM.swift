@@ -1,6 +1,7 @@
 import Foundation
 import Combine
 
+@MainActor
 class HomePageVM: ObservableObject {
     // MARK: Published properties
     @Published var search: String = ""

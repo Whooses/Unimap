@@ -1,6 +1,7 @@
 import Foundation
 import Combine
 
+@MainActor
 class ExplorePageVM: ObservableObject {
     // MARK: Published properties
     @Published var errorMessage: String? = nil

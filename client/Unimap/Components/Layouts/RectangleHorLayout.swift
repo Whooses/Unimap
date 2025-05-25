@@ -5,7 +5,7 @@ struct RectangleHorLayout: View {
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 5) {
+            LazyHStack(spacing: 5) {
                 ForEach(events) { event in
                     RectangleComponent(
                         username: event.user.name,

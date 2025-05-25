@@ -5,7 +5,7 @@ struct RectangleVerLayout: View {
 
     var body: some View {
         ScrollView(showsIndicators: false) {
-            VStack(spacing: 5) {
+            LazyVStack(spacing: 5) {
                 ForEach(events) { event in
                     RectangleComponent(
                         username: event.user.name,

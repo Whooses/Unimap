@@ -6,28 +6,30 @@ struct HomePage: View {
     @FocusState private var isSearching: Bool
     
     var body: some View {
-        VStack {
-            SearchBarComponent(searchText: $VM.search)
-                .focused($isSearching)
-                .padding(.bottom)
-            
-            ZStack {
-                if isSearching {
-                    searchingView()
-                        .transition(.opacity)
-                        .padding(.horizontal, 25)
-                } else {
-                    ScrollView() {
-                        VStack {
-                            RecommendationView(events: VM.events[.recommendations] ?? [])
-                            
-                            YourUpcomingView(events: VM.events[.yourUpcoming] ?? [])
-                            
-                            LastestEventsView(events: VM.events[.latestEvents] ?? [])
-                            
-                            Spacer()
+        NavigationStack {
+            VStack {
+                SearchBarComponent(searchText: $VM.search)
+                    .focused($isSearching)
+                    .padding(.bottom)
+                
+                ZStack {
+                    if isSearching {
+                        searchingView()
+                            .transition(.opacity)
+                            .padding(.horizontal, 25)
+                    } else {
+                        ScrollView() {
+                            LazyVStack {
+                                RecommendationView(events: VM.events[.recommendations] ?? [])
+                                
+                                YourUpcomingView(events: VM.events[.yourUpcoming] ?? [])
+                                
+                                LastestEventsView(events: VM.events[.latestEvents] ?? [])
+                                
+                                Spacer()
+                            }
+                            .frame(alignment: .topLeading)
                         }
-                        .frame(alignment: .topLeading)
                     }
                 }
             }

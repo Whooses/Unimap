@@ -6,34 +6,36 @@ struct ExplorePage: View {
     @FocusState private var isSearching: Bool
     
     var body: some View {
-        VStack {
-            SearchBarComponent(searchText: $explorePageVM.search)
-                .focused($isSearching)
+        NavigationStack {
+            VStack {
+                SearchBarComponent(searchText: $explorePageVM.search)
+                    .focused($isSearching)
+                
+                ZStack {
+                    if isSearching {
+                        searchingView()
+                            .transition(.opacity)
+                            .padding(.horizontal, 25)
                         
-            ZStack {
-                if isSearching {
-                    searchingView()
-                    .transition(.opacity)
-                    .padding(.horizontal, 25)
-
-                } else {
-                    VStack {
-                        SelectedTabView(selectedTab: explorePageVM.currTab) { newTab in
-                            explorePageVM.currTab = newTab
-                        }
-                        .padding(.top)
-                        
-                        TabView(selection: $explorePageVM.currTab) {
-                            AllEventSView()
-                                .tag(ExploreTab.all)
+                    } else {
+                        VStack {
+                            SelectedTabView(selectedTab: explorePageVM.currTab) { newTab in
+                                explorePageVM.currTab = newTab
+                            }
+                            .padding(.top)
                             
-                            InPersonEventsView()
-                                .tag(ExploreTab.inPerson)
-                            
-                            OnlineEventsView()
-                                .tag(ExploreTab.online)
+                            TabView(selection: $explorePageVM.currTab) {
+                                AllEventSView()
+                                    .tag(ExploreTab.all)
+                                
+                                InPersonEventsView()
+                                    .tag(ExploreTab.inPerson)
+                                
+                                OnlineEventsView()
+                                    .tag(ExploreTab.online)
+                            }
+                            .tabViewStyle(.page(indexDisplayMode: .never))
                         }
-                        .tabViewStyle(.page(indexDisplayMode: .never))
                     }
                 }
             }
