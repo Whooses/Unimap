@@ -7,7 +7,6 @@ class BugReports(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     description = Column(Text, nullable=False)
-    page_url = Column(String, nullable=True)
     screenshot_url = Column(String, nullable=True)
     reporter_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
