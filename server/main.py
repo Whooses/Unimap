@@ -6,9 +6,6 @@ from api.routers import users, events, bug_reports, event_reports
 
 from config import CORS_ALLOWED_ORIGINS
 
-# Create tables in the database
-Base.metadata.create_all(bind=engine)
-
 # Initialize FastAPI app
 app = FastAPI()
 
