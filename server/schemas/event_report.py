@@ -1,10 +1,10 @@
 from pydantic import BaseModel, Field
 
-class ReportCreate(BaseModel):
+class EventReportCreate(BaseModel):
     event_id: int
     reason: str = Field(..., min_length=5)
 
-class ReportOut(BaseModel):
+class EventReportOut(BaseModel):
     id: int
     event_id: int
     reason: str
