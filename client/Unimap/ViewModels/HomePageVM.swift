@@ -1,6 +1,7 @@
 import Foundation
 import Combine
 
+// TODO: This VM needs to depend of user id
 @MainActor
 class HomePageVM: ObservableObject {
     // MARK: Published properties
