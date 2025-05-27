@@ -45,6 +45,65 @@ struct HomePage: View {
     }
 }
 
+private struct RecommendationView: View {
+    let events: [Event]
+    
+    var body: some View {
+        VStack {
+            HStack {
+                Text("Reccomendations")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .padding(.bottom, -2)
+                    .padding(.leading)
+                Spacer()
+            }
+            MedSquareHorLayout(events: events)
+        }
+        .frame(alignment: .topLeading)
+    }
+}
+
+private struct YourFollowingView: View {
+    let events: [Event]
+
+    var body: some View {
+        VStack {
+            HStack {
+                Text("Your following")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .padding(.bottom, -2)
+                    .padding(.leading)
+                Spacer()
+            }
+            SmallSquareHorLayout(events: events)
+        }
+        .frame(height: 250, alignment: .topLeading)
+    }
+}
+
+
+private struct YourUpcomingView: View {
+    let events: [Event]
+    
+    var body: some View {
+        VStack {
+            HStack {
+                Text("Your upcoming")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .padding(.bottom, -2)
+                    .padding(.leading)
+                Spacer()
+            }
+            RectangleHorLayout(events: events)
+        }
+        .frame(height: 250, alignment: .topLeading)
+    }
+}
+
+
 
 
 
@@ -61,6 +120,6 @@ private struct ContentView: View {
     }
 }
 
-#Preview {
-    ContentView()
-}
+//#Preview {
+//    ContentView()
+//}

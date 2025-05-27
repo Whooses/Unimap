@@ -9,6 +9,7 @@ struct RectangleComponent: View {
     let eventDate: Date?
     var eventLocation: String? = "IA 2101"
     var eventID: UUID = UUID()
+    var showHeader: Bool = true
     
     @StateObject private var imageLoaderService = ImageLoaderService(url: nil)
     @State private var cardColor = Color(.systemGray)
@@ -16,11 +17,13 @@ struct RectangleComponent: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            NavigationLink(destination: ProfilePage()) {
-                BoxHeaderComponent(
-                    pfp: userPFP,
-                    username: username
-                )
+            if showHeader {
+                NavigationLink(destination: ProfilePage()) {
+                    BoxHeaderComponent(
+                        pfp: userPFP,
+                        username: username
+                    )
+                }
             }
             
             Button (action: {showSheet.toggle()}) {

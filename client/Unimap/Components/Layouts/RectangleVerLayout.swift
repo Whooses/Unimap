@@ -2,6 +2,7 @@ import SwiftUI
 
 struct RectangleVerLayout: View {
     let events: [Event]
+    var showHeader: Bool = true
 
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -16,8 +17,10 @@ struct RectangleVerLayout: View {
                         eventImageURL: event.imageURL,
                         eventTitle: event.title,
                         eventDescription: event.description,
-                        eventDate: event.date
+                        eventDate: event.date,
+                        showHeader: showHeader
                     )
+                    .padding(.bottom, showHeader ? 8 : 16)
                 }
             }
             .padding(.horizontal, 16)

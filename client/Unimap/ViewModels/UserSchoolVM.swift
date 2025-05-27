@@ -17,4 +17,8 @@ class UserSchoolVM: ObservableObject {
     func loadClubs() async -> Void {
         fatalError(#function + " not implemented")
     }
+    
+    func updateSort(_ sort: Sort) -> Void {
+        
+    }
 }

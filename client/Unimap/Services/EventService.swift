@@ -30,7 +30,11 @@ class EventService {
     
 
     func fetchuserEvents() async throws -> [Event] {
-        fatalError()
+        return [
+            Event.mock(), Event.mock(), Event.mock(),
+            Event.mock(), Event.mock(), Event.mock(),
+            Event.mock(), Event.mock(), Event.mock()
+        ]
     }
 
     func fetchExploreEvents(
