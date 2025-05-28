@@ -40,7 +40,7 @@ class ProfilePageVM: ObservableObject {
         isLoading = true
         
         do {
-            let data = try await eventService.fetchuserEvents()
+            let data = try await eventService.fetchUserEvents()
             
             events = data
         } catch {

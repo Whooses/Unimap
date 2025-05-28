@@ -20,6 +20,14 @@ class EventService {
         ]
     }
     
+    func fetchUserEvents() async throws -> [Event] {
+        return [
+            Event.mock(), Event.mock(), Event.mock(),
+            Event.mock(), Event.mock(), Event.mock(),
+            Event.mock(), Event.mock(), Event.mock()
+        ]
+    }
+    
 
     // MARK: School base service
     
@@ -31,15 +39,6 @@ class EventService {
         ]
     }
     
-    
-
-    func fetchuserEvents() async throws -> [Event] {
-        return [
-            Event.mock(), Event.mock(), Event.mock(),
-            Event.mock(), Event.mock(), Event.mock(),
-            Event.mock(), Event.mock(), Event.mock()
-        ]
-    }
 
     func fetchExploreEvents(
             search: String? = nil,
@@ -67,6 +66,9 @@ class EventService {
 //        } catch {
 //            throw error
 //        }
+        
+        let builder = URLRequestBuilder()
+        
         return [
             Event.mock(), Event.mock(), Event.mock(),
             Event.mock(), Event.mock(), Event.mock(),

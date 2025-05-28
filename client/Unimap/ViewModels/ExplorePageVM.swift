@@ -121,23 +121,3 @@ class ExplorePageVM: ObservableObject {
         isLoading[currTab] = false
     }
 }
-
-// Supported types
-enum ExploreTab: String, StringIdentifiableEnum {
-    case all
-    case inPerson = "in_person"
-    case online
-    
-    var id: String { self.rawValue }
-    
-    var displayName: String {
-        switch self {
-        case .all:
-            return "All"
-        case .inPerson:
-            return "In person"
-        case .online:
-            return "Online"
-        }
-    }
-}
