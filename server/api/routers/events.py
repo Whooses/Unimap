@@ -9,7 +9,7 @@ from services.event.protocol_event_service import ProtocolEventService
 router = APIRouter(prefix="/events", tags=["events"])
 
 @router.get("/", response_model=List[EventOut])
-def get_events(
+async def get_events(
     skip: int = 0,
     limit: int = 100,
     owner_id: Optional[int] = Query(None),
@@ -21,7 +21,7 @@ def get_events(
     end_date: Optional[date] = Query(None),
     event_service: ProtocolEventService = Depends(get_event_service),
 ):
-    events = event_service.get_events(
+    events = await event_service.get_events(
         skip=skip,
         limit=limit,
         search=search,
@@ -34,25 +34,25 @@ def get_events(
     return events
 
 @router.post("/", response_model=EventOut)
-def create_event(
+async def create_event(
     event: EventCreate,
     event_service: ProtocolEventService = Depends(get_event_service),
 ):
-    return event_service.create_event(event)
+    return await event_service.create_event(event)
 
 @router.put("/{event_id}", response_model=EventOut)
-def update_event(
+async def update_event(
     event_id: int,
     updated_event: EventCreate,
     event_service: ProtocolEventService = Depends(get_event_service),
 ):
-    updated = event_service.update_event(event_id, updated_event)
+    updated = await event_service.update_event(event_id, updated_event)
     return updated
 
 @router.delete("/{event_id}", status_code=204)
-def delete_event(
+async def delete_event(
     event_id: int,
     event_service: ProtocolEventService = Depends(get_event_service),
 ):
-    deleted = event_service.delete_event(event_id)
+    await event_service.delete_event(event_id)
     return Response(status_code=204)

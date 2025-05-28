@@ -36,3 +36,16 @@ class Users(Base):
         secondary=favourite_table,
         backref="favourited_by"
     )
+
+    reports = relationship(
+        "EventReport",
+        back_populates="reporter",
+        cascade="all, delete-orphan"
+    )
+
+    bug_reports = relationship(
+        "BugReport",
+        back_populates="reporter",
+        cascade="all, delete-orphan"
+    )
+
