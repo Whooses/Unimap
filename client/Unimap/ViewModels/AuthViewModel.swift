@@ -9,7 +9,7 @@ class AuthViewModel: ObservableObject {
     // MARK: - Published Properties
 
     /// Indicates whether the user is currently authenticated.
-    @Published var isAuthenticated = true
+    @Published var isAuthenticated = false
 
     /// Stores the authenticated user's information retrieved from Auth0.
     @Published var userInfo: UserInfo? = nil

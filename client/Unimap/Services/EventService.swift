@@ -3,6 +3,7 @@ import Foundation
 class EventService {
     private let networkService = NetworkService()
 
+    // MARK: User specific services
     func fetchRecEvents(user: User?) async throws -> [Event] {
         return [
             Event.mock(), Event.mock(), Event.mock(),
@@ -18,6 +19,9 @@ class EventService {
             Event.mock(), Event.mock(), Event.mock()
         ]
     }
+    
+
+    // MARK: School base service
     
     func fetchLatestEvents(user: User?) async throws -> [Event] {
         return [
