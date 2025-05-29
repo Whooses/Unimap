@@ -1,6 +1,6 @@
 from typing import Protocol, List, Optional
 from schemas.event import EventCreate, EventOut
-from db.models.events import Events
+from db.models.events import Event
 
 class ProtocolEventService(Protocol):
     """
@@ -25,7 +25,7 @@ class ProtocolEventService(Protocol):
         clubs: Optional[List[str]] = None,
         start_date: Optional[str] = None,
         end_date: Optional[str] = None,
-    ) -> List[Events]:
+    ) -> List[Event]:
         """
         Retrieve a list of events with optional filters and pagination.
 
@@ -34,14 +34,14 @@ class ProtocolEventService(Protocol):
         errors occur. Raises exceptions only for unrecoverable issues (e.g., configuration errors).
 
         Returns:
-            List[Events]: List of event objects matching the filters.
+            List[Event]: List of event objects matching the filters.
 
         Raises:
             RuntimeError: For unrecoverable or unexpected internal errors.
         """
         pass
 
-    async def get_event(self, event_id: int) -> Optional[Events]:
+    async def get_event(self, event_id: int) -> Optional[Event]:
         """
         Retrieve event details by event ID.
 
@@ -52,14 +52,14 @@ class ProtocolEventService(Protocol):
             event_id (int): The ID of the event to retrieve.
 
         Returns:
-            Optional[Events]: The event object if found, otherwise None.
+            Optional[Event]: The event object if found, otherwise None.
 
         Raises:
             RuntimeError: For unrecoverable or unexpected internal errors.
         """
         pass
 
-    async def create_event(self, event_create: EventCreate) -> Events:
+    async def create_event(self, event_create: EventCreate) -> Event:
         """
         Create a new event.
 
@@ -77,7 +77,7 @@ class ProtocolEventService(Protocol):
         """
         pass
 
-    async def update_event(self, event_id: int, event_update: EventCreate) -> Optional[Events]:
+    async def update_event(self, event_id: int, event_update: EventCreate) -> Optional[Event]:
         """
         Update an existing event.
 
@@ -90,7 +90,7 @@ class ProtocolEventService(Protocol):
             event_update (EventCreate): The updated event data.
 
         Returns:
-            Optional[Events]: The updated event object if successful, otherwise None.
+            Optional[Event]: The updated event object if successful, otherwise None.
 
         Raises:
             RuntimeError: For unrecoverable or unexpected internal errors.

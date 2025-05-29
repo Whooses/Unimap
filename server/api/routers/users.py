@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from db.models.users import Users
-from db.models.events import Events
+from db.models.users import User
+from db.models.events import Event
 from dependencies.database_dep import get_db
 from dependencies.auth_dep import get_current_user
 from schemas.event import EventOut
@@ -14,8 +14,8 @@ def add_favourite(
     db: Session = Depends(get_db),
     user=Depends(get_current_user)
 ):
-    db_user = db.query(Users).filter(Users.id == user["sub"]).first()
-    db_event = db.query(Events).filter(Events.id == event_id).first()
+    db_user = db.query(User).filter(User.id == user["sub"]).first()
+    db_event = db.query(Event).filter(Event.id == event_id).first()
 
     if not db_event:
         raise HTTPException(status_code=404, detail="Event not found")
@@ -35,7 +35,7 @@ def remove_favourite(
     user=Depends(get_current_user)
 ):
     db_user = db.query(Users).filter(Users.id == user["sub"]).first()
-    db_event = db.query(Events).filter(Events.id == event_id).first()
+    db_event = db.query(Event).filter(Event.id == event_id).first()
 
     if not db_event:
         raise HTTPException(status_code=404, detail="Event not found")

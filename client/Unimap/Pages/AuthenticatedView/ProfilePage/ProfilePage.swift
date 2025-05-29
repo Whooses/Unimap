@@ -1,19 +1,19 @@
 import SwiftUI
 
 struct ProfilePage: View {
-    
+
     var username: String? = nil
     var PFPURL: URL? = nil
     let userID: UUID? = UUID()
-    
+
     @StateObject private var imageLoader = ImageLoaderService(url: nil)
     @StateObject private var VM = ProfilePageVM(
         userID: UUID(),
         eventService: EventService(),
         userService: UserService()
     )
-    
-    
+
+
     var body: some View {
         ScrollView {
             VStack(spacing: 15) {
@@ -23,7 +23,7 @@ struct ProfilePage: View {
                     .fontWeight(.bold)
                     .foregroundStyle(.primary)
                     .lineLimit(1)
-                
+
                 // PFP
                 Image(uiImage: imageLoader.image ?? UIImage(named: "stockUser")!)
                        .resizable()
@@ -31,42 +31,42 @@ struct ProfilePage: View {
                        .frame(width: 100, height: 100)
                        .padding(.bottom, 6)
                        .clipShape(Circle())
-                
-                // Events, followers, and attended counts
+
+                // Event, followers, and attended counts
                 UserInfoView(
                     events: VM.eventsCounts,
                     followers: VM.followerCounts,
                     attended: VM.attendedCounts
                 )
-                
+
                 // Follow and message button
                 HStack {
                     FollowBtn() {
-                        
+
                     }
-                    
+
                     MessageBtn() {
-                        
+
                     }
                 }
-                
+
                 // Filter and search
                 HStack {
                     FilterLayout(
                         selectedSort: VM.selectedSort,
                         updateSort: VM.updateSort
                     )
-                    
+
                     Spacer()
-                    
+
                     SearchBtn()
                 }
-                
-                // Events
+
+                // Event
                 RectangleVerLayout(events: VM.events, showHeader: false)
             }
             .padding(.horizontal)
-            
+
         }
         .onAppear {
             imageLoader.url = PFPURL
@@ -84,7 +84,7 @@ private struct UserInfoView: View {
     var attended: Int = 0
     var body: some View {
         HStack(alignment: .center, spacing: 30) {
-            ProfileDataView(number: events, type: "Events")
+            ProfileDataView(number: events, type: "Event")
             ProfileDataView(number: followers, type: "Followers")
             ProfileDataView(number: attended, type: "Attended")
 
@@ -112,7 +112,7 @@ private struct ProfileDataView: View {
 
 private struct FollowBtn: View {
     let followUser: (() -> Void)?
-    
+
     var body: some View {
             Button(action: {followUser?()}) {
                 HStack(spacing: 8) {
@@ -133,7 +133,7 @@ private struct FollowBtn: View {
 
 private struct MessageBtn: View {
     let messageUser: (() -> Void)?
-    
+
     var body: some View {
             Button(action: {messageUser?()}) {
                 HStack(spacing: 8) {
@@ -155,7 +155,7 @@ private struct MessageBtn: View {
 private struct FilterLayout: View {
     let selectedSort: Sort
     let updateSort: ((Sort) -> Void)?
-    
+
     var body: some View {
         HStack {
             Image(systemName: "line.3.horizontal.decrease")

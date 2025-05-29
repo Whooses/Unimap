@@ -13,10 +13,10 @@ from sqlalchemy import (
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import relationship
 from db.session import Base
-from db.models.favourites import favourite_table
+# from db.models.favourites import favourite_table
 
-class Users(Base):
-    __tablename__ = "users"
+class User(Base):
+    __tablename__ = "user"
 
     id         = Column(BigInteger, primary_key=True, index=True, autoincrement=True)
     username   = Column(String, unique=True, nullable=False, index=True)
@@ -26,25 +26,25 @@ class Users(Base):
     updated_at = Column(DateTime(timezone=True), nullable=True)
 
     events = relationship(
-        "Events",
+        "Event",
         back_populates="user",
         cascade="all, delete-orphan"
     )
 
-    favourites = relationship(
-        "Events",
-        secondary=favourite_table,
-        backref="favourited_by"
-    )
+    # favourites = relationship(
+    #     "Event",
+    #     secondary=favourite_table,
+    #     backref="favourited_by"
+    # )
 
-    reports = relationship(
-        "EventReport",
+    event_reports = relationship(
+        "EventReports",
         back_populates="reporter",
         cascade="all, delete-orphan"
     )
 
     bug_reports = relationship(
-        "BugReport",
+        "BugReports",
         back_populates="reporter",
         cascade="all, delete-orphan"
     )

@@ -6,7 +6,7 @@ from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from db.repository.event_repo import EventRepository
-from db.models.events import Events
+from db.models.events import Event
 from schemas.event import EventCreate
 
 log = logging.getLogger(__name__)
@@ -46,7 +46,7 @@ class EventService:
         clubs: Optional[List[str]] = None,
         start_date: Optional[str] = None,
         end_date: Optional[str] = None,
-    ) -> List[Events]:
+    ) -> List[Event]:
         try:
             events = await self.repo.get_events(
                 skip=skip,
@@ -63,7 +63,7 @@ class EventService:
             log.exception("DB failure in get_events")
             raise self._err500(exc) from exc
 
-    async def get_event(self, event_id: int) -> Events:
+    async def get_event(self, event_id: int) -> Event:
         try:
             event = await self.repo.get_event(event_id)
             if event is None:
@@ -73,7 +73,7 @@ class EventService:
             log.exception("DB failure in get_event")
             raise self._err500(exc) from exc
 
-    async def create_event(self, data: EventCreate) -> Events:
+    async def create_event(self, data: EventCreate) -> Event:
         try:
             event = await self.repo.create_event(data.dict())
             return event
@@ -84,7 +84,7 @@ class EventService:
             log.exception("DB failure in create_event")
             raise self._err500(exc) from exc
 
-    async def update_event(self, event_id: int, data: EventCreate) -> Events:
+    async def update_event(self, event_id: int, data: EventCreate) -> Event:
         try:
             event = await self.repo.update_event(event_id, data.dict())
             if event is None:

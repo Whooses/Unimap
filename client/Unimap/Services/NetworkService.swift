@@ -18,6 +18,8 @@ class NetworkService {
     /// - Throws: `NetworkError` if the request fails, response is invalid, or decoding fails.
     func sendRequest<T: Decodable>(from request: URLRequest, type: T.Type) async throws -> T {
         do {
+            print(request.url?.absoluteString ?? "Invalid URL")
+            
             let (data, response) = try await session.data(for: request)
             try validateHTTPResponse(response)
             try validateStatusCode(response, data)

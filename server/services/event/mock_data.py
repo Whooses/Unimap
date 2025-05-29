@@ -3,7 +3,7 @@ from schemas.event import EventOut
 from schemas.user import UserInfo
 
 mock_events = [
-    # Upcoming Events
+    # Upcoming Event
     EventOut(
         id=1,
         title="Hack the Future",
@@ -47,7 +47,7 @@ mock_events = [
         user=UserInfo(id=3, username="csec_lead", pfp_url=""),
     ),
 
-    # Latest Events
+    # Latest Event
     EventOut(
         id=4,
         title="Speed Coding Challenge",
@@ -77,7 +77,7 @@ mock_events = [
         user=UserInfo(id=2, username="math_user", pfp_url=""),
     ),
 
-    # Recently Added Events
+    # Recently Added Event
     EventOut(
         id=6,
         title="Cybersecurity Basics",
@@ -107,7 +107,7 @@ mock_events = [
         user=UserInfo(id=5, username="prog_enthusiast", pfp_url=""),
     ),
 
-    # Past Events
+    # Past Event
     EventOut(
         id=8,
         title="Intro to Linux",

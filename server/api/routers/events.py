@@ -14,7 +14,7 @@ async def get_events(
     limit: int = 100,
     owner_id: Optional[int] = Query(None),
     search: Optional[str] = Query(None),
-    tab: str = Query(..., description="Must be one of: all, inPerson, online"),
+    tab: str = Query(..., description="Must be one of: all, in_person, online"),
     sort: str = Query(..., description="Must be one of: latest, upcoming, recently_added, past"),
     clubs: Optional[List[str]] = Query(None),
     start_date: Optional[date] = Query(None),
