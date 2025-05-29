@@ -22,7 +22,8 @@ struct ExplorePage: View {
                             SelectedTabView(selectedTab: explorePageVM.currTab) { newTab in
                                 explorePageVM.currTab = newTab
                             }
-                            .padding(.top)
+                            .padding(.top, 20)
+                            .padding(.bottom, 10)
                             
                             TabView(selection: $explorePageVM.currTab) {
                                 AllEventSView()
@@ -35,13 +36,15 @@ struct ExplorePage: View {
                                     .tag(ExploreTab.online)
                             }
                             .tabViewStyle(.page(indexDisplayMode: .never))
+                            
                         }
                     }
                 }
+                
+//                Spacer()
             }
         }
-        .frame(maxHeight: .infinity, alignment: .topLeading)
-        .background(.white)
+        .frame(maxHeight: .infinity)
         .onAppear {
             Task {
                 await explorePageVM.fetchEvents()
@@ -119,20 +122,20 @@ private struct SelectedTabView: View {
 
 
 
-//private struct ExploreWrapper: View {
-//    @StateObject private var explorePageVM = ExplorePageVM(
-//        schoolService: SchoolService(),
-//        eventService: EventService()
-//    )
-//    
-//    var body: some View {
-//        ExplorePage()
-//            .environmentObject(explorePageVM)
-//    }
-//}
-//
-//
-//
-//#Preview {
-//    ExploreWrapper()
-//}
+private struct ExploreWrapper: View {
+    @StateObject private var explorePageVM = ExplorePageVM(
+        schoolService: SchoolService(),
+        eventService: EventService()
+    )
+    
+    var body: some View {
+        ExplorePage()
+            .environmentObject(explorePageVM)
+    }
+}
+
+
+
+#Preview {
+    ExploreWrapper()
+}

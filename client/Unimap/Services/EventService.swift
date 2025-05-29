@@ -45,34 +45,32 @@ class EventService {
             tab: ExploreTab,
             filter: ExploreFilter
     ) async throws -> [Event] {
-//        let builder = EventRequestBuilder()
-//            .setSearch(search)
-//            .setTab(tab)
-//            .setSort(filter.sort)
-////            .setClubs(filter.clubs)
-//            .setDateRange(start: filter.startDate, end: filter.endDate)
-//
-//        guard let request = builder.build() else {
-//            throw NSError(
-//                domain: "EventService",
-//                code: 1,
-//                userInfo: [NSLocalizedDescriptionKey: "Could not build request"]
-//            )
-//        }
-//        
-//        do {
-//            let data: [Event] = try await self.networkService.sendRequest(from: request, type: Event.self)
-//            return data
-//        } catch {
-//            throw error
-//        }
+        let builder = URLRequestBuilder(forEventsService: true)
+            .setSearch(search ?? "")
+            .setPlatform(tab)
+            .setSort(filter.sort)
+            .setClubs(filter.clubs)
+            .setDateRange(filter.startDate, filter.endDate)
         
-        let builder = URLRequestBuilder()
-        
-        return [
-            Event.mock(), Event.mock(), Event.mock(),
-            Event.mock(), Event.mock(), Event.mock(),
-            Event.mock(), Event.mock(), Event.mock()
-        ]
+        do {
+            let request = try builder.build()
+            let data: [Event] = try await networkService.sendRequest(from: request, type: [Event].self)
+            
+            return data
+            
+        } catch let error as URLRequestBuilderError {
+            print(error.localizedDescription)
+            
+            throw error
+        } catch let error as NetworkError {
+            print(error.localizedDescription)
+            
+            // TODO: Implement better error handling logic later
+            throw error
+        } catch {
+            print("Unexpected error: \(error.localizedDescription)")
+            
+            throw error
+        }
     }
 }

@@ -30,10 +30,10 @@ class SchoolService {
     }
     
     // Get all school's clubs
-    func getSchoolClubs(schoolID: Int) -> [User] {
+    func getSchoolClubs(schoolID: Int) -> [Club] {
         return [
-            User.mock(), User.mock(), User.mock(),
-            User.mock(), User.mock(), User.mock()
+            Club.mock(), Club.mock(), Club.mock(),
+            Club.mock(), Club.mock(), Club.mock()
         ]
     }
 }

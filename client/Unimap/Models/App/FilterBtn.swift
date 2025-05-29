@@ -2,7 +2,7 @@ import Foundation
 
 struct ExploreFilter {
     var sort: Sort = .latest
-    var clubs: [User] = []
+    var clubs: [Club] = []
     var startDate: Date? = nil
     var endDate: Date? = nil
 }
@@ -67,28 +67,6 @@ enum Sort: String, StringIdentifiableEnum {
             return "Recently added"
         case .pastEvents:
             return "Past"
-        }
-    }
-}
-
-enum ClubsFilter: String, StringIdentifiableEnum {
-    case amacs
-    case csec
-    case mathematicsClub = "mathematics_club"
-    case programmingClub = "programming_club"
-    
-    var id: String { self.rawValue }
-    
-    var displayName: String {
-        switch self {
-        case .amacs:
-            return "AMACS"
-        case .csec:
-            return "CSEC"
-        case .mathematicsClub:
-            return "Mathematics club"
-        case .programmingClub:
-            return "Programming club"
         }
     }
 }

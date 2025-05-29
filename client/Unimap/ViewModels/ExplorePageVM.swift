@@ -92,7 +92,7 @@ class ExplorePageVM: ObservableObject {
         }
     }
     
-    func updateClubs(_ clubs: [User]) {
+    func updateClubs(_ clubs: [Club]) {
         if var currFilter = filter[currTab] {
             if currFilter.clubs != clubs {
                 currFilter.clubs = clubs

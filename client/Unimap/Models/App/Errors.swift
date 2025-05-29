@@ -26,4 +26,19 @@ enum NetworkError: Error, LocalizedError {
     }
 }
 
+enum URLRequestBuilderError: Error, LocalizedError {
+    case invalidURLComponents
+    case custom(String)
+    
+    var errorDescription: String? {
+        switch self {
+        case .invalidURLComponents:
+            return "Failed to construct a valid URL from components."
+        case .custom(let message):
+            return message
+        }
+    }
+}
+
+
 

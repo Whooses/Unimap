@@ -38,7 +38,7 @@ class URLRequestBuilder {
     
     /// Builds a `URLRequest` using the provided URL and request components.
     /// - Returns: A fully-formed `URLRequest` object, or `nil` if the URL could not be constructed.
-    func build() -> URLRequest? {
+    func build() throws -> URLRequest {
         // Building the URL
         var components: URLComponents = URLComponents()
         components.scheme = scheme
@@ -48,7 +48,7 @@ class URLRequestBuilder {
         components.queryItems = queryItems.isEmpty ? nil : queryItems
         
         guard let url = components.url else {
-            return nil
+            throw URLRequestBuilderError.invalidURLComponents
         }
         
         // Construct the URLRequest
@@ -66,8 +66,15 @@ class URLRequestBuilder {
 
 extension URLRequestBuilder {
     
+    convenience init(forEventsService: Bool = true) {
+        self.init()
+        if forEventsService {
+            self.path = "/events"
+        }
+    }
+    
     // Set search
-    func setSearch(_ search: String = "") -> Self {
+    func setSearch(_ search: String) -> Self {
         queryItems = queryItems.filter { $0.name != "search" }
         
         if !search.isEmpty {
@@ -80,7 +87,7 @@ extension URLRequestBuilder {
     
     // Set platform
     func setPlatform(_ platform: ExploreTab = ExploreTab.all) -> Self {
-        if let platform = queryItems.first(
+        if let _ = queryItems.first(
             where: {$0.name == "tab" && $0.value == platform.rawValue}
         ) {
             return self
@@ -97,7 +104,7 @@ extension URLRequestBuilder {
     
     // Set sort
     func setSort(_ sort: Sort  = Sort.latest) -> Self {
-        if let sort = queryItems.first(
+        if let _ = queryItems.first(
             where: {$0.name == "sort" && $0.value == sort.rawValue}
         ) {
             return self
@@ -113,11 +120,11 @@ extension URLRequestBuilder {
     }
     
     // Set clubs
-    func setClubs(_ clubs: [ClubsFilter] = []) -> Self {
+    func setClubs(_ clubs: [Club] = []) -> Self {
         queryItems = queryItems.filter { $0.name != "clubs" }
         
         if !clubs.isEmpty {
-            let item = URLQueryItem(name: "clubs", value: clubs.map(\.self.rawValue).joined(separator: ","))
+            let item = URLQueryItem(name: "clubs", value: clubs.map(\.self.name).joined(separator: ","))
             queryItems.append(item)
         }
         
