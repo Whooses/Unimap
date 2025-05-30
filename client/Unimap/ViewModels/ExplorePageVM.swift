@@ -7,7 +7,11 @@ class ExplorePageVM: ObservableObject {
     @Published var errorMessage: String? = nil
     @Published var search: String = ""
     @Published var currTab: ExploreTab = .all
-    @Published var events: [Event] = []
+    @Published var events: [ExploreTab: [Event]] = [
+        .all: [],
+        .inPerson: [],
+        .online: []
+    ]
     @Published var filteredEvents: [Event] = []
     @Published var filter: [ExploreTab: ExploreFilter] = [
         .all: ExploreFilter(),
@@ -36,8 +40,10 @@ class ExplorePageVM: ObservableObject {
         isLoading[currTab] = true
         
         guard let selectedFilter = filter[currTab] else {
-            isLoading[currTab] = false
             errorMessage = "Unexpected state: filter not found for tab \(currTab)"
+            
+            isLoading[currTab] = false
+            
             return
         }
         
@@ -47,9 +53,13 @@ class ExplorePageVM: ObservableObject {
                 tab: currTab,
                 filter: selectedFilter
             )
-            events = data
+            events[currTab] = data
+            
+            isLoading[currTab] = false
         } catch {
             errorMessage = error.localizedDescription
+            
+            isLoading[currTab] = false
         }
     }
 
@@ -63,6 +73,7 @@ class ExplorePageVM: ObservableObject {
         isLoading[currTab] = false
     }
 
+    
     func updateTab(_ tab: ExploreTab) async {
         isLoading[currTab] = true
         
@@ -72,7 +83,53 @@ class ExplorePageVM: ObservableObject {
         
         isLoading[currTab] = false
     }
-
+    
+    func updateSort(_ sort: Sort) async {
+        isLoading[currTab] = true
+        
+        if var currFilter = filter[currTab] {
+            if currFilter.sort != sort {
+                currFilter.sort = sort
+                filter[currTab] = currFilter
+            }
+        }
+        
+        await fetchEvents()
+        
+        isLoading[currTab] = false
+    }
+    
+    func updateClubs(_ clubs: [Club]) async {
+        isLoading[currTab] = true
+        
+        if var currFilter = filter[currTab] {
+            if currFilter.clubs != clubs {
+                currFilter.clubs = clubs
+                filter[currTab] = currFilter
+            }
+        }
+        
+        await fetchEvents()
+        
+        isLoading[currTab] = false
+    }
+    
+    func updateDR(_ startDate: Date?, _ endDate: Date?) async {
+        isLoading[currTab] = true
+        
+        if var currFilter = filter[currTab] {
+            if (currFilter.startDate != startDate || currFilter.endDate != endDate) {
+                currFilter.startDate = startDate
+                currFilter.endDate = endDate
+                filter[currTab] = currFilter
+            }
+        }
+        
+        await fetchEvents()
+        
+        isLoading[currTab] = false
+    }
+    
     func updateFilters(_ newFilter: ExploreFilter) async {
         isLoading[currTab] = true
         
@@ -81,34 +138,6 @@ class ExplorePageVM: ObservableObject {
         await fetchEvents()
         
         isLoading[currTab] = false
-    }
-    
-    func updateSort(_ sort: Sort) {
-        if var currFilter = filter[currTab] {
-            if currFilter.sort != sort {
-                currFilter.sort = sort
-                filter[currTab] = currFilter
-            }
-        }
-    }
-    
-    func updateClubs(_ clubs: [Club]) {
-        if var currFilter = filter[currTab] {
-            if currFilter.clubs != clubs {
-                currFilter.clubs = clubs
-                filter[currTab] = currFilter
-            }
-        }
-    }
-    
-    func updateDR(_ startDate: Date?, _ endDate: Date?) {
-        if var currFilter = filter[currTab] {
-            if (currFilter.startDate != startDate || currFilter.endDate != endDate) {
-                currFilter.startDate = startDate
-                currFilter.endDate = endDate
-                filter[currTab] = currFilter
-            }
-        }
     }
 
     func resetFilters() async {

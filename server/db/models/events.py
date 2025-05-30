@@ -22,7 +22,7 @@ class Event(Base):
     id           = Column(BigInteger, primary_key=True, index=True, autoincrement=True)
     title        = Column(String, nullable=False, default="none")
     description  = Column(Text, nullable=True, default="none")
-    date         = Column(Date, nullable=True)
+    date         = Column(DateTime(timezone=True), nullable=True)
     location     = Column(String, nullable=True, default="none")
     user_id      = Column(
         BigInteger,
@@ -38,7 +38,8 @@ class Event(Base):
     categories   = Column(ARRAY(Text), nullable=True)
     clubs        = Column(ARRAY(Text), nullable=True)
     types        = Column(ARRAY(Text), nullable=True)
-    online       = Column(Boolean, nullable=True, default=False)
+    is_in_person = Column(Boolean, nullable=True, default=False)
+    is_online    = Column(Boolean, nullable=True, default=False)
 
     user = relationship(
         "User",

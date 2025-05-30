@@ -1,6 +1,7 @@
 from typing import Protocol, List, Optional
 from schemas.event import EventCreate, EventOut
 from db.models.events import Event
+from datetime import datetime
 
 class ProtocolEventService(Protocol):
     """
@@ -23,8 +24,8 @@ class ProtocolEventService(Protocol):
         tab: Optional[str] = None,  # Added tab param
         sort: Optional[str] = None,
         clubs: Optional[List[str]] = None,
-        start_date: Optional[str] = None,
-        end_date: Optional[str] = None,
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
     ) -> List[Event]:
         """
         Retrieve a list of events with optional filters and pagination.

@@ -20,8 +20,8 @@ class EventQueryBuilder:
         search: Optional[str] = None,
         tab: str = "all",
         clubs: Optional[List[str]] = None,
-        start_date: Optional[str] = None,
-        end_date: Optional[str] = None,
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
     ) -> "EventQueryBuilder":
         filters = []
 
@@ -37,9 +37,10 @@ class EventQueryBuilder:
 
         # Tab filter
         if tab == "in_person":
-            filters.append(Event.location.isnot(None))
+            filters.append(Event.is_in_person.is_(True))
         elif tab == "online":
-            filters.append(Event.location.is_(None))
+            filters.append(Event.is_online.is_(True))
+
 
         # Clubs filter
         if clubs:

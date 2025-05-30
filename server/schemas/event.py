@@ -11,9 +11,10 @@ class EventOut(BaseModel):
     id: int
     title: str
     description: Optional[str]
-    date: Optional[datetime.date]
+    date: Optional[datetime.datetime]
     location: Optional[str]
     image_url: str
+
     user: UserInfo
 
     model_config = {

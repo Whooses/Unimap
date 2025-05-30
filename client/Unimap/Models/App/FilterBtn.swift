@@ -27,33 +27,11 @@ enum ExploreTab: String, StringIdentifiableEnum {
     }
 }
 
-enum SortFilter: String, StringIdentifiableEnum {
-    case latest
-    case upcoming
-    case recentlyAdded = "recently_added"
-    case past
-    
-    var id: String { self.rawValue }
-    
-    var displayName: String {
-        switch self {
-        case .latest:
-            return "Latest"
-        case .upcoming:
-            return "Upcoming"
-        case .recentlyAdded:
-            return "Recently added"
-        case .past:
-            return "Past"
-        }
-    }
-}
-
 enum Sort: String, StringIdentifiableEnum {
     case latest
     case upcoming
     case recentlyAdded = "recently_added"
-    case pastEvents
+    case past
     
     var id: String { rawValue }
     
@@ -65,7 +43,7 @@ enum Sort: String, StringIdentifiableEnum {
             return "Upcoming"
         case .recentlyAdded:
             return "Recently added"
-        case .pastEvents:
+        case .past:
             return "Past"
         }
     }

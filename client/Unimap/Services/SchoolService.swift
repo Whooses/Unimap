@@ -32,8 +32,9 @@ class SchoolService {
     // Get all school's clubs
     func getSchoolClubs(schoolID: Int) -> [Club] {
         return [
-            Club.mock(), Club.mock(), Club.mock(),
-            Club.mock(), Club.mock(), Club.mock()
+            Club(clubID: 1, name: "AMACSS", pfpURL: URL(string: "https://pbs.twimg.com/profile_images/508742385606483969/l3lgfk0v_400x400.jpeg"), school: nil),
+            Club(clubID: 2, name: "DSH3", pfpURL: URL(string: "https://pbs.twimg.com/profile_images/508742385606483969/l3lgfk0v_400x400.jpeg"), school: nil),
+            Club(clubID: 3, name: "VSA", pfpURL: URL(string: "https://pbs.twimg.com/profile_images/508742385606483969/l3lgfk0v_400x400.jpeg"), school: nil)
         ]
     }
 }

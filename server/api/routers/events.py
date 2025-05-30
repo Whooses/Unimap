@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Query, HTTPException, Response
 from typing import List, Optional
-from datetime import date
+from datetime import datetime
 
 from schemas.event import EventCreate, EventOut
 from dependencies.event_dep import get_event_service
@@ -16,8 +16,8 @@ async def get_events(
     tab: str = Query(..., description="Must be one of: all, in_person, online"),
     sort: str = Query(..., description="Must be one of: latest, upcoming, recently_added, past"),
     clubs: Optional[List[str]] = Query(None),
-    start_date: Optional[date] = Query(None),
-    end_date: Optional[date] = Query(None),
+    start_date: Optional[datetime] = Query(None),
+    end_date: Optional[datetime] = Query(None),
     event_service: ProtocolEventService = Depends(get_event_service),
 ):
     events = await event_service.get_events(
@@ -27,8 +27,8 @@ async def get_events(
         tab=tab,
         sort=sort,
         clubs=clubs,
-        start_date=start_date.isoformat() if start_date else None,
-        end_date=end_date.isoformat() if end_date else None,
+        start_date=start_date,
+        end_date=end_date,
     )
     return events
 

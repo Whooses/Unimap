@@ -6,24 +6,11 @@ class NetworkService {
     private let session: URLSession
     private let decoder: JSONDecoder
     
-    private static let yyyyMMddFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.calendar = Calendar(identifier: .iso8601)
-        df.locale   = Locale(identifier: "en_US_POSIX")
-        df.timeZone = TimeZone(secondsFromGMT: 0)
-        df.dateFormat = "yyyy-MM-dd"
-        return df
-    }()
-    
-    private static func makeDecoder() -> JSONDecoder {
-        let d = JSONDecoder()
-        d.dateDecodingStrategy = .formatted(Self.yyyyMMddFormatter)
-        return d
-    }
-    
     init(session: URLSession = .shared,
-         decoder: JSONDecoder = NetworkService.makeDecoder()) {
+         decoder: JSONDecoder = JSONDecoder()) {
         self.session = session
+        
+        decoder.dateDecodingStrategy = .iso8601
         self.decoder = decoder
     }
     

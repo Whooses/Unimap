@@ -24,7 +24,7 @@ struct InPersonEventsView: View {
                     .foregroundColor(.red)
                     .offset(y: 10)
             } else {
-                RectangleVerLayout(events: explorePageVM.events)
+                RectangleVerLayout(events: explorePageVM.events[.inPerson])
             }
             
             Spacer()

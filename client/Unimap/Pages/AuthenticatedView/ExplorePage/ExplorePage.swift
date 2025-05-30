@@ -8,7 +8,12 @@ struct ExplorePage: View {
     var body: some View {
         NavigationStack {
             VStack {
-                SearchBarComponent(searchText: $explorePageVM.search)
+                SearchBarComponent() { newSearch in
+                    Task {
+                        await explorePageVM.updateSearch(newSearch)
+                    }
+                    
+                }
                     .focused($isSearching)
                 
                 ZStack {
@@ -20,7 +25,9 @@ struct ExplorePage: View {
                     } else {
                         VStack {
                             SelectedTabView(selectedTab: explorePageVM.currTab) { newTab in
-                                explorePageVM.currTab = newTab
+                                Task {
+                                    await explorePageVM.updateTab(newTab)
+                                }
                             }
                             .padding(.top, 20)
                             .padding(.bottom, 10)
@@ -93,7 +100,8 @@ private struct SelectedTabView: View {
                                 .frame(width: 35, height: 4)
                                 .offset(y: 15)
                         }
-                    }                }
+                    }
+                }
                 
                 Button(action: {
                     onSelectTab?(ExploreTab.online)
@@ -122,7 +130,12 @@ private struct SelectedTabView: View {
 
 
 
-private struct ExploreWrapper: View {
+
+
+
+
+
+private struct ContentView: View {
     @StateObject private var explorePageVM = ExplorePageVM(
         schoolService: SchoolService(),
         eventService: EventService()
@@ -134,8 +147,6 @@ private struct ExploreWrapper: View {
     }
 }
 
-
-
 #Preview {
-    ExploreWrapper()
+    ContentView()
 }

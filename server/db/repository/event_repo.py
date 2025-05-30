@@ -7,6 +7,8 @@ from typing import List, Optional
 from db.models.events import Event
 from db.repository.query_helper import EventQueryBuilder
 
+from datetime import datetime
+
 class EventRepository:
     def __init__(self, db: AsyncSession):
         self.db = db
@@ -19,8 +21,8 @@ class EventRepository:
         tab: str = "all",
         sort: str = "latest",
         clubs: Optional[List[str]] = None,
-        start_date: Optional[str] = None,
-        end_date: Optional[str] = None,
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
     ) -> List[Event]:
         try:
             stmt = (

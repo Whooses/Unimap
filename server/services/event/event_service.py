@@ -1,5 +1,6 @@
 import logging
 from typing import List, Optional
+from datetime import datetime
 
 from fastapi import HTTPException, status
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
@@ -44,8 +45,8 @@ class EventService:
         tab: Optional[str] = None,  # Added tab param
         sort: Optional[str] = None,
         clubs: Optional[List[str]] = None,
-        start_date: Optional[str] = None,
-        end_date: Optional[str] = None,
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
     ) -> List[Event]:
         try:
             events = await self.repo.get_events(
