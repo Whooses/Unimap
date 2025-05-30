@@ -12,7 +12,6 @@ router = APIRouter(prefix="/events", tags=["events"])
 async def get_events(
     skip: int = 0,
     limit: int = 100,
-    owner_id: Optional[int] = Query(None),
     search: Optional[str] = Query(None),
     tab: str = Query(..., description="Must be one of: all, in_person, online"),
     sort: str = Query(..., description="Must be one of: latest, upcoming, recently_added, past"),

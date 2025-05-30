@@ -5,6 +5,7 @@ from sqlalchemy.orm import selectinload
 from typing import List, Optional
 
 from db.models.events import Event
+from db.repository.query_helper import EventQueryBuilder
 
 class EventRepository:
     def __init__(self, db: AsyncSession):
@@ -22,59 +23,16 @@ class EventRepository:
         end_date: Optional[str] = None,
     ) -> List[Event]:
         try:
-            stmt = select(Event).options(selectinload(Event.user))
-            filters = []
-
-            # Search filter
-            if search:
-                filters.append(
-                    or_(
-                        Event.title.ilike(f"%{search}%"),
-                        Event.description.ilike(f"%{search}%"),
-                        Event.location.ilike(f"%{search}%"),
-                    )
-                )
-
-            # Tab filter
-            if tab == "in_person":
-                filters.append(Event.location.isnot(None))
-            elif tab == "online":
-                filters.append(Event.location.is_(None))
-
-            # Clubs filter
-            if clubs:
-                filters.append(Event.clubs.overlap(clubs))
-
-            # Date filters
-            if start_date and end_date:
-                filters.append(Event.date.between(start_date, end_date))
-            elif start_date:
-                filters.append(Event.date >= start_date)
-            elif end_date:
-                filters.append(Event.date <= end_date)
-
-            # Apply all filters
-            if filters:
-                stmt = stmt.where(and_(*filters))
-
-            # Apply sorting
-            if sort == "latest":
-                stmt = stmt.order_by(Event.date.desc())
-            elif sort == "upcoming":
-                stmt = stmt.order_by(Event.date.asc())
-            elif sort == "recently_added":
-                stmt = stmt.order_by(Event.id.desc())
-            elif sort == "past":
-                from datetime import datetime
-                today = datetime.now().date()
-                filters.append(Event.date < today)
-                stmt = stmt.order_by(Event.date.desc())
-
-            # Apply pagination
-            stmt = stmt.offset(skip).limit(limit)
-
+            stmt = (
+                EventQueryBuilder()
+                .apply_filters(search, tab, clubs, start_date, end_date)
+                .apply_sort(sort)
+                .paginate(skip, limit)
+                .build()
+            )
             result = await self.db.execute(stmt)
             return result.scalars().all()
+
         except SQLAlchemyError as e:
             raise RuntimeError(f"Database error in get_events: {e}")
 

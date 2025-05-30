@@ -16,7 +16,7 @@ mock_events = [
         categories=["Hackathon"],
         clubs=["AMACSS"],
         types=["Competition"],
-        user=UserInfo(id=1, username="amacss_admin", pfp_url=""),
+        user=UserInfo(id=1, username="amacss_admin", pfp_url="", is_verified=False),
     ),
     EventOut(
         id=2,
@@ -30,7 +30,7 @@ mock_events = [
         categories=["Puzzle"],
         clubs=["Mathematics Club"],
         types=["Social"],
-        user=UserInfo(id=2, username="math_user", pfp_url=""),
+        user=UserInfo(id=2, username="math_user", pfp_url="", is_verified=False),
     ),
     EventOut(
         id=3,
@@ -44,7 +44,7 @@ mock_events = [
         categories=["Workshop"],
         clubs=["CSEC"],
         types=["Learning"],
-        user=UserInfo(id=3, username="csec_lead", pfp_url=""),
+        user=UserInfo(id=3, username="csec_lead", pfp_url="", is_verified=False),
     ),
 
     # Latest Event
@@ -60,7 +60,7 @@ mock_events = [
         categories=["Competition"],
         clubs=["Programming Club"],
         types=["Challenge"],
-        user=UserInfo(id=4, username="prog_master", pfp_url=""),
+        user=UserInfo(id=4, username="prog_master", pfp_url="", is_verified=False),
     ),
     EventOut(
         id=5,
@@ -74,7 +74,7 @@ mock_events = [
         categories=["Game Night"],
         clubs=["Mathematics Club"],
         types=["Trivia"],
-        user=UserInfo(id=2, username="math_user", pfp_url=""),
+        user=UserInfo(id=2, username="math_user", pfp_url="", is_verified=False),
     ),
 
     # Recently Added Event
@@ -90,7 +90,7 @@ mock_events = [
         categories=["Workshop"],
         clubs=["CSEC"],
         types=["Learning"],
-        user=UserInfo(id=3, username="csec_admin", pfp_url=""),
+        user=UserInfo(id=3, username="csec_admin", pfp_url="", is_verified=False),
     ),
     EventOut(
         id=7,
@@ -104,7 +104,7 @@ mock_events = [
         categories=["Practice"],
         clubs=["Programming Club"],
         types=["Challenge"],
-        user=UserInfo(id=5, username="prog_enthusiast", pfp_url=""),
+        user=UserInfo(id=5, username="prog_enthusiast", pfp_url="", is_verified=False),
     ),
 
     # Past Event
@@ -120,7 +120,7 @@ mock_events = [
         categories=["Workshop"],
         clubs=["CSEC"],
         types=["Learning"],
-        user=UserInfo(id=9, username="techie_tim", pfp_url=""),
+        user=UserInfo(id=9, username="techie_tim", pfp_url="", is_verified=False),
     ),
     EventOut(
         id=9,
@@ -134,7 +134,7 @@ mock_events = [
         categories=["Games"],
         clubs=["Mathematics Club"],
         types=["Educational"],
-        user=UserInfo(id=10, username="math_admin", pfp_url=""),
+        user=UserInfo(id=10, username="math_admin", pfp_url="", is_verified=False),
     ),
 
     # Clubs-Based Filtering
@@ -150,7 +150,7 @@ mock_events = [
         categories=["Workshop"],
         clubs=["CSEC"],
         types=["Learning"],
-        user=UserInfo(id=3, username="csec_lead", pfp_url=""),
+        user=UserInfo(id=3, username="csec_lead", pfp_url="", is_verified=False),
     ),
     EventOut(
         id=11,
@@ -164,7 +164,7 @@ mock_events = [
         categories=["Hackathon"],
         clubs=["Programming Club"],
         types=["Competition"],
-        user=UserInfo(id=4, username="prog_master", pfp_url=""),
+        user=UserInfo(id=4, username="prog_master", pfp_url="", is_verified=False),
     ),
     EventOut(
         id=12,
@@ -178,7 +178,7 @@ mock_events = [
         categories=["Panel"],
         clubs=["Mathematics Club"],
         types=["Networking"],
-        user=UserInfo(id=2, username="math_user", pfp_url=""),
+        user=UserInfo(id=2, username="math_user", pfp_url="", is_verified=False),
     ),
 
     # Diverse Dates
@@ -194,7 +194,7 @@ mock_events = [
         categories=["Panel"],
         clubs=["AMACSS"],
         types=["Awareness"],
-        user=UserInfo(id=1, username="amacss_admin", pfp_url=""),
+        user=UserInfo(id=1, username="amacss_admin", pfp_url="", is_verified=False),
     ),
     EventOut(
         id=14,
@@ -208,7 +208,7 @@ mock_events = [
         categories=["Workshop"],
         clubs=["Programming Club"],
         types=["Educational"],
-        user=UserInfo(id=6, username="prog_user", pfp_url=""),
+        user=UserInfo(id=6, username="prog_user", pfp_url="", is_verified=False),
     ),
     EventOut(
         id=15,
@@ -222,7 +222,7 @@ mock_events = [
         categories=["Talk"],
         clubs=["Mathematics Club"],
         types=["Academic"],
-        user=UserInfo(id=2, username="math_user", pfp_url=""),
+        user=UserInfo(id=2, username="math_user", pfp_url="", is_verified=False),
     ),
 
     # Additional Mix
@@ -238,7 +238,7 @@ mock_events = [
         categories=["Competition"],
         clubs=["Programming Club"],
         types=["Game"],
-        user=UserInfo(id=4, username="prog_master", pfp_url=""),
+        user=UserInfo(id=4, username="prog_master", pfp_url="", is_verified=False),
     ),
     EventOut(
         id=17,
@@ -252,7 +252,7 @@ mock_events = [
         categories=["Talk"],
         clubs=["AMACSS"],
         types=["Educational"],
-        user=UserInfo(id=1, username="amacss_admin", pfp_url=""),
+        user=UserInfo(id=1, username="amacss_admin", pfp_url="", is_verified=False),
     ),
     EventOut(
         id=18,
@@ -266,7 +266,7 @@ mock_events = [
         categories=["Study Session"],
         clubs=["Mathematics Club"],
         types=["Review"],
-        user=UserInfo(id=10, username="math_ta", pfp_url=""),
+        user=UserInfo(id=10, username="math_ta", pfp_url="", is_verified=False),
     ),
     EventOut(
         id=19,
@@ -280,7 +280,7 @@ mock_events = [
         categories=["Workshop"],
         clubs=["CSEC"],
         types=["Learning"],
-        user=UserInfo(id=3, username="csec_lead", pfp_url=""),
+        user=UserInfo(id=3, username="csec_lead", pfp_url="", is_verified=False),
     ),
     EventOut(
         id=20,
@@ -294,7 +294,7 @@ mock_events = [
         categories=["Workshop"],
         clubs=["Programming Club"],
         types=["Educational"],
-        user=UserInfo(id=5, username="prog_enthusiast", pfp_url=""),
+        user=UserInfo(id=5, username="prog_enthusiast", pfp_url="", is_verified=False),
     ),
     EventOut(
         id=21,
@@ -308,7 +308,7 @@ mock_events = [
         categories=["Study"],
         clubs=["Programming Club"],
         types=["Practice"],
-        user=UserInfo(id=19, username="prog_nightowl", pfp_url=""),
+        user=UserInfo(id=19, username="prog_nightowl", pfp_url="", is_verified=False),
     ),
     EventOut(
         id=22,
@@ -322,7 +322,7 @@ mock_events = [
         categories=["Talk"],
         clubs=["AMACSS"],
         types=["Discussion"],
-        user=UserInfo(id=20, username="amacss_speaker", pfp_url=""),
+        user=UserInfo(id=20, username="amacss_speaker", pfp_url="", is_verified=False),
     ),
     EventOut(
         id=23,
@@ -336,7 +336,7 @@ mock_events = [
         categories=["Networking"],
         clubs=["CSEC"],
         types=["Social"],
-        user=UserInfo(id=4, username="csec_admin", pfp_url=""),
+        user=UserInfo(id=4, username="csec_admin", pfp_url="", is_verified=False),
     ),
     EventOut(
         id=24,
@@ -350,7 +350,7 @@ mock_events = [
         categories=["Workshop"],
         clubs=["Programming Club"],
         types=["Tech"],
-        user=UserInfo(id=6, username="prog_user", pfp_url=""),
+        user=UserInfo(id=6, username="prog_user", pfp_url="", is_verified=False),
     ),
     EventOut(
         id=25,
@@ -364,7 +364,7 @@ mock_events = [
         categories=["Social"],
         clubs=["Mathematics Club"],
         types=["Community"],
-        user=UserInfo(id=23, username="math_mentor", pfp_url=""),
+        user=UserInfo(id=23, username="math_mentor", pfp_url="", is_verified=False),
     ),
     EventOut(
         id=26,
@@ -378,7 +378,7 @@ mock_events = [
         categories=["Tech"],
         clubs=["CSEC"],
         types=["Learning"],
-        user=UserInfo(id=24, username="csec_user", pfp_url=""),
+        user=UserInfo(id=24, username="csec_user", pfp_url="", is_verified=False),
     ),
     EventOut(
         id=27,
@@ -392,6 +392,6 @@ mock_events = [
         categories=["Lecture"],
         clubs=["Programming Club"],
         types=["Academic"],
-        user=UserInfo(id=25, username="prog_advanced", pfp_url=""),
+        user=UserInfo(id=25, username="prog_advanced", pfp_url="", is_verified=False),
     ),
 ]

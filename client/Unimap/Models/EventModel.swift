@@ -1,13 +1,15 @@
 import Foundation
 
 struct Event: Codable, Identifiable {
-    let id: UUID
+    let id: Int
     let title: String
     var description: String? = nil
     var date: Date? = nil
     var location: String? = nil
     var imageURL: URL? = nil
     let user: User
+    
+    private static var mockIDCounter = 0
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -20,12 +22,18 @@ struct Event: Codable, Identifiable {
     }
     
     static func mock() -> Event {
-        return Event(id: UUID(), title: "Party Night", imageURL: URL(string: "https://shorturl.at/ISmcS"),user: User.mock())
+        mockIDCounter += 1
+        return Event(
+            id: mockIDCounter,
+            title: "Party Night",
+            imageURL: URL(string: "https://shorturl.at/ISmcS"),
+            user: User.mock()
+        )
     }
 }
 
 struct EventDetails: Codable, Identifiable {
-    let id: UUID
+    let id: Int
     let title: String
     var description: String? = nil
     var date: Date? = nil
@@ -39,6 +47,8 @@ struct EventDetails: Codable, Identifiable {
     let user: User
     var inPerson: Bool? = nil
     var online: Bool? = nil
+    
+    private static var mockIDCounter = 0
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -58,7 +68,14 @@ struct EventDetails: Codable, Identifiable {
     }
     
     static func mock() -> Event {
-        return Event(id: UUID(), title: "Party Night", imageURL: URL(string: "https://shorturl.at/ISmcS"),user: User.mock())
+        mockIDCounter += 1
+        
+        return Event(
+            id: mockIDCounter,
+            title: "Party Night",
+            imageURL: URL(string: "https://shorturl.at/ISmcS"),
+            user: User.mock()
+        )
     }
 }
 

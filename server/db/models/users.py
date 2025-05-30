@@ -24,6 +24,7 @@ class User(Base):
     pfp_url    = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = Column(DateTime(timezone=True), nullable=True)
+    is_verified = Column(Boolean, default=False, nullable=False)
 
     events = relationship(
         "Event",
