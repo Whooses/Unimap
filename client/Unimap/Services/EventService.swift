@@ -20,12 +20,32 @@ class EventService {
         ]
     }
     
-    func fetchUserEvents() async throws -> [Event] {
-        return [
-            Event.mock(), Event.mock(), Event.mock(),
-            Event.mock(), Event.mock(), Event.mock(),
-            Event.mock(), Event.mock(), Event.mock()
-        ]
+
+    func fetchUserEvents(userID: Int, sort: Sort = .latest) async throws -> [Event] {
+        let builder = URLRequestBuilder(forEventsService: true)
+            .setPath("/events/user/\(userID)")
+            .setSort(sort)
+        
+        do {
+            let request = try builder.build()
+            let data: [Event] = try await networkService.sendRequest(from: request, type: [Event].self)
+            
+            return data
+            
+        } catch let error as URLRequestBuilderError {
+            print(error.localizedDescription)
+            
+            throw error
+        } catch let error as NetworkError {
+            print(error.localizedDescription)
+            
+            // TODO: Implement better error handling logic later
+            throw error
+        } catch {
+            print("Unexpected error: \(error.localizedDescription)")
+            
+            throw error
+        }
     }
     
 

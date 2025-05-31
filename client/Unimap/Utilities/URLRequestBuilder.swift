@@ -73,6 +73,11 @@ extension URLRequestBuilder {
         }
     }
     
+    func setPath(_ path: String) -> Self {
+        self.path = path
+        return self
+    }
+    
     // Set search
     func setSearch(_ search: String) -> Self {
         queryItems = queryItems.filter { $0.name != "search" }

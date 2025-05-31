@@ -70,6 +70,11 @@ class EventQueryBuilder:
             self._stmt = self._stmt.where(Event.date < today).order_by(Event.date.desc())
         return self
 
+    def set_user(self, user_id: Optional[int]) -> "EventQueryBuilder":
+        if user_id is not None:
+            self._stmt = self._stmt.where(Event.user_id == user_id)
+        return self
+
     def paginate(self, skip: int = 0, limit: int = 100) -> "EventQueryBuilder":
         self._stmt = self._stmt.offset(skip).limit(limit)
         return self

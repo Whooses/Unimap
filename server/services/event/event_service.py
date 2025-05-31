@@ -74,6 +74,20 @@ class EventService:
             log.exception("DB failure in get_event")
             raise self._err500(exc) from exc
 
+    async def get_user_events(
+        self,
+        user_id: int,
+        sort: str = "latest",
+        skip: int = 0,
+        limit: int = 100,
+    ) -> List[Event]:
+        try:
+            events = await self.repo.get_user_events(user_id, sort=sort, skip=skip, limit=limit)
+            return events
+        except SQLAlchemyError as exc:
+            log.exception("DB failure in get_user_events")
+            raise self._err500(exc) from exc
+
     async def create_event(self, data: EventCreate) -> Event:
         try:
             event = await self.repo.create_event(data.dict())

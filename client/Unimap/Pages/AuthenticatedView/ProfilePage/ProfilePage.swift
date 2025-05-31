@@ -4,11 +4,10 @@ struct ProfilePage: View {
 
     var username: String? = nil
     var PFPURL: URL? = nil
-    let userID: UUID? = UUID()
+    var userID: Int = 0
 
     @StateObject private var imageLoader = ImageLoaderService(url: nil)
     @StateObject private var VM = ProfilePageVM(
-        userID: UUID(),
         eventService: EventService(),
         userService: UserService()
     )
@@ -29,50 +28,63 @@ struct ProfilePage: View {
                        .resizable()
                        .scaledToFill()
                        .frame(width: 100, height: 100)
-                       .padding(.bottom, 6)
+                       .padding(.vertical)
                        .clipShape(Circle())
 
-                // Event, followers, and attended counts
-                UserInfoView(
-                    events: VM.eventsCounts,
-                    followers: VM.followerCounts,
-                    attended: VM.attendedCounts
-                )
+//                // Event, followers, and attended counts
+//                UserInfoView(
+//                    events: VM.eventsCounts,
+//                    followers: VM.followerCounts,
+//                    attended: VM.attendedCounts
+//                )
 
-                // Follow and message button
-                HStack {
-                    FollowBtn() {
-
-                    }
-
-                    MessageBtn() {
-
-                    }
-                }
+//                // Follow and message button
+//                HStack {
+//                    FollowBtn() {
+//
+//                    }
+//
+//                    MessageBtn() {
+//
+//                    }
+//                }
 
                 // Filter and search
                 HStack {
-                    FilterLayout(
-                        selectedSort: VM.selectedSort,
-                        updateSort: VM.updateSort
-                    )
+                    FilterLayout(selectedSort: VM.selectedSort) { newSort in
+                        Task {
+                            await VM.updateSort(newSort)
+                        }
+                    }
 
                     Spacer()
 
-                    SearchBtn()
+//                    SearchBtn()
                 }
 
                 // Event
-                RectangleVerLayout(events: VM.events, showHeader: false)
+                if VM.errorMessage == "No data received from server." {
+                    Text("No events")
+                        .foregroundColor(.secondary)
+                        .offset(y: 10)
+                } else if let error = VM.errorMessage {
+                    Text(error)
+                        .foregroundColor(.red)
+                        .offset(y: 10)
+                } else {
+                    RectangleVerLayout(events: VM.events)
+                }
             }
             .padding(.horizontal)
 
         }
         .onAppear {
-            imageLoader.url = PFPURL
+            VM.userID = userID
             Task {
-                await imageLoader.load()
-                await VM.fetchEvents()
+                await withTaskGroup(of: Void.self) { group in
+                    group.addTask { await imageLoader.load() }
+                    group.addTask { await VM.fetchEvents() }
+                }
             }
         }
     }
@@ -182,6 +194,10 @@ private struct SearchBtn: View {
 }
 
 
-#Preview {
-    ProfilePage()
-}
+//#Preview {
+//    ProfilePage(
+//        username: "Whooses",
+//        PFPURL: URL(string: "https://upload-os-bbs.hoyolab.com/upload/2024/07/15/255898048/948a3d9cafb5a807d06a6dc5b4b81caf_7027934554437582076.jpg?x-oss-process=image%2Fresize%2Cs_1000%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70")!,
+//        userID: 1
+//    )
+//}

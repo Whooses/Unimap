@@ -32,12 +32,16 @@ async def get_events(
     )
     return events
 
-@router.post("/", response_model=EventOut)
-async def create_event(
-    event: EventCreate,
+@router.get("/user/{user_id}", response_model=List[EventOut])
+async def get_user_events(
+    user_id: int,
+    sort: str = Query(..., description="Must be one of: latest, upcoming, recently_added, past"),
+    skip: int = 0,
+    limit: int = 100,
     event_service: ProtocolEventService = Depends(get_event_service),
 ):
-    return await event_service.create_event(event)
+    events = await event_service.get_user_events(user_id, sort=sort, skip=skip, limit=limit)
+    return events
 
 @router.put("/{event_id}", response_model=EventOut)
 async def update_event(

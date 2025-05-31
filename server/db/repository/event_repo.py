@@ -46,6 +46,26 @@ class EventRepository:
         except SQLAlchemyError as e:
             raise RuntimeError(f"Database error in get_event: {e}")
 
+    async def get_user_events(
+        self,
+        user_id: int,
+        sort: str = "latest",
+        skip: int = 0,
+        limit: int = 100,
+    ) -> List[Event]:
+        try:
+            stmt = (
+                EventQueryBuilder()
+                .apply_sort(sort)
+                .set_user(user_id)
+                .paginate(skip, limit)
+                .build()
+            )
+            result = await self.db.execute(stmt)
+            return result.scalars().all()
+        except SQLAlchemyError as e:
+            raise RuntimeError(f"Database error in get_user: {e}")
+
     async def create_event(self, event_data: dict) -> Event:
         try:
             db_event = Event(**event_data)

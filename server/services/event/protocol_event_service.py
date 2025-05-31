@@ -60,6 +60,30 @@ class ProtocolEventService(Protocol):
         """
         pass
 
+    async def get_user_events(
+        self,
+        user_id: int,
+        sort: str = "latest",
+        skip: int = 0,
+        limit: int = 100,
+    ) -> List[Event]:
+        """
+        Retrieve events associated with a specific user.
+        Handles expected errors such as missing user IDs or transient database issues internally,
+        possibly with retries or logging. Returns an empty list if no events are found or if recoverable
+        errors occur. Raises exceptions only for unrecoverable issues (e.g., configuration errors).
+        Args:
+            user_id (int): The ID of the user whose events to retrieve.
+            sort (str): The sorting criteria for the events.
+            skip (int): Number of events to skip for pagination.
+            limit (int): Maximum number of events to return.
+        Returns:
+            List[Event]: List of events associated with the user.
+        Raises:
+            RuntimeError: For unrecoverable or unexpected internal errors.
+        """
+        pass
+
     async def create_event(self, event_create: EventCreate) -> Event:
         """
         Create a new event.

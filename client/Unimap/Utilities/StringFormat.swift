@@ -30,22 +30,39 @@ func dateRangeString(from startDate: Date?, to endDate: Date?) -> String {
 }
 
 
-func stringDate(Date date: Date?,
-            format: String = "yyyy-MM-dd",
-            placeholder: String = "") -> String {
+func stringDate(date: Date?, placeholder: String = "") -> String {
+    guard let date = date else { return placeholder }
     
-    guard let date else { return placeholder }
-    
-    // Re-use the same formatter instance for speed.
+    // Reuse formatter instances for performance
     struct Cache {
-        static var formatter = DateFormatter()
+        // For absolute date formatting (e.g. "March 10, 2006")
+        static let dateFormatter: DateFormatter = {
+            let df = DateFormatter()
+            df.locale = Locale.current
+            df.timeZone = TimeZone.current
+            df.dateFormat = "MMMM d, yyyy"
+            return df
+        }()
+        
+        // For relative-date formatting (e.g. "in 3 days", "5 days ago")
+        static let relativeFormatter: RelativeDateTimeFormatter = {
+            let rf = RelativeDateTimeFormatter()
+            rf.locale = Locale.current
+            rf.unitsStyle = .full
+            return rf
+        }()
     }
     
-    let formatter = Cache.formatter
-    if formatter.dateFormat != format {
-        formatter.dateFormat = format
-        formatter.locale = Locale.current
-        formatter.timeZone = TimeZone.current
+    let now = Date()
+    let oneWeekInSeconds: TimeInterval = 7 * 24 * 60 * 60
+    let interval = date.timeIntervalSince(now)
+    
+    if abs(interval) <= oneWeekInSeconds {
+        // Within one week: show "in X days"/"X days ago"
+        return Cache.relativeFormatter.localizedString(for: date, relativeTo: now)
+    } else {
+        // Outside one-week range: show full English date
+        return Cache.dateFormatter.string(from: date)
     }
-    return formatter.string(from: date)
 }
+

@@ -12,6 +12,7 @@ struct SmallSquareCard: View {
     
     @StateObject private var imageLoaderService = ImageLoaderService(url: nil)
     @State private var showSheet: Bool = false
+    @State private var showProfilePage: Bool = false
 
     var body: some View {
         ZStack(alignment: .bottomLeading) {
@@ -71,9 +72,11 @@ struct SmallSquareCard: View {
                     username: username,
                     title: eventTitle,
                     description: eventDescription,
-                    imageURL: eventImageURL,
+                    imageUI: imageLoaderService.image,
                     date: eventDate,
-                    location: eventLocation
+                    location: eventLocation,
+                    showSheet: $showSheet,
+                    showProfilePage: $showProfilePage
                 )
             }
         )
