@@ -39,7 +39,7 @@ class ImageLoaderService: ObservableObject {
             self.averageColor = Color(darker)
             
         } catch {
-            print("Error loading image: \(error)")
+//            print("Error loading image: \(error)")
         }
     }
 }

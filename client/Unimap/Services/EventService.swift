@@ -1,27 +1,76 @@
 import Foundation
-import SwiftUI
 
-/// Service responsible for fetching event data from the network.
 class EventService {
-
-    /// Handles network requests and responses.
     private let networkService = NetworkService()
 
-    /// Fetches an array of `Event` objects from the provided URL request.
-    ///
-    /// - Parameter request: The URLRequest specifying the endpoint for events.
-    /// - Returns: An array of `Event` objects.
-    /// - Throws: An error if the network request fails or decoding is unsuccessful.
-    func getEvents(from request: URLRequest) async throws -> [Event] {
-        do {
-            let data: [Event] = try await self.networkService.sendRequest(from: request, type: Event.self)
-            return data
-        } catch {
-            throw error
-        }
+    // MARK: User specific services
+    func fetchRecEvents(user: User?) async throws -> [Event] {
+        return [
+            Event.mock(), Event.mock(), Event.mock(),
+            Event.mock(), Event.mock(), Event.mock(),
+            Event.mock(), Event.mock(), Event.mock()
+        ]
     }
 
-    // Caching, storage
+    func fetchUpcomingEvents(user: User?) async throws -> [Event] {
+        return [
+            Event.mock(), Event.mock(), Event.mock(),
+            Event.mock(), Event.mock(), Event.mock(),
+            Event.mock(), Event.mock(), Event.mock()
+        ]
+    }
+    
 
-    // Error Handling
+    // MARK: School base service
+    
+    func fetchLatestEvents(user: User?) async throws -> [Event] {
+        return [
+            Event.mock(), Event.mock(), Event.mock(),
+            Event.mock(), Event.mock(), Event.mock(),
+            Event.mock(), Event.mock(), Event.mock()
+        ]
+    }
+    
+    
+
+    func fetchuserEvents() async throws -> [Event] {
+        return [
+            Event.mock(), Event.mock(), Event.mock(),
+            Event.mock(), Event.mock(), Event.mock(),
+            Event.mock(), Event.mock(), Event.mock()
+        ]
+    }
+
+    func fetchExploreEvents(
+            search: String? = nil,
+            tab: ExploreTab,
+            filter: ExploreFilter
+    ) async throws -> [Event] {
+//        let builder = EventRequestBuilder()
+//            .setSearch(search)
+//            .setTab(tab)
+//            .setSort(filter.sort)
+////            .setClubs(filter.clubs)
+//            .setDateRange(start: filter.startDate, end: filter.endDate)
+//
+//        guard let request = builder.build() else {
+//            throw NSError(
+//                domain: "EventService",
+//                code: 1,
+//                userInfo: [NSLocalizedDescriptionKey: "Could not build request"]
+//            )
+//        }
+//        
+//        do {
+//            let data: [Event] = try await self.networkService.sendRequest(from: request, type: Event.self)
+//            return data
+//        } catch {
+//            throw error
+//        }
+        return [
+            Event.mock(), Event.mock(), Event.mock(),
+            Event.mock(), Event.mock(), Event.mock(),
+            Event.mock(), Event.mock(), Event.mock()
+        ]
+    }
 }
