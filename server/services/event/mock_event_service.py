@@ -2,6 +2,7 @@ from typing import List, Optional
 from .mock_data import mock_events
 from schemas.event import EventCreate, EventOut
 from schemas.user import UserInfo
+from datetime import datetime
 
 class MockEventService:
     async def get_events(
@@ -12,8 +13,8 @@ class MockEventService:
         tab: Optional[str] = None,  # Added tab param
         sort: Optional[str] = None,
         clubs: Optional[List[str]] = None,
-        start_date: Optional[str] = None,
-        end_date: Optional[str] = None,
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
     ) -> List[EventOut]:
         events = mock_events
 

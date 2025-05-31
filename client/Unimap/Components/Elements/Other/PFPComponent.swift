@@ -24,6 +24,8 @@ struct PFPComponent: View {
     /// Background color behind the plus icon.
     var plusBackgroundColor: Color = .white
     /// Size factor for the plus icon relative to the main circle.
+    
+    
     private var plusSizeFactor: CGFloat { 0.4 }
 
     var body: some View {

@@ -14,8 +14,20 @@ struct InPersonEventsView: View {
             }
             
             ExploreFilterLayout()
-            RectangleVerLayout(events: explorePageVM.events)
-//            Spacer()
+            
+            if explorePageVM.errorMessage == "No data received from server." {
+                Text("No events")
+                    .foregroundColor(.secondary)
+                    .offset(y: 10)
+            } else if let error = explorePageVM.errorMessage {
+                Text(error)
+                    .foregroundColor(.red)
+                    .offset(y: 10)
+            } else {
+                RectangleVerLayout(events: explorePageVM.events[.inPerson])
+            }
+            
+            Spacer()
         }
     }
 }

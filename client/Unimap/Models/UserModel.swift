@@ -1,13 +1,15 @@
 import Foundation
 
 struct User: Codable, NamedIdentifiable {
-    let userID: UUID
+    let userID: Int
     let name: String
     var pfpURL: URL? = nil
     let isVerified: Bool
     var school: School?  = nil
     
-    var id: UUID { userID }
+    var id: Int { userID }
+    
+    private static var mockIDCounter: Int = 0
     
     enum CodingKeys: String, CodingKey {
         case userID = "id"
@@ -18,7 +20,14 @@ struct User: Codable, NamedIdentifiable {
     }
     
     static func mock() -> User {
-        return User(userID: UUID(), name: "Test User", pfpURL: URL(string: "https://shorturl.at/vYd1A"), isVerified: false)
+        mockIDCounter += 1
+        
+        return User(
+            userID: mockIDCounter,
+            name: "Test User",
+            pfpURL: URL(string: "https://shorturl.at/vYd1A"),
+            isVerified: false
+        )
     }
 }
 
@@ -43,7 +52,7 @@ struct UserDetails: Codable, NamedIdentifiable {
         case school = "school_id"
     }
     
-    static func mock() -> User {
-        return User(userID: UUID(), name: "Test User", pfpURL: URL(string: "https://shorturl.at/vYd1A"), isVerified: false)
+    static func mock() -> UserDetails {
+        return UserDetails(userID: UUID(), name: "Test User", pfpURL: URL(string: "https://shorturl.at/vYd1A"), isVerified: false)
     }
 }

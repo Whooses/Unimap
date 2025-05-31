@@ -1,8 +1,10 @@
 import Foundation
 
 struct School: Codable, Equatable {
-    let id: UUID
+    let id: Int
     let name: String
+    
+    static private var mockID: Int = 0
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -10,12 +12,14 @@ struct School: Codable, Equatable {
     }
     
     static func mock() -> Self {
-        return .init(id: UUID(), name: "Mock")
+        mockID += 1
+        
+        return .init(id: mockID, name: "Mock")
     }
 }
 
 struct SchoolDetails: Codable, Equatable {
-    let id: UUID
+    let id: Int
     let name: String
     let stateProvince: String?
     let city: String?
@@ -23,6 +27,8 @@ struct SchoolDetails: Codable, Equatable {
     let latitude: Double?
     let longitude: Double?
     let createdAt: Date?
+    
+    static private var mockID: Int = 0
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -36,6 +42,8 @@ struct SchoolDetails: Codable, Equatable {
     }
     
     static func mock() -> Self {
-        return .init(id: UUID(), name: "University of Toronto Scarborough", stateProvince: nil, city: nil, country: nil, latitude: nil, longitude: nil, createdAt: nil)
+        mockID += 1
+        
+        return .init(id: mockID, name: "University of Toronto Scarborough", stateProvince: nil, city: nil, country: nil, latitude: nil, longitude: nil, createdAt: nil)
     }
 }

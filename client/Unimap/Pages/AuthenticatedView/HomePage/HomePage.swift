@@ -9,7 +9,9 @@ struct HomePage: View {
     var body: some View {
         NavigationStack {
             VStack {
-                SearchBarComponent(searchText: $VM.search)
+                SearchBarComponent() { newSearch in
+                    
+                }
                     .focused($isSearching)
                     .padding(.bottom)
                 

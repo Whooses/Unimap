@@ -11,14 +11,9 @@ class EventOut(BaseModel):
     id: int
     title: str
     description: Optional[str]
-    date: Optional[datetime.date]
+    date: Optional[datetime.datetime]
     location: Optional[str]
     image_url: str
-    is_public: bool
-    departments: Optional[List[str]]
-    categories: Optional[List[str]]
-    clubs: Optional[List[str]]
-    types: Optional[List[str]]
 
     user: UserInfo
 
