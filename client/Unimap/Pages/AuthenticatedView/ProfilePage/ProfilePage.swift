@@ -72,7 +72,7 @@ struct ProfilePage: View {
                         .foregroundColor(.red)
                         .offset(y: 10)
                 } else {
-                    RectangleVerLayout(events: VM.events)
+                    RectangleVerLayout(events: VM.events, showHeader: false)
                 }
             }
             .padding(.horizontal)

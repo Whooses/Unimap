@@ -48,3 +48,4 @@ class Event(Base):
 
     event_reports = relationship(
         "EventReports",
+    )
