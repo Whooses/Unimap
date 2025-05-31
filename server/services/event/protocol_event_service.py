@@ -42,6 +42,7 @@ class ProtocolEventService(Protocol):
         """
         pass
 
+
     async def get_event(self, event_id: int) -> Optional[Event]:
         """
         Retrieve event details by event ID.

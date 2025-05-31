@@ -43,6 +43,14 @@ async def get_user_events(
     events = await event_service.get_user_events(user_id, sort=sort, skip=skip, limit=limit)
     return events
 
+@router.post("/", response_model=EventOut)
+async def create_event(
+    event: EventCreate,
+    event_service: ProtocolEventService = Depends(get_event_service),
+):
+    return await event_service.create_event(event)
+
+
 @router.put("/{event_id}", response_model=EventOut)
 async def update_event(
     event_id: int,

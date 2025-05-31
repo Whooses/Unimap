@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, Text, ForeignKey, DateTime, func
 from sqlalchemy.orm import relationship
 from db.session import Base
 
+
 class EventReports(Base):
     __tablename__ = "event_reports"
 
@@ -13,3 +14,4 @@ class EventReports(Base):
 
     reporter = relationship("User", back_populates="event_reports")
     event = relationship("Event", back_populates="event_reports")
+

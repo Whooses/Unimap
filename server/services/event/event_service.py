@@ -99,6 +99,7 @@ class EventService:
             log.exception("DB failure in create_event")
             raise self._err500(exc) from exc
 
+
     async def update_event(self, event_id: int, data: EventCreate) -> Event:
         try:
             event = await self.repo.update_event(event_id, data.dict())

@@ -48,6 +48,3 @@ class Event(Base):
 
     event_reports = relationship(
         "EventReports",
-        back_populates="event",
-        cascade="all, delete-orphan"
-        )
