@@ -1,0 +1,91 @@
+name: Dev CICD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - developing
+  pull_request:
+    branches:
+      - main
+      - developing
+
+jobs:
+  build-and-test:
+    name: 🔧 Build and Test
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.base_ref == 'main' && 'Prod' ||
+              github.base_ref == 'developing' && 'Dev'}}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t unimap ./server
+
+      - name: Run tests inside Docker
+        run: |
+          docker run --rm \
+            -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
+            unimap pytest
+
+      - name: Save Docker image as artifact
+        run: docker save unimap| gzip > image.tar.gz
+
+      - name: Upload image artifact to share across jobs
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: image.tar.gz
+
+
+  deploy:
+    name: 🚀 Deploy to ECR & EC2
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    environment: dev
+
+
+    steps:
+      - name: Download image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+
+      - name: Load Docker image
+        run: |
+          gunzip -c image.tar.gz | docker load
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Tag image for ECR
+        run: docker tag unimap:latest ${{ secrets.ECR_URI }}:latest
+
+      - name: Push image to ECR
+        run: docker push ${{ secrets.ECR_URI }}:latest
+
+      - name: Deploy to EC2 via SSM
+        run: |
+          aws ssm send-command \
+            --document-name "AWS-RunShellScript" \
+            --comment "Deploy Docker container from GitHub Actions" \
+            --targets "Key=InstanceIds,Values=${{ secrets.EC2_INSTANCE_ID }}" \
+            --parameters 'commands=[
+              "aws ecr get-login-password --region '${{ secrets.AWS_REGION }}' | docker login --username AWS --password-stdin '${{ secrets.ECR_URI }}'",
+              "docker pull '${{ secrets.ECR_URI }}:latest'",
+              "docker stop unimap || true",
+              "docker rm unimap || true",
+              "docker run --rm -d --name unimap -e DATABASE_URL='${{ secrets.DATABASE_URL }}' -p 8000:8000 '${{ secrets.ECR_URI }}:latest'"
+            ]' \
+            --region $AWS_REGION
