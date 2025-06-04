@@ -3,7 +3,7 @@ name: Server CI
 on:
   pull_request:
     branches:
-      - develop
+      - developing
       - main
 
 jobs:
