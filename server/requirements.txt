@@ -9,7 +9,7 @@ docopt==0.6.2
 ecdsa==0.19.1
 fastapi==0.115.7
 greenlet==3.2.2
-h11==0.14.0
+h11==0.16.0
 httpcore==1.0.9
 httpx==0.28.1
 idna==3.10
@@ -23,6 +23,7 @@ pydantic==2.10.6
 pydantic_core==2.27.2
 Pygments==2.19.1
 pytest==8.4.0
+pytest-asyncio==1.0.0
 python-dotenv==1.0.1
 python-jose==3.4.0
 requests==2.32.3
