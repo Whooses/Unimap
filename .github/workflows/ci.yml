@@ -44,7 +44,7 @@ jobs:
         done
 
     - name: Apply migrations (+ built-in seed.sql)
-      run: supabase db reset --force
+      run: supabase db reset
 
     - name: Seed Database
       run: supabase db seed
