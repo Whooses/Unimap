@@ -4,7 +4,7 @@ from datetime import datetime
 
 from schemas.event import EventCreate, EventOut
 from dependencies.event_dep import get_event_service
-from services.event.protocol_event_service import ProtocolEventService
+from services.event.event_service import EventService
 
 router = APIRouter(prefix="/events", tags=["events"])
 
@@ -18,7 +18,7 @@ async def get_events(
     clubs: Optional[List[str]] = Query(None),
     start_date: Optional[datetime] = Query(None),
     end_date: Optional[datetime] = Query(None),
-    event_service: ProtocolEventService = Depends(get_event_service),
+    event_service: EventService = Depends(get_event_service),
 ):
     events = await event_service.get_events(
         skip=skip,
@@ -38,7 +38,7 @@ async def get_user_events(
     sort: str = Query(..., description="Must be one of: latest, upcoming, recently_added, past"),
     skip: int = 0,
     limit: int = 100,
-    event_service: ProtocolEventService = Depends(get_event_service),
+    event_service: EventService = Depends(get_event_service),
 ):
     events = await event_service.get_user_events(user_id, sort=sort, skip=skip, limit=limit)
     return events
@@ -46,7 +46,7 @@ async def get_user_events(
 @router.post("/", response_model=EventOut)
 async def create_event(
     event: EventCreate,
-    event_service: ProtocolEventService = Depends(get_event_service),
+    event_service: EventService = Depends(get_event_service),
 ):
     return await event_service.create_event(event)
 
@@ -55,7 +55,7 @@ async def create_event(
 async def update_event(
     event_id: int,
     updated_event: EventCreate,
-    event_service: ProtocolEventService = Depends(get_event_service),
+    event_service: EventService = Depends(get_event_service),
 ):
     updated = await event_service.update_event(event_id, updated_event)
     return updated
@@ -63,7 +63,7 @@ async def update_event(
 @router.delete("/{event_id}", status_code=204)
 async def delete_event(
     event_id: int,
-    event_service: ProtocolEventService = Depends(get_event_service),
+    event_service: EventService = Depends(get_event_service),
 ):
     await event_service.delete_event(event_id)
     return Response(status_code=204)
