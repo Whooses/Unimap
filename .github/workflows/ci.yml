@@ -17,27 +17,36 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up Python (for develop branch)
-      if: github.base_ref == 'develop'
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.13.1'
-
-    - name: Install dependencies (for develop branch)
-      if: github.base_ref == 'develop'
+    - name: Install Supabase CLI
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        curl -sL https://github.com/supabase/cli/releases/latest/download/supabase_linux_amd64.tar.gz | tar -xz
+        sudo mv supabase /usr/local/bin/supabase
 
-    - name: Run tests with pytest (for develop branch)
-      if: github.base_ref == 'develop'
-      run: pytest
+    - name: Start Supabase services
+      run: supabase start --no-analytics --detach
 
-    - name: Build Docker image (for main branch)
-      if: github.base_ref == 'main'
+    - name: Wait for Supabase to be ready
+      run: |
+        for i in {1..10}; do
+          pg_isready -h localhost -p 54322 && break
+          echo "Waiting for Supabase DB..."
+          sleep 3
+        done
+
+    - name: Seed Database
+      run: supabase db seed
+
+    - name: Build server Docker image
       run: docker build -t fastapi-app .
 
-    - name: Run tests inside Docker (for main branch)
-      if: github.base_ref == 'main'
+    - name: Run tests inside Docker
       run: |
-        docker run --rm fastapi-app pytest
+        docker run --rm \
+          --network supabase_network \
+          -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
+          fastapi-app pytest
+
+
+
+
+
