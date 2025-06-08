@@ -18,12 +18,19 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Cache Supabase CLI
+      id: cache-supabase
+      uses: actions/cache@v3
+      with:
+        path: /usr/local/bin/supabase
+        key: supabase-cli-${{ runner.os }}-v1
+
     - name: Install Supabase CLI
+      if: steps.cache-supabase.outputs.cache-hit != 'true'
       run: |
         mkdir -p /tmp/supabase-cli
         curl -sL https://github.com/supabase/cli/releases/latest/download/supabase_linux_amd64.tar.gz | tar -xz -C /tmp/supabase-cli
         sudo mv /tmp/supabase-cli/supabase /usr/local/bin/supabase
-
 
     - name: Start Supabase services
       run: supabase start
