@@ -44,7 +44,7 @@ jobs:
     - name: Run tests inside Docker
       run: |
         docker run --rm \
-          --network supabase_network \
+          --add-host=host.docker.internal:host-gateway \
           -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
           fastapi-app pytest
 
