@@ -43,6 +43,9 @@ jobs:
           sleep 3
         done
 
+    - name: Apply migrations (+ built-in seed.sql)
+      run: supabase db reset --force
+
     - name: Seed Database
       run: supabase db seed
 
