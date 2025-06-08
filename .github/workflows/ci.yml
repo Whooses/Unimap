@@ -25,7 +25,7 @@ jobs:
 
 
     - name: Start Supabase services
-      run: supabase start --detach
+      run: supabase start
 
     - name: Wait for Supabase to be ready
       run: |
