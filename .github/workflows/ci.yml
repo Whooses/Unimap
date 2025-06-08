@@ -41,7 +41,7 @@ jobs:
         done
 
     - name: Apply migrations and seed
-      run: supabase db reset --workdir ./db/supabase
+      run: supabase db reset 
 
     - name: Build server Docker image
       run: docker build -t fastapi-app ./server
