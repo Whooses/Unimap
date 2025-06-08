@@ -10,9 +10,6 @@ jobs:
   test-server:
     runs-on: ubuntu-latest
     environment: dev
-    defaults:
-      run:
-        working-directory: server
 
     steps:
     - name: Checkout code
@@ -43,14 +40,14 @@ jobs:
           sleep 3
         done
 
-    - name: Apply migrations (+ built-in seed.sql)
-      run: supabase db reset
+    - name: Apply migrations and seed
+      run: supabase db reset --project-dir ./db/supabase
 
     - name: Seed Database
       run: supabase db seed
 
     - name: Build server Docker image
-      run: docker build -t fastapi-app .
+      run: docker build -t fastapi-app ./server
 
     - name: Run tests inside Docker
       run: |
