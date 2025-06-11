@@ -2,12 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from db.session import engine, Base
-from api.routers import users, events
+from api.routers import users, events, bug_reports, event_reports
 
 from config import CORS_ALLOWED_ORIGINS
-
-# Create tables in the database
-Base.metadata.create_all(bind=engine)
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -23,3 +20,5 @@ app.add_middleware(
 # Include routers
 app.include_router(users.router)
 app.include_router(events.router)
+app.include_router(event_reports.router)
+app.include_router(bug_reports.router)

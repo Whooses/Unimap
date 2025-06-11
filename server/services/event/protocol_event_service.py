@@ -1,6 +1,7 @@
 from typing import Protocol, List, Optional
 from schemas.event import EventCreate, EventOut
-from db.models.events import Events
+from db.models.events import Event
+from datetime import datetime
 
 class ProtocolEventService(Protocol):
     """
@@ -15,17 +16,17 @@ class ProtocolEventService(Protocol):
     should result in exceptions being raised to the caller.
     """
 
-    def get_event_list(
+    async def get_events(
         self,
         skip: int = 0,
         limit: int = 100,
-        owner_id: Optional[int] = None,
         search: Optional[str] = None,
-        start_date: Optional[str] = None,
-        end_date: Optional[str] = None,
-        clubs: Optional[List[str]] = None,
+        tab: Optional[str] = None,  # Added tab param
         sort: Optional[str] = None,
-    ) -> List[Events]:
+        clubs: Optional[List[str]] = None,
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
+    ) -> List[Event]:
         """
         Retrieve a list of events with optional filters and pagination.
 
@@ -34,14 +35,15 @@ class ProtocolEventService(Protocol):
         errors occur. Raises exceptions only for unrecoverable issues (e.g., configuration errors).
 
         Returns:
-            List[Events]: List of event objects matching the filters.
+            List[Event]: List of event objects matching the filters.
 
         Raises:
             RuntimeError: For unrecoverable or unexpected internal errors.
         """
         pass
 
-    def get_event(self, event_id: int) -> Optional[Events]:
+
+    async def get_event(self, event_id: int) -> Optional[Event]:
         """
         Retrieve event details by event ID.
 
@@ -52,14 +54,38 @@ class ProtocolEventService(Protocol):
             event_id (int): The ID of the event to retrieve.
 
         Returns:
-            Optional[Events]: The event object if found, otherwise None.
+            Optional[Event]: The event object if found, otherwise None.
 
         Raises:
             RuntimeError: For unrecoverable or unexpected internal errors.
         """
         pass
 
-    def create_event(self, event_create: EventCreate) -> Events:
+    async def get_user_events(
+        self,
+        user_id: int,
+        sort: str = "latest",
+        skip: int = 0,
+        limit: int = 100,
+    ) -> List[Event]:
+        """
+        Retrieve events associated with a specific user.
+        Handles expected errors such as missing user IDs or transient database issues internally,
+        possibly with retries or logging. Returns an empty list if no events are found or if recoverable
+        errors occur. Raises exceptions only for unrecoverable issues (e.g., configuration errors).
+        Args:
+            user_id (int): The ID of the user whose events to retrieve.
+            sort (str): The sorting criteria for the events.
+            skip (int): Number of events to skip for pagination.
+            limit (int): Maximum number of events to return.
+        Returns:
+            List[Event]: List of events associated with the user.
+        Raises:
+            RuntimeError: For unrecoverable or unexpected internal errors.
+        """
+        pass
+
+    async def create_event(self, event_create: EventCreate) -> Event:
         """
         Create a new event.
 
@@ -77,7 +103,7 @@ class ProtocolEventService(Protocol):
         """
         pass
 
-    def update_event(self, event_id: int, event_update: EventCreate) -> Optional[Events]:
+    async def update_event(self, event_id: int, event_update: EventCreate) -> Optional[Event]:
         """
         Update an existing event.
 
@@ -90,14 +116,14 @@ class ProtocolEventService(Protocol):
             event_update (EventCreate): The updated event data.
 
         Returns:
-            Optional[Events]: The updated event object if successful, otherwise None.
+            Optional[Event]: The updated event object if successful, otherwise None.
 
         Raises:
             RuntimeError: For unrecoverable or unexpected internal errors.
         """
         pass
 
-    def delete_event(self, event_id: int) -> bool:
+    async def delete_event(self, event_id: int) -> bool:
         """
         Delete an event by ID.
 

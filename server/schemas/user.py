@@ -10,6 +10,7 @@ class UserInfo(BaseModel):
     id: int
     username: str
     pfp_url: Optional[str]
+    is_verified: bool
 
     model_config = {
         "from_attributes": True

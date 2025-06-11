@@ -10,7 +10,7 @@ struct PFPComponent: View {
     /// The URL of the profile image.
     let imageUrl: URL?
     /// Diameter of the profile circle.
-    var size: CGFloat = 80
+    var size: CGFloat = 40
     /// Toggle to show the plus icon overlay.
     var showPlusIcon: Bool = true
     /// Placeholder image shown while loading or on failure.
@@ -24,6 +24,8 @@ struct PFPComponent: View {
     /// Background color behind the plus icon.
     var plusBackgroundColor: Color = .white
     /// Size factor for the plus icon relative to the main circle.
+    
+    
     private var plusSizeFactor: CGFloat { 0.4 }
 
     var body: some View {
@@ -31,26 +33,25 @@ struct PFPComponent: View {
             // Load the image asynchronously
             AsyncImage(url: imageUrl) { phase in
                 switch phase {
-                case .empty:
-                    placeholder
-                        .resizable()
-                        .scaledToFill()
-                        .overlay(
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle())
-                        )
-                case .success(let image):
-                    image
-                        .resizable()
-                        .scaledToFill()
-                case .failure:
-                    placeholder
-                        .resizable()
-                        .scaledToFill()
-                @unknown default:
-                    placeholder
-                        .resizable()
-                        .scaledToFill()
+                    case .empty:
+                        placeholder
+                            .resizable()
+                            .scaledToFill()
+                            .foregroundColor(.gray)
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    case .failure:
+                        placeholder
+                            .resizable()
+                            .scaledToFill()
+                            .foregroundColor(.gray)
+                    @unknown default:
+                        placeholder
+                            .resizable()
+                            .scaledToFill()
+                            .foregroundColor(.gray)
                 }
             }
             .frame(width: size, height: size)
@@ -71,6 +72,12 @@ struct PFPComponent: View {
                     .offset(x: size * 0.05, y: size * 0.05)
             }
         }
+    }
+    
+    func showPlusIcon(_ showPlusIcon: Bool) -> PFPComponent {
+        var copy = self
+        copy.showPlusIcon = showPlusIcon
+        return copy
     }
 }
 

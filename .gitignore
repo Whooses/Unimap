@@ -8,3 +8,9 @@ server/.env
 *.xcbkptlist
 .vscode/
 .DS_Store
+.env
+venv/
+__pycache__/
+*.pyc
+.idea/
+.db

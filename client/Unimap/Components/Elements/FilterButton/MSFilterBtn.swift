@@ -1,60 +1,63 @@
 import SwiftUI
 
-// MARK: – Button that opens the sheet
-struct MSFilterBtn: View {
-    @State var label: String
-    @State var options: [String]
-    @ObservedObject var builder: EventRequestBuilder
-
-    @State private var selectedOptions: [String] = []
+// MARK: Main button - State holder
+struct MSFilterBtn<Item: NamedIdentifiable>: View {
+    let label: String
+    let options: [Item]
+    let selectedOptions: [Item]
+    let onSelection: (([Item]) -> Void)?
+    
     @State private var showSheet = false
-
+    
     var body: some View {
         VStack {
-            Button { showSheet = true } label: {
-                buttonLabel(selected: label, icon: "chevron.down")
+            Button(action: {showSheet = true}) {
+                buttonLabel(
+                    selected: label,
+                    icon: "chevron.down"
+                )
             }
         }
         .sheet(isPresented: $showSheet) {
             MSFilterBtnSheet(
-                options: $options,
-                selectedOptions: $selectedOptions,
-                builder: builder
+                label: label,
+                options: options,
+                selectedOptions: selectedOptions,
+                onSelection: onSelection
             )
         }
     }
 }
 
-// MARK: – Sheet
-struct MSFilterBtnSheet: View {
-    @Binding var options: [String]
-    @Binding var selectedOptions: [String]
-    @ObservedObject var builder: EventRequestBuilder
-
-    // Work-in-progress copy; starts equal to selectedOptions
-    @State private var tempSelected: [String] = []
-
+// MARK: Button sheet - State modifier
+private struct MSFilterBtnSheet<Item: NamedIdentifiable>: View {
+    let label: String
+    let options: [Item]
+    let selectedOptions: [Item]
+    let onSelection: (([Item]) -> Void)?
+    
+    @State private var tempSelected: [Item] = []
+    @Environment(\.dismiss) private var dismiss
+    
     private let rowHeight: CGFloat = 55
     private let headerHeight: CGFloat = 60
-
-    @Environment(\.dismiss) private var dismiss
-
+    
     var body: some View {
-        VStack(spacing: 0) {
+        VStack {
             // Header
-            Text("Select Clubs")
+            Text("Select \(label)")
                 .font(.headline)
                 .frame(maxWidth: .infinity)
                 .frame(height: headerHeight)
                 .padding(.horizontal)
                 .padding(.top, 8)
-
+            
             Divider()
-
-            // List
+            
+            // Displaying each option
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    ForEach(options, id: \.self) { option in
+                    ForEach(options) { option in
                         Button {
                             // Toggle inside the *local* copy
                             if tempSelected.contains(option) {
@@ -63,70 +66,103 @@ struct MSFilterBtnSheet: View {
                                 tempSelected.append(option)
                             }
                         } label: {
-                            HStack {
-                                Image(systemName: tempSelected.contains(option)
-                                      ? "checkmark.circle.fill"
-                                      : "circle")
-                                    .font(.title2)
-                                Text(option)
-                                Spacer()
-                            }
-                            .frame(height: rowHeight)
-                            .padding(.horizontal)
+                            OptionRow(
+                                optionName: option.name,
+                                isSelected: tempSelected.contains(option),
+                                rowHeight: rowHeight
+                            )
                         }
                         .buttonStyle(.plain)
                     }
                 }
-                .padding(.top)
             }
-
-            // ACTIONS
-            Button("Apply") {
-                selectedOptions = tempSelected
-
-                let clubs = selectedOptions.compactMap {
-                    EventRequestBuilder.Club(caseInsensitive: $0)
-                }
-                _ = builder.setClubs(clubs)
-
-                dismiss()
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 50)
-            .background(Color.black)
-            .foregroundColor(.white)
-            .cornerRadius(15)
-            .padding(.horizontal)
-            .padding(.bottom)
-
-//            Button("Cancel") { dismiss() }
-//                .frame(maxWidth: .infinity)
-//                .frame(height: 50)
-//                .background(Color.white)
-//                .foregroundColor(.black)
-//                .cornerRadius(15)
-//                .padding(.horizontal)
+            
+            ApplyButton(tempSelected: tempSelected, onSelection: onSelection)
+                .padding(.bottom)
         }
+        .presentationDetents([.height(400), .large])
         .onAppear {
             tempSelected = selectedOptions
         }
-        .presentationDetents([.height(400), .large])
     }
 }
 
-//// MARK: – Preview harness
-//struct MSFilterBtnView: View {
-//    @StateObject var builder = EventRequestBuilder()
-//
-//    var body: some View {
-//        MSFilterBtn(
-//            label: "Clubs",
-//            options: ["Option A", "Option B", "Option C",
-//                      "Option D", "Option E", "Option F",
-//                      "Option G", "Option H", "Option I"],
-//            builder: builder
-//        )
-//    }
+// MARK: Singular sheet option
+private struct OptionRow: View {
+    let optionName: String
+    let isSelected: Bool
+    let rowHeight: CGFloat
+    
+    var body: some View {
+        HStack {
+            Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                .font(.title2)
+            Text(optionName)
+            Spacer()
+        }
+        .frame(height: rowHeight)
+        .padding(.horizontal)
+    }
+}
+
+// MARK: Sheet apply button
+private struct ApplyButton<Item>: View {
+    let tempSelected: [Item]
+    let onSelection: (([Item]) -> Void)?
+    
+    @Environment(\.dismiss) private var dismiss
+    
+    var body: some View {
+        Button("Apply") {
+            if let onSelection = onSelection {
+                onSelection(tempSelected)
+            }
+            dismiss()
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 50)
+        .background(Color.black)
+        .foregroundColor(.white)
+        .cornerRadius(15)
+        .padding(.horizontal)
+    }
+}
+
+
+
+
+
+
+
+//// MARK: - Sample Data Model
+//struct SampleSchool: NamedIdentifiable {
+//    let id: UUID = UUID()
+//    let name: String
 //}
 //
-//#Preview { MSFilterBtnView() }
+//// MARK: - Preview
+//struct MSFilterBtn_Previews: PreviewProvider {
+//    struct PreviewWrapper: View {
+//        @State private var selectedSchools: [SampleSchool] = []
+//        
+//        private let sampleSchools = [
+//            SampleSchool(name: "Harvard"),
+//            SampleSchool(name: "MIT"),
+//            SampleSchool(name: "Stanford")
+//        ]
+//        
+//        var body: some View {
+//            MSFilterBtn(
+//                label: "School",
+//                options: sampleSchools,
+//                selectedOptions: selectedSchools
+//            ) { newSelections in
+//                selectedSchools = newSelections
+//            }
+//        }
+//    }
+//    
+//    static var previews: some View {
+//        PreviewWrapper()
+//    }
+//}

@@ -1,83 +1,73 @@
 import SwiftUI
 
-struct SSFilterBtn: View {
-    @State var label: String
-    @State var options: [String]
-    @ObservedObject var builder: EventRequestBuilder
-
-    @State private var selectedOption: String?
-    @State private var showSheet = false
-
+// MARK: Main button - State holder
+struct SSFilterBtn<E: StringIdentifiableEnum>: View {
+    let options: [E]
+    let selectedOption: E
+    let sheetTitle: String
+    let onSelection: ((E) -> Void)?
+    
+    @State private var showSheet: Bool = false
+    
     var body: some View {
         VStack {
             Button(action: {showSheet = true}) {
                 buttonLabel(
-                    selected: selectedOption ?? label,
+                    selected: selectedOption.displayName,
                     icon: "chevron.down"
                 )
             }
         }
         .sheet(isPresented: $showSheet) {
             SSFilterBtnSheet(
-                label: $label,
-                selectedOption: Binding<String>(
-                    get: { selectedOption ?? label },
-                    set: { newValue in
-                        selectedOption = newValue
-                        if let sortEnum = EventRequestBuilder
-                            .Sort(rawValue: newValue.lowercased()) {
-                            _ = builder.setSort(sortEnum)
-                        }
-                    }
-                ),
-                options: $options
+                options: options,
+                selectedOption: selectedOption,
+                sheetTitle: sheetTitle,
+                onSelection: onSelection
             )
         }
     }
 }
 
-struct SSFilterBtnSheet: View {
-    @Binding var label: String
-    @Binding var selectedOption: String
-    @Binding var options: [String]
-
+// MARK: Button sheet - State modifier
+private struct SSFilterBtnSheet<E: StringIdentifiableEnum>: View {
+    let options: [E]
+    let selectedOption: E
+    let sheetTitle: String
+    let onSelection: ((E) -> Void)?
+    
     private let rowHeight: CGFloat = 55
     private let headerHeight: CGFloat = 60
-
+    
     @Environment(\.dismiss) private var dismiss
-
+    
     var body: some View {
-        VStack(spacing: 0) {
+        VStack {
             // Header
-            Text("Select \(label)")
+            Text("\(sheetTitle)")
                 .font(.headline)
                 .frame(maxWidth: .infinity)
                 .frame(height: headerHeight)
                 .padding(.horizontal)
                 .padding(.top, 8)
-
+            
             Divider()
-
+            
+            // Displaying each option
             ScrollView {
                 LazyVStack(spacing: 0, pinnedViews: []) {
-                    ForEach(Array(options.enumerated()), id: \.element) { index, option in
+                    ForEach(options) { option in
                         Button {
-                            selectedOption = option
+                            if let onSelection = onSelection {
+                                onSelection(option)
+                            }
                             dismiss()
                         } label: {
-                            HStack {
-                                Image(systemName: selectedOption == option
-                                    ? "largecircle.fill.circle"
-                                    : "circle"
-                                )
-                                .font(.title2)
-                                Text(option)
-                                Spacer()
-                            }
-                            .frame(height: rowHeight)
-                            .padding(.horizontal)
-                            .padding(.top, index == 0 ? 16 : 0)
-                            .padding(.bottom, index == options.count - 1 ? 16 : 0)
+                            OptionRow(
+                                optionName: option.displayName,
+                                isSelected: selectedOption == option,
+                                rowHeight: rowHeight
+                            )
                         }
                         .buttonStyle(.plain)
                     }
@@ -88,18 +78,49 @@ struct SSFilterBtnSheet: View {
     }
 }
 
-//struct SSFilterBtnView: View {
-//    @StateObject var builder  = EventRequestBuilder()
-//    var body: some View {
-//        SSFilterBtn(
-//            label: "Sort",
-//            options: ["Option A", "Option B", "Option C"],
-//            builder: builder
-//        )
+// MARK: Singular sheet's option
+private struct OptionRow: View {
+    let optionName: String
+    let isSelected: Bool
+    let rowHeight: CGFloat
+    
+    var body: some View {
+        HStack {
+            Image(systemName: isSelected ? "largecircle.fill.circle" : "circle")
+                .font(.title2)
+            Text(optionName)
+            Spacer()
+        }
+        .frame(height: rowHeight)
+        .padding(.horizontal)
+    }
+}
+
+
+
+
+
+
+
+
+//// MARK: - Preview
+//struct SSFilterBtn_Previews: PreviewProvider {
+//    struct PreviewWrapper: View {
+//        @State private var selectedOption = Sort.latest
+//        
+//        var body: some View {
+//            SSFilterBtn(
+//                options: Sort.allCases,
+//                selectedOption: selectedOption,
+//                sheetTitle: "Select sort"
+//            ) { newSelect in
+//                selectedOption = newSelect
+//            }
+//        }
 //    }
-//}
-//
-//
-//#Preview {
-//    SSFilterBtnView()
+//    
+//    static var previews: some View {
+//        PreviewWrapper()
+//            .preferredColorScheme(.light)
+//    }
 //}
