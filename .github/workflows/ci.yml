@@ -6,7 +6,8 @@ on:
 jobs:
   test-server:
     runs-on: ubuntu-latest
-    environment: dev
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
     steps:
     - name: Checkout code
@@ -16,4 +17,5 @@ jobs:
       run: docker build -t fastapi-app ./server
 
     - name: Run tests inside Docker
-      run: docker run --env-file server/.secret --network=host fastapi-app pytest
+      run: docker run -e DATABASE_URL=$DATABASE_URL --network=host fastapi-app pytest
+
