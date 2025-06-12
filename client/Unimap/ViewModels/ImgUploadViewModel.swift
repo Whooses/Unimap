@@ -13,7 +13,7 @@ class ImgUploadViewModel: ObservableObject {
     @Published var pickerItem: PhotosPickerItem? //changes once user has selected something from their gallery
     @Published var selectedImage: Image? //holds selected image
     
-    //Function loads image
+    //Function loads image w/do and catch
     func loadImg() {
         Task {
             do {

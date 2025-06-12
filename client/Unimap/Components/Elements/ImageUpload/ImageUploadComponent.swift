@@ -13,7 +13,7 @@ struct ImageUploadComponent: View {
         VStack {
             ImageSelector(selectedImage:
                             imgViewModel.selectedImage) //image selector view
-            //Photos picker item selector
+            //Photos picker item selector button
             PhotosPicker(selection: $imgViewModel.pickerItem, matching: .images) {
                 Text("Upload Image")
                     .font(.system(size: 17, weight: .semibold))
