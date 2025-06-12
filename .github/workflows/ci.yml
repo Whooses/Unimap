@@ -1,7 +1,10 @@
 name: Server CI
 
 on:
-  local-test:
+  pull_request:
+    branches:
+      - main
+      - developing
 
 jobs:
   test-server:
