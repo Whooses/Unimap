@@ -1,8 +1,7 @@
-name: Server CI (Local Only)
+name: Server CI
 
 on:
-  workflow_call:
-  local-test::
+  local-test:
 
 jobs:
   test-server:
@@ -19,4 +18,5 @@ jobs:
 
     - name: Run tests inside Docker
       run: docker run -e DATABASE_URL=$DATABASE_URL --network=host fastapi-app pytest
+
 
