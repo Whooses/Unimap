@@ -21,6 +21,6 @@ jobs:
       env:
         DATABASE_URL: ${{ secrets.DATABASE_URL }}
       run: |
-        docker run -e DATABASE_URL=$DATABASE_URL --network=host fastapi-app pytest
+        docker run --env DATABASE_URL --network=host fastapi-app pytest
 
 
