@@ -9,7 +9,6 @@ on:
 jobs:
   test-server:
     runs-on: ubuntu-latest
-    environment: dev
 
     steps:
     - name: Checkout code
