@@ -17,17 +17,10 @@ jobs:
     - name: Build server Docker image
       run: docker build -t fastapi-app ./server
 
-    - name: Debug DATABASE_URL presence
-      run: |
-        if [ -z "${{ secrets.DATABASE_URL }}" ]; then
-          echo "DATABASE_URL is EMPTY"
-          exit 1
-        else
-          echo "DATABASE_URL is set"
-        fi
-
-
     - name: Run tests inside Docker
-      run: docker run -e DATABASE_URL=${{ secrets.DATABASE_URL }} --network=host fastapi-app pytest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    run: |
+      docker run -e DATABASE_URL=$DATABASE_URL --network=host fastapi-app pytest
 
 
