@@ -19,7 +19,7 @@ jobs:
 
     - name: Run tests inside Docker
       run: |
-        docker run --rm \
+        docker run \
           -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
           fastapi-app pytest
 
