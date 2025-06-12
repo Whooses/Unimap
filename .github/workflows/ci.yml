@@ -1,7 +1,8 @@
-name: Server CI
+name: Server CI (Local Only)
 
 on:
-  push:
+  workflow_call:
+  local-test::
 
 jobs:
   test-server:
