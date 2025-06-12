@@ -18,9 +18,9 @@ jobs:
       run: docker build -t fastapi-app ./server
 
     - name: Run tests inside Docker
-    env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-    run: |
-      docker run -e DATABASE_URL=$DATABASE_URL --network=host fastapi-app pytest
+      env:
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      run: |
+        docker run -e DATABASE_URL=$DATABASE_URL --network=host fastapi-app pytest
 
 
