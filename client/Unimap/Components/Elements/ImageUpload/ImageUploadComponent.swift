@@ -8,51 +8,13 @@ import SwiftUI
 import PhotosUI
 
 struct ImageUploadComponent: View {
-    @State private var pickerItem: PhotosPickerItem? //changes once user has selected something from their gallery
-    @State private var selectedImage: Image?
-    
+    @StateObject private var imgViewModel = ImgUploadViewModel()
     var body: some View {
         VStack {
-            //image overlay 
-            ZStack {
-                if let image = selectedImage {
-                    image
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 315, height: 300)
-                        .clipped()
-                        .clipShape(RoundedRectangle(cornerRadius: 16))
-                } else {
-                    RoundedRectangle(cornerRadius: 16)
-                            .fill(.white)
-                            .frame(width: 315, height: 300)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 16)
-                                    .stroke(style: StrokeStyle(lineWidth: 2, dash: [6]))
-                                    .foregroundColor(.gray)
-                            )
-                    VStack(alignment: .center) {
-                        Text("Select Image")
-                            .font(.headline)
-                            .padding(.bottom, 1)
-                        Image(systemName:"square.and.arrow.down.fill")
-                            .font(.system(size: 22, weight: .medium))
-                    } .foregroundColor(.gray)
-                    
-                }
-            }
-            .background(
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(LinearGradient(
-                        gradient: Gradient(colors: [.gray, .gray]),
-                        startPoint: .top,
-                        endPoint: .bottom)
-                    )
-            )
-            
-            .padding(.bottom, 6)
-
-            PhotosPicker(selection: $pickerItem, matching: .images) {
+            ImageSelector(selectedImage:
+                            imgViewModel.selectedImage) //image selector view
+            //Photos picker item
+            PhotosPicker(selection: $imgViewModel.pickerItem, matching: .images) {
                 Text("Upload Image")
                     .font(.system(size: 17, weight: .semibold))
                     .foregroundColor(.white)
@@ -64,12 +26,45 @@ struct ImageUploadComponent: View {
             }
             
         }
-        .onChange(of: pickerItem) {
-            Task {
-                selectedImage = try await pickerItem?.loadTransferable(type: Image.self)
-            }
+        .onChange(of: imgViewModel.pickerItem) {
+            imgViewModel.loadImg() //call VM function to load image
         }
         
+    }
+}
+
+struct ImageSelector: View {
+    var selectedImage: Image?
+    
+    var body: some View {
+        ZStack {
+            if let image = selectedImage {
+                image
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 315, height: 300)
+                    .clipped()
+            } else {
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(.white)
+                    .frame(width: 315, height: 300)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(style: StrokeStyle(lineWidth: 2, dash: [6]))
+                            .foregroundColor(.gray)
+                    )
+                VStack(alignment: .center) {
+                    Text("Select Image")
+                        .font(.headline)
+                        .padding(.bottom, 1)
+                    Image(systemName:"square.and.arrow.down.fill")
+                        .font(.system(size: 22, weight: .medium))
+                } .foregroundColor(.gray)
+                
+            }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .padding(.bottom, 6)
     }
 }
 
