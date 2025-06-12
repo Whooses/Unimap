@@ -1,14 +1,41 @@
+# name: Server CI
+
+# on:
+#   pull_request:
+#     branches:
+#       - main
+#       - developing
+
+# jobs:
+#   test-server:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v3
+
+#     - name: Build server Docker image
+#       run: docker build -t fastapi-app ./server
+
+#     - name: Run tests inside Docker
+#       env:
+#         DATABASE_URL: ${{ secrets.DATABASE_URL }}
+#       run: |
+#         docker run --env DATABASE_URL --network=host fastapi-app pytest
+
+
 name: Server CI
 
 on:
   pull_request:
     branches:
-      - main
       - developing
+      - main
 
 jobs:
   test-server:
     runs-on: ubuntu-latest
+    environment: dev
 
     steps:
     - name: Checkout code
@@ -18,9 +45,16 @@ jobs:
       run: docker build -t fastapi-app ./server
 
     - name: Run tests inside Docker
-      env:
-        DATABASE_URL: ${{ secrets.DATABASE_URL }}
       run: |
-        docker run --env DATABASE_URL --network=host fastapi-app pytest
+        docker run --rm \
+          --add-host=host.docker.internal:host-gateway \
+          -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
+          fastapi-app pytest
+
+
+
+
+
+
 
 
