@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build Docker image
-        run: docker build -t unimap/dev .
+        run: docker build -t unimap/dev ./server
 
       - name: Save Docker image as artifact
         run: docker save unimap/dev | gzip > image.tar.gz
