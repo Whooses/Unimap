@@ -3,16 +3,18 @@ name: Dev CICD Pipeline
 on:
   push:
     branches:
+      - main
       - developing
   pull_request:
     branches:
+      - main
       - developing
 
 jobs:
   build-and-test:
     name: 🔧 Build and Test
     runs-on: ubuntu-latest
-    environment: dev
+    environment: ${{ github.ref_name == 'main' && 'Prod' || github.ref_name == 'developing' && 'Dev' || 'preview' }}
 
     steps:
       - name: Checkout code
