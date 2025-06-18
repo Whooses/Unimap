@@ -4,11 +4,12 @@ on:
   pull_request:
     branches:
       - developing
-  workflow_dispatch:
+  workflow_call:
       inputs:
         version:
-          description: 'Enter Docker image version'
+          description: "Tag version for the Docker image"
           required: true
+          type: string
 
 jobs:
   build-and-test:
