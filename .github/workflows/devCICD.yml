@@ -32,7 +32,7 @@ jobs:
           path: image.tar.gz
 
 
-  test-server:
+  test:
     runs-on: ubuntu-latest
     environment: dev
 
