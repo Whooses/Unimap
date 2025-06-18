@@ -4,11 +4,11 @@ on:
   pull_request:
     branches:
       - developing
-  workflow_dispatch:
-      inputs:
-        version:
-          description: 'Enter Docker image version'
-          required: true
+#   workflow_dispatch:
+#       inputs:
+#         version:
+#           description: 'Enter Docker image version'
+#           required: true
 
 jobs:
   build-and-test:
@@ -25,9 +25,18 @@ jobs:
       - name: Run tests inside Docker
         run: |
             docker run --rm \
-            --add-host=host.docker.internal:host-gateway \
             -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
             unimap/dev pytest
+
+      - name: Save Docker image as artifact
+        run: docker save unimap/dev | gzip > image.tar.gz
+
+      - name: Upload image artifact to share across jobs
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: image.tar.gz
+
 
   deploy:
     name: 🚀 Deploy to ECR & EC2
