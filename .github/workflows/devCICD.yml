@@ -4,7 +4,7 @@ on:
   pull_request:
     branches:
       - developing
-  workflow_call:
+  workflow_dispatch:
       inputs:
         version:
           description: "Tag version for the Docker image"
