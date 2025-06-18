@@ -50,7 +50,7 @@ jobs:
         run: |
             docker run --rm \
             -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
-            unimap-dev pytest
+            unimap/dev pytest
 
 
   deploy:
@@ -94,8 +94,8 @@ jobs:
             --parameters 'commands=[
               "aws ecr get-login-password --region '${{ secrets.AWS_REGION }}' | docker login --username AWS --password-stdin '${{ secrets.ECR_URI }}'",
               "docker pull '${{ secrets.ECR_URI }}:${{ secrets.IMAGE_TAG }}'",
-              "docker stop unimap-dev || true",
-              "docker rm unimap-dev || true",
-              "docker run --rm -d --name unimap-dev -e DATABASE_URL='${{ secrets.DATABASE_URL }}' -p 8000:8000 '${{ env.ECR_URI }}:${{ env.IMAGE_TAG }}'"
+              "docker stop unimap/dev || true",
+              "docker rm unimap/dev || true",
+              "docker run --rm -d --name unimap/dev -e DATABASE_URL='${{ secrets.DATABASE_URL }}' -p 8000:8000 '${{ env.ECR_URI }}:${{ env.IMAGE_TAG }}'"
             ]' \
             --region $AWS_REGION
