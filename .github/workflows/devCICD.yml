@@ -3,12 +3,13 @@ name: Server CI
 on:
   pull_request:
     branches:
-      - main
       - developing
+      - main
 
 jobs:
-  build:
+  test-server:
     runs-on: ubuntu-latest
+    environment: dev
 
     steps:
     - name: Checkout code
@@ -20,13 +21,6 @@ jobs:
     - name: Run tests inside Docker
       run: |
         docker run --rm \
+          --add-host=host.docker.internal:host-gateway \
           -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
           fastapi-app pytest
-
-
-
-
-
-
-
-
