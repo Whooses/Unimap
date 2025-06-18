@@ -1,6 +1,9 @@
 name: Dev CICD Pipeline
 
 on:
+  push:
+    branches:
+      - developing
   pull_request:
     branches:
       - developing
