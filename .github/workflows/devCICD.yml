@@ -1,26 +1,102 @@
-name: Server CI
+name: Dev CICD Pipeline
 
 on:
   pull_request:
     branches:
       - developing
-      - main
+  workflow_dispatch:
+      inputs:
+        version:
+          description: 'Enter Docker image version'
+          required: true
 
 jobs:
-  test-server:
+  build:
+    name: 🔧 Build Docker Image
     runs-on: ubuntu-latest
-    environment: dev
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Build server Docker image
-      run: docker build -t fastapi-app ./server
+      - name: Build Docker image
+        run: docker build -t unimap/dev ./server
 
-    - name: Run tests inside Docker
-      run: |
-        docker run --rm \
-          --add-host=host.docker.internal:host-gateway \
-          -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
-          fastapi-app pytest
+      - name: Save Docker image as artifact
+        run: docker save unimap/dev | gzip > image.tar.gz
+
+      - name: Upload image artifact to share across jobs
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: image.tar.gz
+
+
+  test:
+    name: ✅ Test Image
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Download image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+
+      - name: Load Docker image
+        run: gunzip -c image.tar.gz | docker load
+
+      - name: Run tests inside Docker
+        run: |
+            docker run --rm \
+            --add-host=host.docker.internal:host-gateway \
+            -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
+            unimap/dev pytest
+
+
+  deploy:
+    name: 🚀 Deploy to ECR & EC2
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Download image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+
+      - name: Load Docker image
+        run: |
+          gunzip -c image.tar.gz | docker load
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Tag image for ECR
+        run: docker tag unimap/dev:latest ${{ secrets.ECR_REPO }}:${{ inputs.version }}
+
+      - name: Push image to ECR
+        run: docker push ${{ secrets.ECR_REPO }}:${{ inputs.version }}
+
+      - name: Deploy to EC2 via SSM
+        run: |
+          aws ssm send-command \
+            --document-name "AWS-RunShellScript" \
+            --comment "Deploy Docker container from GitHub Actions" \
+            --targets "Key=InstanceIds,Values=${{ secrets.EC2_INSTANCE_ID }}" \
+            --parameters 'commands=[
+              "aws ecr get-login-password --region '${{ secrets.AWS_REGION }}' | docker login --username AWS --password-stdin '${{ secrets.ECR_URI }}'",
+              "docker pull '${{ secrets.ECR_URI }}:${{ secrets.IMAGE_TAG }}'",
+              "docker stop unimap/dev || true",
+              "docker rm unimap/dev || true",
+              "docker run --rm -d --name unimap/dev -e DATABASE_URL='${{ secrets.DATABASE_URL }}' -p 8000:8000 '${{ env.ECR_URI }}:${{ env.IMAGE_TAG }}'"
+            ]' \
+            --region $AWS_REGION
