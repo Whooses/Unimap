@@ -47,10 +47,13 @@ jobs:
         run: gunzip -c image.tar.gz | docker load
 
       - name: Run tests inside Docker
+        env:                       # Make the secret available only to this step
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
           docker run --rm \
-            -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
+            -e DATABASE_URL="$DATABASE_URL" \
             unimap/dev pytest
+
 
 
   deploy:
