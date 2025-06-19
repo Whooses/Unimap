@@ -16,8 +16,11 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: ${{
-        (github.base_ref == 'main' || github.ref_name == 'main') && 'Prod' ||
-        (github.base_ref == 'developing' || github.ref_name == 'developing') && 'Dev'}}
+        github.base_ref == 'main' && 'Prod' ||
+        github.ref_name == 'main' && 'Prod' ||
+        github.base_ref == 'developing' && 'Dev' ||
+        github.ref_name == 'developing' && 'Dev'}}
+
 
     steps:
 
