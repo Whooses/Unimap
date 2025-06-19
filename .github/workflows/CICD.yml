@@ -38,9 +38,7 @@ jobs:
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
       SUPABASE_DB_PASSWORD: ${{ secrets.DB_PASSWORD}}
       SUPABASE_PROJECT_ID: ${{ secrets.PROJECT_ID}}
-
     steps:
-
       - name: Print environment
         run: |
           echo "Running on environment: $ENVIRONMENT"
@@ -60,7 +58,7 @@ jobs:
         run: |
           if [ "$environment" = "Dev" ]; then
             supabase db push --dry-run
-          elif [ "$environment" = "prod" ]; then
+          elif [ "$environment" = "Prod" ]; then
             supabase db push --dry-run
           else
             echo "Error: Unknown environment '$environment'. Expected 'Dev' or 'Prod'."
@@ -71,7 +69,7 @@ jobs:
         run: |
           if [ "$environment" = "Dev" ]; then
             supabase db push
-          elif [ "$environment" = "prod" ]; then
+          elif [ "$environment" = "Prod" ]; then
             supabase db push
           else
             echo "Error: Unknown environment '$environment'. Expected 'Dev' or 'Prod'."
