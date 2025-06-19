@@ -12,9 +12,8 @@ class URLRequestBuilder {
     var timeout: TimeInterval = 30
     
     // URL Components
-    var scheme: String = "http"
-    var host: String = "127.0.0.1"
-    var port: Int = 8000
+    var scheme: String = "https"
+    var host: String = "dev.unimapapp.com"
     var path: String = "/"
     var queryItems: [URLQueryItem] = []
     
@@ -43,7 +42,6 @@ class URLRequestBuilder {
         var components: URLComponents = URLComponents()
         components.scheme = scheme
         components.host = host
-        components.port = port
         components.path = path
         components.queryItems = queryItems.isEmpty ? nil : queryItems
         
