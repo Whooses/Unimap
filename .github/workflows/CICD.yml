@@ -15,8 +15,8 @@ jobs:
     name: 🔧 Build and Test
     runs-on: ubuntu-latest
     environment:
-      name: ${{ github.base_ref == 'main' && 'production' ||
-              github.base_ref == 'develop' && 'staging'}}
+      name: ${{ github.base_ref == 'main' && 'Prod' ||
+              github.base_ref == 'developing' && 'Dev'}}
 
     steps:
       - name: Checkout code
