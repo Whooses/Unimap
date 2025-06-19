@@ -26,16 +26,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # - name: Set and echo environment name
-      #   run: |
-      #     if [[ "${GITHUB_BASE_REF}" == "main" || "${GITHUB_REF_NAME}" == "main" ]]; then
-      #       echo "Environment: Prod"
-      #     elif [[ "${GITHUB_BASE_REF}" == "developing" || "${GITHUB_REF_NAME}" == "developing" ]]; then
-      #       echo "Environment: Dev"
-      #     else
-      #       echo "Environment: Unknown"
-      #     fi
-
       - name: Build Docker image
         run: docker build -t unimap ./server
 
