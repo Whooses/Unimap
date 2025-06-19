@@ -23,12 +23,6 @@ jobs:
 
 
     steps:
-
-      - name: Debug branch info
-        run: |
-          echo "base_ref: ${{ github.base_ref }}"
-          echo "ref_name: ${{ github.ref_name }}"
-
       - name: Checkout code
         uses: actions/checkout@v4
 
