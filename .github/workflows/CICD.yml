@@ -14,12 +14,12 @@ jobs:
   build-and-test:
     name: Build and Test
     runs-on: ubuntu-latest
-    environment: Prod
-      # name: ${{
-      #   github.base_ref == 'main' && 'Prod' ||
-      #   github.ref_name == 'main' && 'Prod' ||
-      #   github.base_ref == 'developing' && 'Dev' ||
-      #   github.ref_name == 'developing' && 'Dev'}}
+    environment:
+      name: ${{
+        github.base_ref == 'main' && 'Prod' ||
+        github.ref_name == 'main' && 'Prod' ||
+        github.base_ref == 'developing' && 'Dev' ||
+        github.ref_name == 'developing' && 'Dev'}}
 
 
     steps:
@@ -59,7 +59,12 @@ jobs:
     name: Deploy to ECR & EC2
     runs-on: ubuntu-latest
     needs: build-and-test
-    environment: dev
+    environment:
+      name: ${{
+        github.base_ref == 'main' && 'Prod' ||
+        github.ref_name == 'main' && 'Prod' ||
+        github.base_ref == 'developing' && 'Dev' ||
+        github.ref_name == 'developing' && 'Dev'}}
 
 
     steps:
