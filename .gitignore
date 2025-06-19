@@ -7,3 +7,11 @@ server/.env
 *.xcuserstate
 *.xcbkptlist
 .vscode/
+.DS_Store
+.env
+venv/
+__pycache__/
+*.pyc
+.idea/
+.db
+.secret

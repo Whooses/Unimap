@@ -1,22 +1,21 @@
 import logging
 from typing import List, Optional
-
+from datetime import datetime
 
 from fastapi import HTTPException, status
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from db.repository.event_repo import EventRepository
-from db.models.events import Events
+from db.models.events import Event
 from schemas.event import EventCreate
 
 log = logging.getLogger(__name__)
 
 class EventService:
-    def __init__(self, db: Session):
+    def __init__(self, db: AsyncSession):
         self.repo = EventRepository(db)
 
-    # ── tiny helpers ────────────────────────────────────────────────────
     @staticmethod
     def _err500(exc: Exception) -> HTTPException:
         return HTTPException(
@@ -38,22 +37,25 @@ class EventService:
             detail="Event not found.",
         )
 
-    # ── public API ──────────────────────────────────────────────────────
-    def get_events(
+    async def get_events(
         self,
         skip: int = 0,
         limit: int = 100,
-        owner_id: Optional[int] = None,
         search: Optional[str] = None,
-        start_date: Optional[str] = None,
-        end_date: Optional[str] = None,
-    ) -> List[Events]:
+        tab: Optional[str] = None,  # Added tab param
+        sort: Optional[str] = None,
+        clubs: Optional[List[str]] = None,
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
+    ) -> List[Event]:
         try:
-            events = self.repo.get_events(
+            events = await self.repo.get_events(
                 skip=skip,
                 limit=limit,
-                owner_id=owner_id,
                 search=search,
+                tab=tab,
+                sort=sort,
+                clubs=clubs,
                 start_date=start_date,
                 end_date=end_date,
             )
@@ -62,9 +64,9 @@ class EventService:
             log.exception("DB failure in get_events")
             raise self._err500(exc) from exc
 
-    def get_event(self, event_id: int) -> Events:
+    async def get_event(self, event_id: int) -> Event:
         try:
-            event = self.repo.get_event(event_id)
+            event = await self.repo.get_event(event_id)
             if event is None:
                 raise self._err404()
             return event
@@ -72,20 +74,35 @@ class EventService:
             log.exception("DB failure in get_event")
             raise self._err500(exc) from exc
 
-    def create_event(self, data: EventCreate) -> Events:
+    async def get_user_events(
+        self,
+        user_id: int,
+        sort: str = "latest",
+        skip: int = 0,
+        limit: int = 100,
+    ) -> List[Event]:
         try:
-            event = self.repo.create_event(data.dict())
+            events = await self.repo.get_user_events(user_id, sort=sort, skip=skip, limit=limit)
+            return events
+        except SQLAlchemyError as exc:
+            log.exception("DB failure in get_user_events")
+            raise self._err500(exc) from exc
+
+    async def create_event(self, data: EventCreate) -> Event:
+        try:
+            event = await self.repo.create_event(data.dict())
             return event
-        except IntegrityError as exc:          # <-- specific first
+        except IntegrityError as exc:
             log.exception("Integrity failure in create_event")
             raise self._err409(exc) from exc
         except SQLAlchemyError as exc:
             log.exception("DB failure in create_event")
             raise self._err500(exc) from exc
 
-    def update_event(self, event_id: int, data: EventCreate) -> Events:
+
+    async def update_event(self, event_id: int, data: EventCreate) -> Event:
         try:
-            event = self.repo.update_event(event_id, data.dict())
+            event = await self.repo.update_event(event_id, data.dict())
             if event is None:
                 raise self._err404()
             return event
@@ -96,11 +113,11 @@ class EventService:
             log.exception("DB failure in update_event")
             raise self._err500(exc) from exc
 
-    def delete_event(self, event_id: int) -> None:
+    async def delete_event(self, event_id: int) -> None:
         try:
-            deleted = self.repo.delete_event(event_id)
+            deleted = await self.repo.delete_event(event_id)
             if not deleted:
-                raise self._err404() from exc
+                raise self._err404()
         except SQLAlchemyError as exc:
             log.exception("DB failure in delete_event")
             raise self._err500(exc) from exc
