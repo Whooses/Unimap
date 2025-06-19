@@ -12,6 +12,7 @@ server/.env
 venv/
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 .idea/
-.db
-.secret
+*.db

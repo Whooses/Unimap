@@ -1,8 +1,10 @@
 import SwiftUI
 
 struct SearchBarComponent: View {
-    @Binding var searchText: String
+    let onSubmit: ((String)->Void)?
+    
     @FocusState private var isTextFieldFocused: Bool
+    @State private var tempSearchText: String = ""
     
     var body: some View {
         VStack() {
@@ -14,11 +16,12 @@ struct SearchBarComponent: View {
                     .scaledToFit()
                     .frame(width: 50, height: 50)
                 
-                TextField("Search", text: $searchText)
+                TextField("Search", text: $tempSearchText)
                     .focused($isTextFieldFocused)
                     .foregroundColor(.black)
                     .font(.system(size: 18, weight: .regular))
                     .onSubmit {
+                        onSubmit?(tempSearchText)
                         isTextFieldFocused = false
                     }
 

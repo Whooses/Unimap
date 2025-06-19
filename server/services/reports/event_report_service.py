@@ -3,7 +3,7 @@ from fastapi import HTTPException, status
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
 from db.repository.event_report_repo import EventReportRepository
-from db.models.event_reports import Event_Reports
+from db.models.event_reports import EventReports
 from schemas.event_report import EventReportCreate
 
 log = logging.getLogger(__name__)
@@ -35,7 +35,7 @@ class EventReportService:
         )
 
     # ── public API ──────────────────────────────────────────────────────
-    def create_event_report(self, data: EventReportCreate, reporter_id: int) -> Event_Reports:
+    def create_event_report(self, data: EventReportCreate, reporter_id: int) -> EventReports:
         try:
             return self.repo.create_event_report(data, reporter_id)
         except IntegrityError as exc:

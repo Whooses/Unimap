@@ -17,7 +17,9 @@ struct ExploreFilterLayout: View {
                     selectedOption: explorePageVM.filter[explorePageVM.currTab]?.sort ?? .latest,
                     sheetTitle: "Select Sort"
                 ) { newSelect in
-                    explorePageVM.updateSort(newSelect)
+                    Task {
+                        await explorePageVM.updateSort(newSelect)
+                    }
                 }
                 
                 MSFilterBtn(
@@ -25,7 +27,9 @@ struct ExploreFilterLayout: View {
                     options: explorePageVM.schoolService.getSchoolClubs(schoolID: 1),
                     selectedOptions: explorePageVM.filter[explorePageVM.currTab]?.clubs ?? [],
                 ) { newSelect in
-                    explorePageVM.updateClubs(newSelect)
+                    Task {
+                        await explorePageVM.updateClubs(newSelect)
+                    }
                 }
                 
                 DRFilterBtn(
@@ -36,7 +40,9 @@ struct ExploreFilterLayout: View {
                         .filter[explorePageVM.currTab]?
                         .endDate ?? nil
                 ) { from, to in
-                    explorePageVM.updateDR(from, to)
+                    Task {
+                        await explorePageVM.updateDR(from, to)
+                    }
                 }
                 
                 Spacer()

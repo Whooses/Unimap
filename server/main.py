@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from db.session import engine, Base
-from api.routers import users, events, bug_reports, event_reports
+from routers import users, events, bug_reports, event_reports
 
 from config import CORS_ALLOWED_ORIGINS
 

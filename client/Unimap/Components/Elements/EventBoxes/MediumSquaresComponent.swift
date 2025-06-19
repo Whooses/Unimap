@@ -11,7 +11,10 @@ struct MediumSquareCard: View {
     var eventID: UUID = UUID()
     
 
+    @StateObject private var imageLoaderService = ImageLoaderService(url: nil)
+    @State private var cardColor = Color(.systemGray)
     @State private var showSheet: Bool = false
+    @State private var showProfilePage: Bool = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -27,7 +30,9 @@ struct MediumSquareCard: View {
                     eventImageURL: eventImageURL,
                     eventTitle: eventTitle,
                     eventDescription: eventDescription,
-                    eventDate: eventDate
+                    eventDate: eventDate,
+                    imageUI: imageLoaderService.image,
+                    cardColor: imageLoaderService.averageColor
                 )
             }
             .buttonStyle(PlainButtonStyle())
@@ -35,18 +40,31 @@ struct MediumSquareCard: View {
         .sheet(
             isPresented: $showSheet,
             content: {
-                EventDetailsSheet(
-                    eventID: eventID,
-                    pfp: userPFP.showPlusIcon(false),
-                    username: username,
-                    title: eventTitle,
-                    description: eventDescription,
-                    imageURL: eventImageURL,
-                    date: eventDate,
-                    location: eventLocation
-                )
+                NavigationStack {
+                    EventDetailsSheet(
+                        eventID: eventID,
+                        pfp: userPFP.showPlusIcon(false),
+                        username: username,
+                        title: eventTitle,
+                        description: eventDescription,
+                        imageUI: imageLoaderService.image,
+                        date: eventDate,
+                        location: eventLocation,
+                        showSheet: $showSheet,
+                        showProfilePage: $showProfilePage
+                    )
+                }
             }
         )
+        .onAppear {
+            imageLoaderService.url = eventImageURL
+            Task {
+                await imageLoaderService.load()
+                if let newColor = imageLoaderService.averageColor {
+                    cardColor = newColor
+                }
+            }
+        }
     }
 }
 
@@ -55,19 +73,18 @@ private struct BoxBody: View {
     let eventTitle: String
     let eventDescription: String?
     let eventDate: Date?
-    
-    @StateObject private var imageLoaderService = ImageLoaderService(url: nil)
-    @State private var cardColor = Color(.systemGray)
+    let imageUI: UIImage?
+    let cardColor: Color?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Image(uiImage: imageLoaderService.image ?? UIImage())
+            Image(uiImage: imageUI ?? UIImage())
                 .resizable()
                 .scaledToFill()
                 .frame(width: 200, height: 200)
                 .clipped()
 
-            Text(stringDate(Date: eventDate))
+            Text(stringDate(date: eventDate))
                 .font(.subheadline)
                 .bold()
                 .padding(.vertical, 8)
@@ -79,15 +96,6 @@ private struct BoxBody: View {
         .shadow(radius: 5)
         .frame(width: 200)
         .cornerRadius(12)
-        .onAppear {
-            imageLoaderService.url = eventImageURL
-            Task {
-                await imageLoaderService.load()
-                if let newColor = imageLoaderService.averageColor {
-                    cardColor = newColor
-                }
-            }
-        }
     }
 }
 

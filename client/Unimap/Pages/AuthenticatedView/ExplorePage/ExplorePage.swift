@@ -8,7 +8,12 @@ struct ExplorePage: View {
     var body: some View {
         NavigationStack {
             VStack {
-                SearchBarComponent(searchText: $explorePageVM.search)
+                SearchBarComponent() { newSearch in
+                    Task {
+                        await explorePageVM.updateSearch(newSearch)
+                    }
+                    
+                }
                     .focused($isSearching)
                 
                 ZStack {
@@ -20,9 +25,12 @@ struct ExplorePage: View {
                     } else {
                         VStack {
                             SelectedTabView(selectedTab: explorePageVM.currTab) { newTab in
-                                explorePageVM.currTab = newTab
+                                Task {
+                                    await explorePageVM.updateTab(newTab)
+                                }
                             }
-                            .padding(.top)
+                            .padding(.top, 20)
+                            .padding(.bottom, 10)
                             
                             TabView(selection: $explorePageVM.currTab) {
                                 AllEventSView()
@@ -35,13 +43,15 @@ struct ExplorePage: View {
                                     .tag(ExploreTab.online)
                             }
                             .tabViewStyle(.page(indexDisplayMode: .never))
+                            
                         }
                     }
                 }
+                
+//                Spacer()
             }
         }
-        .frame(maxHeight: .infinity, alignment: .topLeading)
-        .background(.white)
+        .frame(maxHeight: .infinity)
         .onAppear {
             Task {
                 await explorePageVM.fetchEvents()
@@ -90,7 +100,8 @@ private struct SelectedTabView: View {
                                 .frame(width: 35, height: 4)
                                 .offset(y: 15)
                         }
-                    }                }
+                    }
+                }
                 
                 Button(action: {
                     onSelectTab?(ExploreTab.online)
@@ -119,20 +130,23 @@ private struct SelectedTabView: View {
 
 
 
-//private struct ExploreWrapper: View {
-//    @StateObject private var explorePageVM = ExplorePageVM(
-//        schoolService: SchoolService(),
-//        eventService: EventService()
-//    )
-//    
-//    var body: some View {
-//        ExplorePage()
-//            .environmentObject(explorePageVM)
-//    }
-//}
-//
-//
-//
-//#Preview {
-//    ExploreWrapper()
-//}
+
+
+
+
+
+private struct ContentView: View {
+    @StateObject private var explorePageVM = ExplorePageVM(
+        schoolService: SchoolService(),
+        eventService: EventService()
+    )
+    
+    var body: some View {
+        ExplorePage()
+            .environmentObject(explorePageVM)
+    }
+}
+
+#Preview {
+    ContentView()
+}
