@@ -23,16 +23,16 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build Docker image
-        run: docker build -t unimap/dev ./server
+        run: docker build -t unimap ./server
 
       - name: Run tests inside Docker
         run: |
           docker run --rm \
             -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
-            unimap/dev pytest
+            unimap pytest
 
       - name: Save Docker image as artifact
-        run: docker save unimap/dev | gzip > image.tar.gz
+        run: docker save unimap| gzip > image.tar.gz
 
       - name: Upload image artifact to share across jobs
         uses: actions/upload-artifact@v4
@@ -70,7 +70,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Tag image for ECR
-        run: docker tag unimap/dev:latest ${{ secrets.ECR_URI }}:latest
+        run: docker tag unimap:latest ${{ secrets.ECR_URI }}:latest
 
       - name: Push image to ECR
         run: docker push ${{ secrets.ECR_URI }}:latest
@@ -84,8 +84,8 @@ jobs:
             --parameters 'commands=[
               "aws ecr get-login-password --region '${{ secrets.AWS_REGION }}' | docker login --username AWS --password-stdin '${{ secrets.ECR_URI }}'",
               "docker pull '${{ secrets.ECR_URI }}:latest'",
-              "docker stop unimap_dev || true",
-              "docker rm unimap_dev || true",
-              "docker run --rm -d --name unimap_dev -e DATABASE_URL='${{ secrets.DATABASE_URL }}' -p 8000:8000 '${{ secrets.ECR_URI }}:latest'"
+              "docker stop unimap || true",
+              "docker rm unimap || true",
+              "docker run --rm -d --name unimap -e DATABASE_URL='${{ secrets.DATABASE_URL }}' -p 8000:8000 '${{ secrets.ECR_URI }}:latest'"
             ]' \
             --region $AWS_REGION
