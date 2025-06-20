@@ -41,7 +41,7 @@ jobs:
     steps:
       - name: Print environment
         run: |
-          echo "Running on environment: $ENVIRONMENT"
+          echo "Running on environment: '$ENVIRONMENT'"
 
       - name: Checkout Code
         uses: actions/checkout@v4
