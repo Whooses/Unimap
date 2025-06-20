@@ -125,9 +125,11 @@ jobs:
 
       - name: Run tests inside Docker
         run: |
-          docker run --rm \
-            -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
-            unimap pytest
+          if [ "$environment" = "Dev" ]; then
+            docker run --rm \
+              -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
+              unimap pytest
+          fi
 
 
   deploy:
