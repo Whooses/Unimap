@@ -126,9 +126,7 @@ jobs:
       - name: Run tests inside Docker
         run: |
           if [ "$environment" = "Dev" ]; then
-            docker run --rm \
-              -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
-              unimap pytest
+            docker run --rm -e DATABASE_URL=${{ secrets.DATABASE_URL }} unimap pytest
           fi
 
 
