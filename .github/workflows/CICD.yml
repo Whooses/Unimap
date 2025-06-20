@@ -123,6 +123,9 @@ jobs:
         run: |
           gunzip -c image.tar.gz | docker load
 
+      - name: List Docker images
+        run: docker images
+
       - name: Run tests inside Docker
         run: |
           if [ "$environment" = "Dev" ]; then
