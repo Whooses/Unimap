@@ -176,10 +176,10 @@ jobs:
             --comment "Deploy Docker container from GitHub Actions" \
             --targets "Key=InstanceIds,Values=${{ secrets.EC2_INSTANCE_ID }}" \
             --parameters 'commands=[
-              "aws ecr get-login-password --region '${{ secrets.AWS_REGION }}' | docker login --username AWS --password-stdin '${{ secrets.ECR_URI }}'",
-              "docker pull '${{ secrets.ECR_URI }}:latest'",
+              "aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_URI }}",
+              "docker pull ${{ secrets.ECR_URI }}:latest",
               "docker stop unimap || true",
               "docker rm unimap || true",
-              "docker run --rm -d --name unimap -e DATABASE_URL='${{ secrets.DATABASE_URL }}' -p 8000:8000 '${{ secrets.ECR_URI }}:latest'"
+              "docker run --rm -d --name unimap -e DATABASE_URL=${{ secrets.DATABASE_URL }} -p 8000:8000 ${{ secrets.ECR_URI }}:latest"
             ]' \
             --region $AWS_REGION
