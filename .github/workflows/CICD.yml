@@ -129,6 +129,7 @@ jobs:
             docker run --rm \
               -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
               unimap pytest
+          fi
 
 
   deploy:
