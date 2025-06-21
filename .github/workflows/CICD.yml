@@ -5,10 +5,20 @@ on:
     branches:
       - main
       - developing
+    paths:
+      - '.github/**'
+      - 'server/**'
+      - 'supabase/**'
+
   pull_request:
     branches:
       - main
       - developing
+    paths:
+      - '.github/**'
+      - 'server/**'
+      - 'supabase/**'
+
 
 jobs:
   build-and-test:
