@@ -13,7 +13,7 @@ class URLRequestBuilder {
     
     // URL Components
     var scheme: String = "https"
-    var host: String = "dev.unimapapp.com"
+    var host: String = Bundle.main.infoDictionary?["BASE_URL"] as? String ?? "https://fallback-url.com"
     var path: String = "/"
     var queryItems: [URLQueryItem] = []
     
