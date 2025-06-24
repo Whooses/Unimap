@@ -12,8 +12,9 @@ class URLRequestBuilder {
     var timeout: TimeInterval = 30
     
     // URL Components
-    var scheme: String = "https"
-    var host: String = Bundle.main.infoDictionary?["BASE_URL"] as? String ?? "https://fallback-url.com"
+    var scheme: String = "http"
+    var host: String = "127.0.0.1"//Bundle.main.infoDictionary?["BASE_URL"] as? String ?? "https://fallback-url.com"
+    var port: Int = 8000
     var path: String = "/"
     var queryItems: [URLQueryItem] = []
     
@@ -42,6 +43,7 @@ class URLRequestBuilder {
         var components: URLComponents = URLComponents()
         components.scheme = scheme
         components.host = host
+        components.port = port
         components.path = path
         components.queryItems = queryItems.isEmpty ? nil : queryItems
         
@@ -124,13 +126,14 @@ extension URLRequestBuilder {
     
     // Set clubs
     func setClubs(_ clubs: [Club] = []) -> Self {
-        queryItems = queryItems.filter { $0.name != "clubs" }
-        
-        if !clubs.isEmpty {
-            let item = URLQueryItem(name: "clubs", value: clubs.map(\.self.name).joined(separator: ","))
-            queryItems.append(item)
+        // Remove any existing “clubs” items first
+        queryItems.removeAll { $0.name == "clubs" }
+
+        // Append one query-item per club (FastAPI’s preferred style)
+        for club in clubs {
+            queryItems.append(URLQueryItem(name: "clubs", value: club.name))
         }
-        
+
         return self
     }
     
@@ -149,6 +152,18 @@ extension URLRequestBuilder {
             queryItems.append(item)
         }
         
+        return self
+    }
+    
+    func setPagination(_ skip: Int, _ limit: Int) -> Self {
+        queryItems = queryItems.filter { $0.name != "skip" && $0.name != "limit" }
+
+        let skipItem = URLQueryItem(name: "skip", value: "\(skip)")
+        let limitItem = URLQueryItem(name: "limit", value: "\(limit)")
+
+        queryItems.append(skipItem)
+        queryItems.append(limitItem)
+
         return self
     }
 }

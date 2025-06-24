@@ -10,8 +10,8 @@ router = APIRouter(prefix="/events", tags=["events"])
 
 @router.get("/", response_model=List[EventOut])
 async def get_events(
-    skip: int = 0,
-    limit: int = 100,
+    skip: int,
+    limit: int,
     search: Optional[str] = Query(None),
     tab: str = Query(..., description="Must be one of: all, in_person, online"),
     sort: str = Query(..., description="Must be one of: latest, upcoming, recently_added, past"),
@@ -20,6 +20,7 @@ async def get_events(
     end_date: Optional[datetime] = Query(None),
     event_service: EventService = Depends(get_event_service),
 ):
+    print("▶ clubs param =", clubs) 
     events = await event_service.get_events(
         skip=skip,
         limit=limit,
@@ -30,6 +31,7 @@ async def get_events(
         start_date=start_date,
         end_date=end_date,
     )
+
     return events
 
 @router.get("/user/{user_id}", response_model=List[EventOut])
@@ -40,7 +42,8 @@ async def get_user_events(
     limit: int = 100,
     event_service: EventService = Depends(get_event_service),
 ):
-    events = await event_service.get_user_events(user_id, sort=sort, skip=skip, limit=limit)
+    events = await event_service.get_user_events(user_id, sort, skip, limit)
+
     return events
 
 @router.post("/", response_model=EventOut)

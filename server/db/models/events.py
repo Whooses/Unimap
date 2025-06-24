@@ -36,7 +36,6 @@ class Event(Base):
     updated_at   = Column(DateTime(timezone=True), nullable=True)
     departments  = Column(ARRAY(Text), nullable=True)
     categories   = Column(ARRAY(Text), nullable=True)
-    clubs        = Column(ARRAY(Text), nullable=True)
     types        = Column(ARRAY(Text), nullable=True)
     is_in_person = Column(Boolean, nullable=True, default=False)
     is_online    = Column(Boolean, nullable=True, default=False)

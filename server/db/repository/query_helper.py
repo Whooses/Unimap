@@ -5,6 +5,8 @@ from sqlalchemy.orm import selectinload
 from sqlalchemy.exc import SQLAlchemyError
 
 from db.models.events import Event
+from db.models.users import User
+
 
 
 class EventQueryBuilder:
@@ -44,7 +46,8 @@ class EventQueryBuilder:
 
         # Clubs filter
         if clubs:
-            filters.append(Event.clubs.overlap(clubs))
+            filters.append(User.username.in_(clubs))
+            self._stmt = self._stmt.join(Event.user)
 
         # Date filters
         if start_date and end_date:
@@ -56,6 +59,7 @@ class EventQueryBuilder:
 
         if filters:
             self._stmt = self._stmt.where(and_(*filters))
+
         return self
 
     def apply_sort(self, sort: str = "latest") -> "EventQueryBuilder":
@@ -75,7 +79,7 @@ class EventQueryBuilder:
             self._stmt = self._stmt.where(Event.user_id == user_id)
         return self
 
-    def paginate(self, skip: int = 0, limit: int = 100) -> "EventQueryBuilder":
+    def paginate(self, skip: int, limit: int) -> "EventQueryBuilder":
         self._stmt = self._stmt.offset(skip).limit(limit)
         return self
 
