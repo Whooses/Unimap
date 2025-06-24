@@ -49,6 +49,8 @@ struct ExploreFilterLayout: View {
             }
             .padding(.leading)
         }
+        .padding(.bottom, 5)
+        .background(.white)
     }
 }
 

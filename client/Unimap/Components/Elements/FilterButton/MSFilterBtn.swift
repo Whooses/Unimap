@@ -56,7 +56,7 @@ private struct MSFilterBtnSheet<Item: NamedIdentifiable>: View {
             
             // Displaying each option
             ScrollView {
-                LazyVStack(spacing: 0) {
+                VStack(spacing: 0) {
                     ForEach(options) { option in
                         Button {
                             // Toggle inside the *local* copy

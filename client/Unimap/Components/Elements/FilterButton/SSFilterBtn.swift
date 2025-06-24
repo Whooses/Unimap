@@ -55,7 +55,7 @@ private struct SSFilterBtnSheet<E: StringIdentifiableEnum>: View {
             
             // Displaying each option
             ScrollView {
-                LazyVStack(spacing: 0, pinnedViews: []) {
+                VStack(spacing: 0) {
                     ForEach(options) { option in
                         Button {
                             if let onSelection = onSelection {

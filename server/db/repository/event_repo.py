@@ -15,8 +15,8 @@ class EventRepository:
 
     async def get_events(
         self,
-        skip: int = 0,
-        limit: int = 100,
+        skip: int,
+        limit: int,
         search: Optional[str] = None,
         tab: str = "all",
         sort: str = "latest",
@@ -62,6 +62,7 @@ class EventRepository:
                 .build()
             )
             result = await self.db.execute(stmt)
+
             return result.scalars().all()
         except SQLAlchemyError as e:
             raise RuntimeError(f"Database error in get_user: {e}")

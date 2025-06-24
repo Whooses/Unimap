@@ -29,7 +29,7 @@ class AuthViewModel: ObservableObject {
 
     /// Initializes the AuthViewModel and attempts to renew tokens silently on launch.
     init() {
-        renewToken()
+//        renewToken()
     }
 
     // MARK: - Public Methods
@@ -69,12 +69,14 @@ class AuthViewModel: ObservableObject {
         credentialsManager.credentials { [weak self] result in
             switch result {
             case .success(let credentials):
+                print("", credentials)
                 DispatchQueue.main.async {
                     _ = self?.credentialsManager.store(credentials: credentials)
                     self?.fetchUserInfo()
                 }
             case .failure(let error):
-                print("Failed to load credentials:", error)
+//                print("Failed to load credentials:", error)
+                print("", error)
                 _ = self?.credentialsManager.clear()
                 DispatchQueue.main.async {
                     self?.authError = "Session expired. Please log in again."

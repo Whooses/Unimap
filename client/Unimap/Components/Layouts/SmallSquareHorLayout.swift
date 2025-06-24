@@ -5,7 +5,7 @@ struct SmallSquareHorLayout: View {
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack(spacing: 16) {
+            HStack(spacing: 16) {
                 ForEach(events) { event in
                     SmallSquareCard(
                         username: event.user.name,

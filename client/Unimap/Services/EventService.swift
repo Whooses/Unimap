@@ -21,10 +21,16 @@ class EventService {
     }
     
 
-    func fetchUserEvents(userID: Int, sort: Sort = .latest) async throws -> [Event] {
+    func fetchUserEvents(
+        skip: Int,
+        limit: Int,
+        userID: Int,
+        sort: Sort = .latest
+    ) async throws -> [Event] {
         let builder = URLRequestBuilder(forEventsService: true)
             .setPath("/events/user/\(userID)")
             .setSort(sort)
+            .setPagination(skip, limit)
         
         do {
             let request = try builder.build()
@@ -61,9 +67,11 @@ class EventService {
     
 
     func fetchExploreEvents(
-            search: String? = nil,
-            tab: ExploreTab,
-            filter: ExploreFilter
+        skip: Int,
+        limit: Int,
+        search: String? = nil,
+        tab: ExploreTab,
+        filter: ExploreFilter
     ) async throws -> [Event] {
         let builder = URLRequestBuilder(forEventsService: true)
             .setSearch(search ?? "")
@@ -71,6 +79,7 @@ class EventService {
             .setSort(filter.sort)
             .setClubs(filter.clubs)
             .setDateRange(filter.startDate, filter.endDate)
+            .setPagination(skip, limit)
         
         do {
             let request = try builder.build()

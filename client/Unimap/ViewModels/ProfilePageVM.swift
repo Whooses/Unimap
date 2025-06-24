@@ -16,12 +16,16 @@ class ProfilePageVM: ObservableObject {
     private let eventService: EventService
     private let userService: UserService
     
+    private var skip: Int = 0
+    private var limit: Int = 15
+    
     init(
         eventService: EventService,
         userService: UserService
     ) {
         self.eventService = eventService
         self.userService = userService
+        print("view loaded")
     }
     
     // MARK: Operations
@@ -37,19 +41,50 @@ class ProfilePageVM: ObservableObject {
     func fetchEvents() async {
         isLoading = true
         
-        do {
-            let data = try await eventService.fetchUserEvents(
-                userID: userID,
-                sort: selectedSort
-            )
-            
-            events = data
-            
-            isLoading = false
-        } catch {
-            errorMessage = error.localizedDescription
-            
-            isLoading = false
+        Task.detached {
+            do {
+                let data = try await self.eventService.fetchUserEvents(
+                    skip: 0,
+                    limit: 20,
+                    userID: self.userID,
+                    sort: self.selectedSort
+                )
+                await MainActor.run {
+                    self.skip += 20
+                    self.events = data
+                    self.isLoading = false
+                }
+            } catch {
+                await MainActor.run {
+                    self.errorMessage = error.localizedDescription
+                    self.isLoading = false
+                }
+            }
+        }
+    }
+    
+    func fetchMoreEvents() async {
+        isLoading = true
+        
+        Task.detached {
+            do {
+                let data = try await self.eventService.fetchUserEvents(
+                    skip: self.skip,
+                    limit: self.limit,
+                    userID: self.userID,
+                    sort: self.selectedSort
+                )
+                await MainActor.run {
+                    self.skip += self.limit
+                    self.events.append(contentsOf: data)
+                    self.isLoading = false
+                }
+            } catch {
+                await MainActor.run {
+                    self.errorMessage = error.localizedDescription
+                    self.isLoading = false
+                }
+            }
         }
     }
     
