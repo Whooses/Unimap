@@ -4,51 +4,62 @@ struct ExplorePage: View {
     @EnvironmentObject private var explorePageVM: ExplorePageVM
     
     @FocusState private var isSearching: Bool
+    @State private var path: [ExploreRoute] = []
+    @State private var scrollToTab: ExploreTab? = nil
+    
     
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             VStack {
                 SearchBarComponent() { newSearch in
-                    Task {
-                        await explorePageVM.updateSearch(newSearch)
-                    }
-                    
+                    Task { await explorePageVM.updateSearch(newSearch) }
                 }
-                    .focused($isSearching)
+                .focused($isSearching)
                 
                 ZStack {
-                    if isSearching {
-                        searchingView()
-                            .transition(.opacity)
-                            .padding(.horizontal, 25)
+                    searchingView()
+                        .transition(.opacity)
+                        .padding(.horizontal, 25)
+                        .opacity(isSearching ? 1 : 0)
                         
-                    } else {
-                        VStack {
-                            SelectedTabView(selectedTab: explorePageVM.currTab) { newTab in
-                                Task {
-                                    await explorePageVM.updateTab(newTab)
-                                }
+                    
+                    VStack {
+                        SelectedTabView(selectedTab: explorePageVM.currTab) { newTab in
+                            if newTab == explorePageVM.currTab {
+                                scrollToTab = nil
+                                withAnimation(.easeInOut) { scrollToTab = newTab }
                             }
-                            .padding(.top, 20)
-                            .padding(.bottom, 10)
-                            
-                            TabView(selection: $explorePageVM.currTab) {
-                                AllEventSView()
-                                    .tag(ExploreTab.all)
-                                
-                                InPersonEventsView()
-                                    .tag(ExploreTab.inPerson)
-                                
-                                OnlineEventsView()
-                                    .tag(ExploreTab.online)
+                            else {
+                                Task { await explorePageVM.updateTab(newTab) }
                             }
-                            .tabViewStyle(.page(indexDisplayMode: .never))
-                            
+                        }
+                        .padding(.top, 20)
+                        .padding(.bottom, 10)
+                        
+                        ZStack {
+                            AllEventSView(scrollToTab: $scrollToTab)
+                                .opacity(explorePageVM.currTab == .all ? 1 : 0)
+                                .allowsHitTesting(explorePageVM.currTab == .all)
+
+                            InPersonEventsView(scrollToTab: $scrollToTab)
+                                .opacity(explorePageVM.currTab == .inPerson ? 1 : 0)
+                                .allowsHitTesting(explorePageVM.currTab == .inPerson)
+
+                            OnlineEventsView(scrollToTab: $scrollToTab)
+                                .opacity(explorePageVM.currTab == .online ? 1 : 0)
+                                .allowsHitTesting(explorePageVM.currTab == .online)
                         }
                     }
+                    .opacity(isSearching ? 0 : 1)
                 }
-                
-//                Spacer()
+            }
+            .navigationDestination(for: ExploreRoute.self) { route in
+                switch route {
+                case let .profile(userID, username, pfpURL):
+                    ProfilePage(username: username,
+                                PFPURL: pfpURL,
+                                userID: userID)
+                }
             }
         }
         .frame(maxHeight: .infinity)
@@ -58,6 +69,10 @@ struct ExplorePage: View {
             }
         }
     }
+}
+
+private enum ExploreRoute: Hashable {
+    case profile(userID: Int, username: String, pfpURL: URL?)
 }
 
 private struct SelectedTabView: View {

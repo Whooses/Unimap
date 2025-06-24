@@ -39,8 +39,8 @@ class EventService:
 
     async def get_events(
         self,
-        skip: int = 0,
-        limit: int = 100,
+        skip: int,
+        limit: int,
         search: Optional[str] = None,
         tab: Optional[str] = None,  # Added tab param
         sort: Optional[str] = None,
@@ -82,7 +82,8 @@ class EventService:
         limit: int = 100,
     ) -> List[Event]:
         try:
-            events = await self.repo.get_user_events(user_id, sort=sort, skip=skip, limit=limit)
+            events = await self.repo.get_user_events(user_id, sort, skip, limit)
+            
             return events
         except SQLAlchemyError as exc:
             log.exception("DB failure in get_user_events")

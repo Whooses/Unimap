@@ -32,7 +32,6 @@ class EventCreate(BaseModel):
     username: Optional[str] = None
     departments: Optional[List[str]] = None
     categories: Optional[List[str]] = None
-    clubs: Optional[List[str]] = None
     types: Optional[List[str]] = None
     owner_id: int
     user_id: int

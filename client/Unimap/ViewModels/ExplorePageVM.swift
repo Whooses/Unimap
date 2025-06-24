@@ -27,6 +27,9 @@ class ExplorePageVM: ObservableObject {
     // MARK: Private properties
     private let eventService: EventService
     let schoolService: SchoolService
+    
+    private var skip: Int = 0
+    private let limit: Int = 15
 
 
     // MARK: Init
@@ -47,19 +50,64 @@ class ExplorePageVM: ObservableObject {
             return
         }
         
-        do {
-            let data = try await eventService.fetchExploreEvents(
-                search: search,
-                tab: currTab,
-                filter: selectedFilter
-            )
-            events[currTab] = data
+        Task.detached {
+            do {
+                let data = try await self.eventService.fetchExploreEvents(
+                    skip: 0,
+                    limit: 20,
+                    search: self.search,
+                    tab: self.currTab,
+                    filter: selectedFilter
+                )
+                
+                await MainActor.run {
+                    self.skip += 20
+                    self.events[self.currTab] = data
+                    self.isLoading[self.currTab] = false
+                }
+
+            } catch {
+                await MainActor.run {
+                    self.errorMessage = error.localizedDescription
+                    self.isLoading[self.currTab] = false
+                }
+            }
+        }
+    }
+    
+    func fetchMoreEvents() async {
+        isLoading[currTab] = true
+        
+        guard let selectedFilter = filter[currTab] else {
+            errorMessage = "Unexpected state: filter not found for tab \(currTab)"
             
             isLoading[currTab] = false
-        } catch {
-            errorMessage = error.localizedDescription
             
-            isLoading[currTab] = false
+            return
+        }
+        
+        Task.detached {
+            do {
+                let data = try await self.eventService.fetchExploreEvents(
+                    skip: self.skip,
+                    limit: self.limit,
+                    search: self.search,
+                    tab: self.currTab,
+                    filter: selectedFilter
+                )
+                
+                await MainActor.run {
+                    self.skip += self.limit
+                    self.events[self.currTab]?.append(contentsOf: data)
+                    self.isLoading[self.currTab] = false
+                }
+
+            } catch {
+                await MainActor.run {
+                    self.errorMessage = error.localizedDescription
+                    self.isLoading[self.currTab] = false
+                }
+            }
         }
     }
 
@@ -74,10 +122,16 @@ class ExplorePageVM: ObservableObject {
     }
 
     
-    func updateTab(_ tab: ExploreTab) async {
+    func updateTab(_ newTab: ExploreTab) async {
         isLoading[currTab] = true
         
-        currTab = tab
+        guard newTab != currTab else { return }
+        
+        currTab = newTab
+        
+        if let cached = events[newTab], !cached.isEmpty {
+            return
+        }
         
         await fetchEvents()
         
@@ -148,5 +202,11 @@ class ExplorePageVM: ObservableObject {
         await fetchEvents()
         
         isLoading[currTab] = false
+    }
+    
+    func clearEventData() {
+        events[.all] = []
+        events[.inPerson] = []
+        events[.online] = []
     }
 }

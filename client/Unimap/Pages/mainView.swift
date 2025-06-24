@@ -12,7 +12,7 @@ struct MainView: View {
 
     var body: some View {
         if (authViewModel.isAuthenticated == true) {
-            AuthenticatedView(authViewModel: authViewModel)
+            AuthenticatedView()
                 .environmentObject(explorePageVM)
                 .environmentObject(homePageVM)
         }
@@ -22,7 +22,7 @@ struct MainView: View {
     }
 }
 
-#Preview {
-    MainView()
-}
+//#Preview {
+//    MainView()
+//}
 

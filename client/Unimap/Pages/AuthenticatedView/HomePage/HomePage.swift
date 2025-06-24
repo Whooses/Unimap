@@ -22,7 +22,7 @@ struct HomePage: View {
                             .padding(.horizontal, 25)
                     } else {
                         ScrollView() {
-                            LazyVStack {
+                            VStack {
                                 RecommendationView(events: VM.events[.recommendations] ?? [])
                                 
                                 YourUpcomingView(events: VM.events[.yourUpcoming] ?? [])

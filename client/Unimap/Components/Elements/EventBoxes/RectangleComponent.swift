@@ -20,12 +20,19 @@ struct RectangleComponent: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             if showHeader {
-                Button(action: {showProfilePage = true}) {
+                NavigationLink {
+                    ProfilePage(
+                        username: username,
+                        PFPURL: userPFP.imageUrl,
+                        userID: userID
+                    )
+                } label: {
                     BoxHeaderComponent(
                         pfp: userPFP.showPlusIcon(false),
                         username: username
                     )
                 }
+                .buttonStyle(.plain)
             }
             
             Button (action: {showSheet.toggle()}) {
@@ -39,6 +46,8 @@ struct RectangleComponent: View {
                 )
             }
             .buttonStyle(PlainButtonStyle())
+            .contentShape(Rectangle())
+            .buttonStyle(.plain)
         }
         .sheet(
             isPresented: $showSheet,
@@ -59,9 +68,6 @@ struct RectangleComponent: View {
                 }
             }
         )
-        .navigationDestination(isPresented: $showProfilePage) {
-            ProfilePage(username: username, PFPURL: userPFP.imageUrl, userID: userID)
-        }
         .onAppear {
             imageLoaderService.url = eventImageURL
             Task {
