@@ -8,7 +8,7 @@ import SwiftUI
 
 struct PFPComponent: View {
     /// The URL of the profile image.
-    let imageUrl: URL?
+    var imageUrl: URL?
     /// Diameter of the profile circle.
     var size: CGFloat = 40
     /// Toggle to show the plus icon overlay.
@@ -18,12 +18,13 @@ struct PFPComponent: View {
     /// Border color around the circle.
     var borderColor: Color = .white
     /// Border line width.
-    var borderWidth: CGFloat = 2
+    var borderWidth: CGFloat = 0.5
     /// Color of the plus icon.
     var plusIconColor: Color = .red
     /// Background color behind the plus icon.
     var plusBackgroundColor: Color = .white
     /// Size factor for the plus icon relative to the main circle.
+    ///
     
     
     private var plusSizeFactor: CGFloat { 0.4 }
@@ -81,4 +82,12 @@ struct PFPComponent: View {
     }
 }
 
+
+#Preview {
+    PFPComponent(
+        imageUrl: URL(string: "https://olxchrqwobbpgwqyuvos.supabase.co/storage/v1/object/public/profile-img//l3lgfk0v_400x400.jpeg"),
+        size: 40,
+        showPlusIcon: false
+    )
+}
 

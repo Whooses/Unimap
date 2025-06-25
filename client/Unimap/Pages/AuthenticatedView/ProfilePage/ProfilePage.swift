@@ -73,13 +73,15 @@ struct ProfilePage: View {
                         .offset(y: 10)
                 } else {
                     RectangleVerLayout(events: VM.events, showHeader: false)
+                        .padding(.top, 5)
                 }
             }
-            .padding(.horizontal)
 
         }
         .onAppear {
             VM.userID = userID
+            imageLoader.url = PFPURL
+            
             Task {
                 await withTaskGroup(of: Void.self) { group in
                     group.addTask { await imageLoader.load() }
@@ -183,6 +185,7 @@ private struct FilterLayout: View {
                 updateSort?(newSelect)
             }
         }
+        .padding(.horizontal)
     }
 }
 

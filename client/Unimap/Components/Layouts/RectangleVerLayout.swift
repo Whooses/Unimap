@@ -8,6 +8,10 @@ struct RectangleVerLayout: View {
     var body: some View {
         ScrollView(showsIndicators: false) {
             LazyVStack(spacing: 5) {
+                Rectangle()
+                    .frame(height: 1)
+                    .opacity(0)
+                
                 ForEach(events ?? []) { event in
                     let isLast = event.id == events?.last?.id
                     
@@ -32,7 +36,6 @@ struct RectangleVerLayout: View {
                     }
                 }
             }
-            .padding(.horizontal, 16)
         }
     }
 }

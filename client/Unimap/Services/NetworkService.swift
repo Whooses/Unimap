@@ -15,7 +15,7 @@ class NetworkService {
     }
     
     // MARK: Network operation
-
+    
     /// Sends a network request and decodes the JSON response into a specified Decodable type.
     /// - Returns: An instance of the decoded type.
     /// - Throws: `NetworkError` if the request fails, response is invalid, or decoding fails.
@@ -34,9 +34,9 @@ class NetworkService {
             throw NetworkError.underlying(error)
         }
     }
-
+    
     // MARK: - Helpers
-
+    
     /// Validates that the response is an HTTPURLResponse.
     /// - Throws: `NetworkError.custom` if the response is not an HTTPURLResponse.
     private func validateHTTPResponse(_ response: URLResponse) throws {
@@ -44,7 +44,7 @@ class NetworkService {
             throw NetworkError.custom("Non-HTTP response")
         }
     }
-
+    
     /// Validates the HTTP status code and attempts to parse an error message if the request failed.
     /// - Parameters:
     /// - Throws: `NetworkError.invalidStatusCode` or `NetworkError.custom` for API-specific error messages.
@@ -59,7 +59,7 @@ class NetworkService {
             }
         }
     }
-
+    
     /// Checks that the response data is not empty.
     /// - Throws: `NetworkError.noData` if the data is empty.
     private func validateData(_ data: Data) throws {
@@ -67,15 +67,34 @@ class NetworkService {
             throw NetworkError.noData
         }
     }
-
+    
     /// Decodes JSON data into the specified Decodable type.
     /// - Returns: A decoded instance of the expected type.
     /// - Throws: `NetworkError.decodingError` if decoding fails.
     private func decodeData<T: Decodable>(_ data: Data, to type: T.Type) throws -> T {
         do {
             return try decoder.decode(T.self, from: data)
+        } catch let decodingError as DecodingError {
+            print("Decoding Error: \(formatDecodingError(decodingError))")
+            throw NetworkError.decodingError(decodingError)
         } catch {
+            print("Unexpected decoding error: \(error.localizedDescription)")
             throw NetworkError.decodingError(error)
+        }
+    }
+
+    private func formatDecodingError(_ error: DecodingError) -> String {
+        switch error {
+        case .typeMismatch(let type, let context):
+            return "Type mismatch for type '\(type)': \(context.debugDescription) at path \(context.codingPath)"
+        case .valueNotFound(let type, let context):
+            return "Value not found for type '\(type)': \(context.debugDescription) at path \(context.codingPath)"
+        case .keyNotFound(let key, let context):
+            return "Missing key '\(key.stringValue)': \(context.debugDescription) at path \(context.codingPath)"
+        case .dataCorrupted(let context):
+            return "Corrupted data: \(context.debugDescription) at path \(context.codingPath)"
+        @unknown default:
+            return "Unknown decoding error"
         }
     }
 }

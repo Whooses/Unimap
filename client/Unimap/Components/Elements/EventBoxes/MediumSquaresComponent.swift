@@ -60,9 +60,7 @@ struct MediumSquareCard: View {
             imageLoaderService.url = eventImageURL
             Task {
                 await imageLoaderService.load()
-                if let newColor = imageLoaderService.averageColor {
-                    cardColor = newColor
-                }
+                cardColor = imageLoaderService.averageColor
             }
         }
     }

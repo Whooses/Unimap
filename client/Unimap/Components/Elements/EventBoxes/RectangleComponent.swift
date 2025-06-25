@@ -37,7 +37,6 @@ struct RectangleComponent: View {
             
             Button (action: {showSheet.toggle()}) {
                 BoxBody(
-                    eventImageURL: eventImageURL,
                     eventTitle: eventTitle,
                     eventDescription: eventDescription,
                     eventDate: eventDate,
@@ -49,6 +48,7 @@ struct RectangleComponent: View {
             .contentShape(Rectangle())
             .buttonStyle(.plain)
         }
+        .padding(.horizontal)
         .sheet(
             isPresented: $showSheet,
             content: {
@@ -72,57 +72,56 @@ struct RectangleComponent: View {
             imageLoaderService.url = eventImageURL
             Task {
                 await imageLoaderService.load()
-                if let newColor = imageLoaderService.averageColor {
-                    cardColor = newColor
-                }
+                cardColor = imageLoaderService.averageColor
             }
         }
     }
 }
 
 private struct BoxBody: View {
-    let eventImageURL: URL?
     let eventTitle: String
     let eventDescription: String?
     let eventDate: Date?
-    let imageUI: UIImage?
-    let cardColor: Color?
-    
+    var imageUI: UIImage?
+    var cardColor: Color? = .gray
+
     var body: some View {
         HStack(spacing: 0) {
-            // Image
-            Image(uiImage: imageUI ?? UIImage())
+            Image(uiImage: imageUI ?? UIImage(named: "defaultEventImage")!)
                 .resizable()
                 .scaledToFill()
                 .frame(width: 140, height: 140)
+                .clipped()
 
-            
-            // Text Section
             VStack(alignment: .leading) {
                 Text(eventTitle)
                     .font(.title3)
                     .bold()
                     .foregroundColor(.white)
                     .lineLimit(1)
-                    .padding(.bottom, 10)
+                    .padding(.top, 10)
                 
+                Spacer()
+
                 Text(eventDescription ?? "No description")
                     .font(.footnote)
                     .foregroundColor(.white)
                     .lineLimit(3)
-                    .padding(.bottom, 10)
                 
+                Spacer()
+
                 Text(stringDate(date: eventDate))
                     .font(.caption)
-                    .lineLimit(3)
                     .foregroundColor(.white)
+                    .padding(.bottom, 10)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(5)
+            .padding(.horizontal)
+            
+            Spacer()
         }
-        .background(cardColor)
-        .frame(width: 350, height: 140)
-        .cornerRadius(14)
+        .frame(maxWidth: .infinity, maxHeight: 140)
+        .background(cardColor ?? .gray)
+        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
         .shadow(radius: 5)
     }
 }
@@ -131,16 +130,25 @@ private struct BoxBody: View {
 
 
 
-//#Preview {
-//    NavigationStack {
-//        RectangleComponent(
-//            username: "Whooses",
-//            userPFP: PFPComponent(imageUrl: URL(string: "https://img.decrypt.co/insecure/rs:fit:3840:0:0:0/plain/https://cdn.decrypt.co/wp-content/uploads/2022/11/bored-ape-3001-bieber-gID_7.png@webp"), size: 40),
-//            eventImageURL: URL(string: "https://marketplace.canva.com/EAFJMl8KcjI/1/0/1131w/canva-purple-black-tropical-party-club-poster-orVwDS2lrfY.jpg"),
-//            eventTitle: "Year End Party!",
-//            eventDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
-//            eventDate: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 30))!,
-//        )
-//    }
-//}
+
+#Preview {
+    NavigationStack {
+        RectangleComponent(
+            username: "Whooses",
+            userPFP: PFPComponent(imageUrl: URL(string: "https://img.decrypt.co/insecure/rs:fit:3840:0:0:0/plain/https://cdn.decrypt.co/wp-content/uploads/2022/11/bored-ape-3001-bieber-gID_7.png@webp"), size: 40),
+            eventImageURL: URL(string: "https://marketplace.canva.com/EAFJMl8KcjI/1/0/1131w/canva-purple-black-tropical-party-club-poster-orVwDS2lrfY.jpg"),
+            eventTitle: "Year End Party!",
+            eventDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+            eventDate: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 30))!,
+        )
+        RectangleComponent(
+            username: "Whooses",
+            userPFP: PFPComponent(imageUrl: URL(string: "https://img.decrypt.co/insecure/rs:fit:3840:0:0:0/plain/https://cdn.decrypt.co/wp-content/uploads/2022/11/bored-ape-3001-bieber-gID_7.png@webp"), size: 40),
+            eventImageURL: URL(string: "https://marketplace.canva.com/EAFJMl8KcjI/1/0/1131w/canva-purple-black-tropical-party-club-poster-orVwDS2lrfY.jpg"),
+            eventTitle: "Year End Party!",
+            eventDescription: "Lorem ipsum dolor",
+            eventDate: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 30))!,
+        )
+    }
+}
 
