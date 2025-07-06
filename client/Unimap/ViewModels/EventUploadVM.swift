@@ -6,8 +6,8 @@
 //
 
 import Foundation
-
-//Enum - field focus
+import SwiftUI
+//Enum - focused field for text inputs
 enum FocusedField: Hashable {
     case title, description, location, departments, categories, types
 }
@@ -37,6 +37,15 @@ class EventUploadVM: ObservableObject {
       @Published var categoryInput: String = ""
       @Published var typeInput: String = ""
     
+    //MARK: - Computed properties
+    var formattedDate: String {
+        eventDate.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day())
+    }
+
+    var formattedTime: String {
+        eventDate.formatted(.dateTime.hour().minute())
+    }
+    
     // MARK: Private properties
     private let eventService: EventService
         
@@ -45,29 +54,29 @@ class EventUploadVM: ObservableObject {
         self.eventService = eventService
     }
 
-       // Error messages
-       @Published var errorMessage: String? = nil
-       @Published var isLoading: Bool = false
+    // Error messages
+    @Published var errorMessage: String? = nil
+    @Published var isLoading: Bool = false
     @Published var isSubmitted: Bool = false
     
     
-      /// Appends tags to the given array based on 'focusedfield' input
-      /// - Returns: N/A
-      func addTag(input: String, type: FocusedField) {
-            let trimmedInput = input.trimmingCharacters(in: .whitespacesAndNewlines).capitalized(with: Locale(identifier: "en_US"))
-            guard !trimmedInput.isEmpty else { return }
-            switch type {
-                case .departments:
-                    appendUnique(trimmedInput, to: &departments)
-                    departmentInput = ""
-                case .categories:
-                    appendUnique(trimmedInput, to: &categories)
-                    categoryInput = ""
-                case .types:
-                    appendUnique(trimmedInput, to: &types)
-                    typeInput = ""
-                default: print("Did not enter the correct type to use this function")
-                }
+    /// Appends tags to the given array based on 'focusedfield' input
+    /// - Returns: N/A
+    func addTag(input: String, type: FocusedField) {
+        let trimmedInput = input.trimmingCharacters(in: .whitespacesAndNewlines).capitalized(with: Locale(identifier: "en_US"))
+        guard !trimmedInput.isEmpty else { return }
+        switch type {
+            case .departments:
+                appendUnique(trimmedInput, to: &departments)
+                departmentInput = ""
+            case .categories:
+                appendUnique(trimmedInput, to: &categories)
+                categoryInput = ""
+            case .types:
+                appendUnique(trimmedInput, to: &types)
+                typeInput = ""
+            default: print("Did not enter the correct type to use this function")
+            }
     }
     
 
@@ -90,21 +99,19 @@ class EventUploadVM: ObservableObject {
         }
     }
     
-    /// Debugging, prints out array contents
-    /// - Returns: N/A
-     func printDebug() {
-         // Handle saving the tags
-         print("Departments: \(departments)")
-         print("Categories: \(categories)")
-         print("Types: \(types)")
-         print("title: \(title)")
+    ///Validates a given arbituary field, based on whether string is mandated or not
+    ///- Returns: Boolean to indicate whether valid or not
+    func hasValidationError(text: String, isMandatory: Bool) -> Bool {
+        return isMandatory && text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
     
+    
     /// Validates mandated fields for event upload
-    /// - Returns: Boolean isEventNameValid to determine whether given input is proper
+    /// - Returns: Boolean  to determine whether given mandated input(s) is proper
     func validateMandatoryFields() -> Bool {
         let isEventNameValid = !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        return isEventNameValid
+        let isEventLocationValid = !location.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        return isEventNameValid && isEventLocationValid 
     }
     
     //MARK: Upload event function
@@ -146,9 +153,17 @@ class EventUploadVM: ObservableObject {
             }
     }
     
+    //MARK: Miscellaneous functions
+    
+    /// Selects a given border colour based on current focused field
+    /// - Returns: N/A
+    func borderColor(for field: FocusedField, currentFocus: FocusedField?) -> Color {
+        return currentFocus == field ? .blue : Color.gray.opacity(0.5)
+    }
+
     /// Resets the form
     /// - Returns: N/A
-    func resetForm() {
+    private func resetForm() {
         title = ""
         description = ""
         location = ""
@@ -161,8 +176,35 @@ class EventUploadVM: ObservableObject {
         isOnline = false
         isInPerson = false
         eventDate = Date()
+        isSubmitted = false
+
     }
     
     
+    /// Reset submission for delay pop-up
+    /// - Returns: N/A
+    func resetSubmission(after seconds: Double, completion: @escaping () -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+            completion()
+        }
+    }
+    
+    //MARK: Debugging
+    
+    /// Debugging, prints out array contents
+    /// - Returns: N/A
+     func printDebug() {
+         // Print out contents
+         print("title: \(title)")
+         print("description: \(description)")
+         print("location: \(title)")
+         print("Departments: \(departments)")
+         print("Categories: \(categories)")
+         print("Types: \(types)")
+         print("isOnline: \(isOnline)")
+         print("isInperson: \(isInPerson)")
+         print("date: \(eventDate)")
+
+    }
 
 }
