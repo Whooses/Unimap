@@ -2,6 +2,30 @@ import Foundation
 
 class EventService {
     private let networkService = NetworkService()
+    
+    // MARK: Upload event
+    func uploadEvent(_ event: EventUpload) async throws -> EventUpload {
+        let builder = URLRequestBuilder(forEventsService: true)
+            .setPath("/events") 
+        builder.method = "POST"
+        
+        do {
+            try builder.setJSONBody(model: event)
+            let request = try builder.build()
+            let response: EventUpload = try await networkService.sendRequest(from: request, type: EventUpload.self)
+            return response
+        } catch let error as URLRequestBuilderError {
+            print("URL builder error: \(error.localizedDescription)")
+            throw error
+        } catch let error as NetworkError {
+            print("Network error: \(error.localizedDescription)")
+            throw error
+        } catch {
+            print("Unexpected error: \(error.localizedDescription)")
+            throw error
+        }
+    }
+    
 
     // MARK: User specific services
     func fetchRecEvents(user: User?) async throws -> [Event] {

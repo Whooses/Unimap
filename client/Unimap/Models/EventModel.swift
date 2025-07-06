@@ -79,3 +79,45 @@ struct EventDetails: Codable, Identifiable {
     }
 }
 
+
+
+struct EventUpload: Codable, Identifiable {
+    var id: Int
+    var user_id: Int
+    var owner_id: Int
+    
+    var title: String
+    var description: String? = nil
+    var date: Date? = nil
+    var location: String? = nil
+    var imageURL: URL? = nil
+    var isPublic: Bool? = nil
+    var userName: String? = nil
+    var departments: [String]? = nil
+    var categories: [String]? = nil
+    var clubs: [String]? = nil
+    var types: [String]? = nil
+    var inPerson: Bool? = nil
+    var online: Bool? = nil
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case user_id
+        case owner_id
+        case title
+        case description
+        case date
+        case location
+        case imageURL = "image_url"
+        case isPublic = "is_public"
+        case userName
+        case departments
+        case categories
+        case clubs
+        case types
+        case inPerson = "is_in_person"
+        case online = "is_online"
+    }
+    
+}
+
