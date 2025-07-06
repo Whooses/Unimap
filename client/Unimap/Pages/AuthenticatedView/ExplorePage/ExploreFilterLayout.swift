@@ -25,7 +25,7 @@ struct ExploreFilterLayout: View {
                 MSFilterBtn(
                     label: "Clubs",
                     options: explorePageVM.schoolService.getSchoolClubs(schoolID: 1),
-                    selectedOptions: explorePageVM.filter[explorePageVM.currTab]?.clubs ?? [],
+                    selectedOptions: explorePageVM.filter[explorePageVM.currTab]?.clubs ?? []
                 ) { newSelect in
                     Task {
                         await explorePageVM.updateClubs(newSelect)

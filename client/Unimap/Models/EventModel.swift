@@ -8,7 +8,7 @@ struct Event: Codable, Identifiable {
     var location: String? = nil
     var imageURL: URL? = nil
     let user: User
-    
+
     private static var mockIDCounter = 0
 
     enum CodingKeys: String, CodingKey {
@@ -20,7 +20,7 @@ struct Event: Codable, Identifiable {
         case imageURL = "image_url"
         case user
     }
-    
+
     static func mock() -> Event {
         mockIDCounter += 1
         return Event(
@@ -47,7 +47,7 @@ struct EventDetails: Codable, Identifiable {
     let user: User
     var inPerson: Bool? = nil
     var online: Bool? = nil
-    
+
     private static var mockIDCounter = 0
 
     enum CodingKeys: String, CodingKey {
@@ -66,10 +66,10 @@ struct EventDetails: Codable, Identifiable {
         case inPerson
         case online
     }
-    
+
     static func mock() -> Event {
         mockIDCounter += 1
-        
+
         return Event(
             id: mockIDCounter,
             title: "Party Night",
@@ -81,43 +81,27 @@ struct EventDetails: Codable, Identifiable {
 
 
 
-struct EventUpload: Codable, Identifiable {
-    var id: Int
-    var user_id: Int
-    var owner_id: Int
-    
+struct EventUpload: Codable {
     var title: String
     var description: String? = nil
     var date: Date? = nil
     var location: String? = nil
     var imageURL: URL? = nil
-    var isPublic: Bool? = nil
-    var userName: String? = nil
+    var isPublic: Bool
     var departments: [String]? = nil
     var categories: [String]? = nil
-    var clubs: [String]? = nil
     var types: [String]? = nil
-    var inPerson: Bool? = nil
-    var online: Bool? = nil
-    
+    var user_id: Int
+    var isInPerson: Bool? = nil
+    var isOnline: Bool? = nil
+
     enum CodingKeys: String, CodingKey {
-        case id
-        case user_id
-        case owner_id
-        case title
-        case description
-        case date
-        case location
+        case title, description, date, location
         case imageURL = "image_url"
         case isPublic = "is_public"
-        case userName
-        case departments
-        case categories
-        case clubs
-        case types
-        case inPerson = "is_in_person"
-        case online = "is_online"
+        case departments, categories, types
+        case user_id
+        case isInPerson = "is_in_person"
+        case isOnline = "is_online"
     }
-    
 }
-

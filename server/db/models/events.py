@@ -42,7 +42,8 @@ class Event(Base):
 
     user = relationship(
         "User",
-        back_populates="events"
+        back_populates="events",
+        lazy="joined"
     )
 
     event_reports = relationship(

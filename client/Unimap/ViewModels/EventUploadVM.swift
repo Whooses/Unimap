@@ -117,41 +117,44 @@ class EventUploadVM: ObservableObject {
     //MARK: Upload event function
     
     func submitEvent() async {
-           isLoading = true
-           errorMessage = nil
+        isLoading = true
+        errorMessage = nil
 
-           let event = EventUpload(
-               id: 0,
-               user_id: 0,
-               owner_id: 0,
-               title: title,
-               description: description.isEmpty ? nil : description,
-               date: eventDate,
-               location: location.isEmpty ? nil : location,
-               imageURL: nil,
-               isPublic: nil,
-               userName: nil,
-               departments: departments.isEmpty ? nil : departments,
-               categories: categories.isEmpty ? nil : categories,
-               clubs: nil,
-               types: types.isEmpty ? nil : types,
-               inPerson: isInPerson,
-               online: isOnline
-           )
-
-           do {
-               _ = try await eventService.uploadEvent(event)
-               isSubmitted = true
-           } catch {
-               errorMessage = "Failed to upload event: \(error.localizedDescription)"
-           }
-
-           isLoading = false
+        // You must provide real user/owner IDs, not zero
+        let currentUserID = 123  // Replace with actual logged-in user ID
+        let currentOwnerID = 123 // Replace accordingly
         
-            if isSubmitted {
-                resetForm()
-            }
+        // Provide a valid image URL string (can be empty string if backend allows)
+        let imageURLString = "https://example.com/default-image.png"
+        
+        let event = EventUpload(
+            title: title,
+            description: description,
+            date: eventDate,
+            location: location,
+            imageURL: URL(string: "https://example.com/default-image.png"),
+            isPublic: true,
+            departments: departments.isEmpty ? nil : departments,
+            categories: categories.isEmpty ? nil : categories,
+            types: types.isEmpty ? nil : types,
+            user_id: 123
+        )
+
+        do {
+            _ = try await eventService.uploadEvent(event)
+            isSubmitted = true
+        } catch {
+            errorMessage = "Failed to upload event: \(error.localizedDescription)"
+        }
+
+        isLoading = false
+
+        if isSubmitted {
+            resetForm()
+        }
     }
+    
+    
     
     //MARK: Miscellaneous functions
     
