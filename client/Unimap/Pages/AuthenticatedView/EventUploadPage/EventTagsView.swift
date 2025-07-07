@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EventTagsView: View {
-    @ObservedObject var viewM: EventUploadVM
+    @EnvironmentObject var viewM: EventUploadVM
     @FocusState private var focusedField: FocusedField?
     
     var body: some View {
@@ -20,7 +20,6 @@ struct EventTagsView: View {
                     input: $viewM.departmentInput,
                     focusedField: $focusedField,
                     holder: "i.e. Computer Science, AI...",
-                    viewM: viewM
                 )
                 
                 TagInputField(
@@ -29,7 +28,6 @@ struct EventTagsView: View {
                     input: $viewM.categoryInput,
                     focusedField: $focusedField,
                     holder: "i.e. Social, Networking...",
-                    viewM: viewM
                 )
                 
                 TagInputField(
@@ -38,8 +36,6 @@ struct EventTagsView: View {
                     input: $viewM.typeInput,
                     focusedField: $focusedField,
                     holder: "i.e. Conference, Promotion...",
-                    viewM: viewM
-
                 )
             }
             .padding(.bottom, 20)
@@ -56,7 +52,7 @@ private struct TagInputField: View {
     @Binding var input: String
     @FocusState.Binding var focusedField: FocusedField?
     var holder: String
-    @ObservedObject var viewM: EventUploadVM
+    @EnvironmentObject var viewM: EventUploadVM
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {

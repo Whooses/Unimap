@@ -15,12 +15,16 @@ struct EventUploadPage: View {
 
     var body: some View {
         ScrollView {
+            
             VStack(alignment: .center, spacing: 15) {
                 UploadTitleView()
                 Spacer()
                 //Title, location inputs
-                LabeledTextField(label: "Event Title", text: $viewM.title, field: .title, focusedField: $focusedField, isMandatory: true, viewModel: viewM)
-                LabeledTextField(label: "Event Location", text: $viewM.location, field: .location, focusedField: $focusedField, isMandatory: true, viewModel: viewM)
+                LabeledTextField(label: "Event Title", text: $viewM.title, field: .title, focusedField: $focusedField, isMandatory: true)
+                    .environmentObject(viewM)
+                LabeledTextField(label: "Event Location", text: $viewM.location, field: .location, focusedField: $focusedField, isMandatory: true, charLimit: 100)
+                    .environmentObject(viewM)
+
            
                 // Description field
                 VStack(alignment: .leading) {
@@ -35,14 +39,19 @@ struct EventUploadPage: View {
                         )
                         .focused($focusedField, equals: .description)
                         .animation(.easeInOut(duration: 0.2), value: focusedField)
+                        .onChange(of: viewM.description) {
+                            viewM.description = String(viewM.description.prefix(400))
+                        }
                 }
                
                 
                 //Departments, Categories & Types
-                EventTagsView(viewM: viewM)
+                EventTagsView()
+                    .environmentObject(viewM)
                 
                // Date picker
-                DateView(viewModel: viewM, showPicker: $showPicker)
+                DateView(showPicker: $showPicker)
+                    .environmentObject(viewM)
                 
                //In person, online selectors
                 HStack(spacing: 30) {
@@ -65,9 +74,7 @@ struct EventUploadPage: View {
                               }
                           }
                         submission.toggle()
-
                     }
-
                 } label: {
                         Text("Submit")
                         .font(.system(size: 20))
@@ -123,7 +130,7 @@ struct EventUploadPage: View {
 }
 
 //MARK: View to show progress bar
-struct ShowProgressView: View {
+private struct ShowProgressView: View {
     var body: some View {
         HStack(spacing: 10) {
             ProgressView()
@@ -161,7 +168,8 @@ private struct LabeledTextField: View {
     var field: FocusedField
     @FocusState.Binding var focusedField: FocusedField?
     var isMandatory: Bool = false
-    @ObservedObject var viewModel: EventUploadVM
+    var charLimit: Int = 50
+    @EnvironmentObject var viewModel: EventUploadVM
 
     private var hasValidationError: Bool {
         viewModel.hasValidationError(text: text, isMandatory: isMandatory)
@@ -184,6 +192,9 @@ private struct LabeledTextField: View {
             )
             .focused($focusedField, equals: field)
             .animation(.easeInOut(duration: 0.2), value: focusedField)
+            .onChange(of: text) {
+                text = String(text.prefix(charLimit)) //Character limit
+            }
             
             // Error message
             if hasValidationError {
@@ -199,7 +210,7 @@ private struct LabeledTextField: View {
 
 //MARK: Holds the date selector
 private struct DateView: View {
-    @ObservedObject var viewModel: EventUploadVM
+    @EnvironmentObject var viewModel: EventUploadVM
     @Binding var showPicker: Bool
 
     var body: some View {

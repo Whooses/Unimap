@@ -200,7 +200,7 @@ class EventUploadVM: ObservableObject {
          // Print out contents
          print("title: \(title)")
          print("description: \(description)")
-         print("location: \(title)")
+         print("location: \(location)")
          print("Departments: \(departments)")
          print("Categories: \(categories)")
          print("Types: \(types)")

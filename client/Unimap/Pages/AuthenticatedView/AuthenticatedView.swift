@@ -2,9 +2,16 @@ import SwiftUI
 
 struct AuthenticatedView: View {
 //    @ObservedObject var authViewModel: AuthViewModel
-    
     var body: some View {
-        ExplorePage()
+        //ExplorePage()
+        TabView {
+            Tab("Explore", systemImage: "magnifyingglass") {
+                ExplorePage()
+            }
+            Tab("Upload", systemImage: "plus") {
+                EventUploadPage()
+            }
+        }
 //        TabView {
 //            HomePage()
 //                .tabItem {
